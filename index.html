@@ -8,6 +8,10 @@
 </head>
 <body>
 
+  <!-- ============ 背景の質感・紙吹雪（全画面共通の演出レイヤー） ============ -->
+  <div class="grain-overlay"></div>
+  <canvas id="confetti-canvas"></canvas>
+
   <!-- ============ 音の操作（全画面共通） ============ -->
   <div class="floating-controls">
     <button id="btn-bgm" class="btn-float off" title="BGM">🎷</button>
@@ -141,6 +145,8 @@
   </div>
 
   <script src="bgm.js"></script>
+  <script src="sfx.js"></script>
+  <script src="confetti.js"></script>
   <script src="odai-generator.js"></script>
   <script src="game.js"></script>
 </body>

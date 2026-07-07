@@ -125,6 +125,7 @@ const UI = {
     bgmOn: "🎷 ジャズBGM オン",
     bgmOff: "🎷 ジャズBGM オフ",
     statusStart: "🎯 罰ゲームをやる人は…！？",
+    spinTaunt: "😈 だれだ…！？",
     spinBtn: "🎰 ルーレット スタート！",
     statusPicked: (name) => `やる人は…【${name}】！`,
     statusOdai: "🔥 お題はこれだ！",
@@ -198,6 +199,7 @@ const UI = {
     bgmOn: "🎷 Jazz BGM ON",
     bgmOff: "🎷 Jazz BGM OFF",
     statusStart: "🎯 Who's getting the challenge...!?",
+    spinTaunt: "😈 Who will it be...!?",
     spinBtn: "🎰 SPIN THE WHEEL!",
     statusPicked: (name) => `It's... 【${name}】!`,
     statusOdai: "🔥 HERE'S THE CHALLENGE!",
@@ -271,6 +273,7 @@ const UI = {
     bgmOn: "🎷 爵士配樂 開啟",
     bgmOff: "🎷 爵士配樂 關閉",
     statusStart: "🎯 誰會被抽到呢…！？",
+    spinTaunt: "😈 會是誰呢…！？",
     spinBtn: "🎰 轉動輪盤！",
     statusPicked: (name) => `是…【${name}】！`,
     statusOdai: "🔥 題目來了！",
@@ -344,6 +347,7 @@ const UI = {
     bgmOn: "🎷 재즈 BGM 켜짐",
     bgmOff: "🎷 재즈 BGM 꺼짐",
     statusStart: "🎯 벌칙을 받을 사람은…！？",
+    spinTaunt: "😈 누구일까…！？",
     spinBtn: "🎰 룰렛 시작！",
     statusPicked: (name) => `당첨은…【${name}】!`,
     statusOdai: "🔥 벌칙 공개！",
@@ -417,6 +421,7 @@ const UI = {
     bgmOn: "🎷 Música jazz ACTIVADA",
     bgmOff: "🎷 Música jazz DESACTIVADA",
     statusStart: "🎯 ¿Quién recibirá el reto...!?",
+    spinTaunt: "😈 ¿Quién será...!?",
     spinBtn: "🎰 ¡GIRAR LA RULETA!",
     statusPicked: (name) => `¡Es... 【${name}】!`,
     statusOdai: "🔥 ¡AQUÍ ESTÁ EL RETO!",
@@ -761,6 +766,7 @@ ctx.scale(dpr, dpr);
 let wheelEntries = [];
 let wheelRotation = 0;
 let spinning = false;
+let highlightIndex = -1; // 当たった瞬間に光らせるコマ（-1で光らせない）
 
 // チームごとのネオンカラー（男性=青系 / 女性=ピンク系 / 全員=交互）
 const COLOR_M = ["#1d3f8f", "#173070"];
@@ -786,8 +792,18 @@ function drawWheel() {
     ctx.moveTo(cx, cy);
     ctx.arc(cx, cy, r, start, start + seg);
     ctx.closePath();
-    ctx.fillStyle = segmentColor(wheelEntries[i], i);
+
+    if (i === highlightIndex) {
+      // 当たった瞬間、白くフラッシュさせる
+      ctx.shadowColor = "#ffe14b";
+      ctx.shadowBlur = 30;
+      ctx.fillStyle = "#ffffff";
+    } else {
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = segmentColor(wheelEntries[i], i);
+    }
     ctx.fill();
+    ctx.shadowBlur = 0;
     ctx.strokeStyle = "#0b0716";
     ctx.lineWidth = 3;
     ctx.stroke();
@@ -827,6 +843,23 @@ function drawWheel() {
   ctx.strokeStyle = accentB;
   ctx.lineWidth = 3;
   ctx.stroke();
+}
+
+// 当たったコマを、白く点滅させて視線を誘導する
+function flashWinnerWedge(index) {
+  let count = 0;
+  const blink = () => {
+    highlightIndex = count % 2 === 0 ? index : -1;
+    drawWheel();
+    count++;
+    if (count < 6) {
+      setTimeout(blink, 110);
+    } else {
+      highlightIndex = -1;
+      drawWheel();
+    }
+  };
+  blink();
 }
 
 // 🃏 イカサマモード：仕込んだ人がいれば高確率で当てる（なければ普通の抽選）
@@ -872,7 +905,7 @@ function spinWheel(onDone) {
       requestAnimationFrame(frame);
     } else {
       spinning = false;
-      onDone(wheelEntries[winnerIndex]);
+      onDone(wheelEntries[winnerIndex], winnerIndex);
     }
   }
   requestAnimationFrame(frame);
@@ -934,13 +967,22 @@ btnSpin.addEventListener("click", () => {
   if (spinning) return;
   btnSpin.disabled = true;
 
+  // 回転中は煽りテキストを点滅させる
+  gameStatus.textContent = t("spinTaunt");
+  gameStatus.classList.add("taunt-pulse");
+  SFX.spinStart();
+
   // このスピンが王様モードになるかどうか、先に運命を決めておく
   const kingRound = Math.random() < KING_CHANCE;
 
-  spinWheel((winner) => {
+  spinWheel((winner, idx) => {
     // 🃏 イカサマの仕込みは1回のスピンだけで自動的に解除する
     state.riggedName = null;
     btnRig.classList.remove("active");
+
+    // 当たったコマを点滅させて視線を誘導する
+    flashWinnerWedge(idx);
+    gameStatus.classList.remove("taunt-pulse");
 
     bumpStat(winner.name, kingRound ? "king" : "challenge");
     state.roundCount++;
@@ -957,6 +999,14 @@ btnSpin.addEventListener("click", () => {
   });
 });
 
+// 結果発表の瞬間の演出（紙吹雪・振動）をまとめて起動する
+function celebrate(colors, vibrationPattern) {
+  Confetti.burst(colors);
+  if ("vibrate" in navigator) {
+    try { navigator.vibrate(vibrationPattern); } catch (e) {}
+  }
+}
+
 // お題の発表（生成 → 表示 → 朗読）
 function showOdai(from, to) {
   state.isKing = false;
@@ -971,6 +1021,11 @@ function showOdai(from, to) {
   btnPass.classList.remove("hidden");
   wheelArea.classList.add("hidden");
   odaiArea.classList.remove("hidden");
+
+  const accentA = getComputedStyle(document.body).getPropertyValue("--c-accent-a").trim();
+  const accentB = getComputedStyle(document.body).getPropertyValue("--c-accent-b").trim();
+  celebrate([accentA, accentB, "#ffffff"], 80);
+  SFX.reveal();
 
   speakOdai(odai.speechText, state.lang, resolveVoice());
 }
@@ -987,6 +1042,9 @@ function showKing(king) {
   btnPass.classList.add("hidden"); // 王様の命令にパスはない！
   wheelArea.classList.add("hidden");
   odaiArea.classList.remove("hidden");
+
+  celebrate(["#ffe14b", "#ffb52d", "#ffffff"], [100, 50, 100, 50, 200]);
+  SFX.kingFanfare();
 
   speakOdai(state.currentSpeech, state.lang, resolveVoice());
 }
