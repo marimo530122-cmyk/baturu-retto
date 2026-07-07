@@ -290,6 +290,11 @@ body {
   padding: 10px 12px;
 }
 .lock { font-size: 11px; }
+.btn-locked.active-pack {
+  border-color: #ffe14b;
+  color: #ffe14b;
+  box-shadow: 0 0 10px rgba(255, 225, 75, 0.5);
+}
 
 .notice {
   margin-top: 34px;
@@ -510,6 +515,75 @@ body {
 .modal-box p { font-size: 15px; line-height: 1.8; margin-bottom: 10px; }
 .modal-price { color: #ffd76f; }
 .modal-box .btn { margin-top: 10px; padding: 12px 40px; font-size: 16px; }
+
+/* 🏆 実績バッジ一覧 */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 18px 0;
+}
+.achievement-badge {
+  background: var(--c-panel);
+  border: 1px solid var(--c-panel-border);
+  border-radius: 14px;
+  padding: 12px 4px;
+  text-align: center;
+}
+.achievement-badge .emoji {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 6px;
+  filter: grayscale(1);
+  opacity: 0.35;
+}
+.achievement-badge.unlocked {
+  border-color: #ffe14b;
+  box-shadow: 0 0 10px rgba(255, 225, 75, 0.5);
+}
+.achievement-badge.unlocked .emoji {
+  filter: none;
+  opacity: 1;
+}
+.achievement-badge .name {
+  font-size: 11px;
+  color: #cfc4e8;
+  line-height: 1.3;
+}
+
+/* 📸 ハイライトギャラリー */
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+  max-height: 340px;
+  overflow-y: auto;
+}
+.highlight-item {
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--c-panel-border);
+}
+.highlight-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 📡 オンラインモード：幹事のルームコード表示 */
+.online-room-badge {
+  display: inline-block;
+  margin: 6px auto 14px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--c-panel);
+  border: 1px solid #ffe14b;
+  color: #ffe14b;
+  font-size: 13px;
+  font-weight: bold;
+}
 
 /* 🃏 イカサマモードの名前選択リスト */
 .rig-list {

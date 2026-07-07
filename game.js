@@ -47,7 +47,13 @@ const state = {
   pendingCeremony: false, // 次の「次のルーレットへ」で表彰画面を挟むかどうか
   theme: "neon",       // "neon" / "casino" / "izakaya"（🎨着せ替え・有料機能）
   riggedName: null,    // 🃏イカサマモードで仕込んだ名前（次の1回だけ有効）
+  pack: "standard",    // "standard" / "romance"（💌恋愛パック・有料機能）
+  onlineRole: null,    // null / "host" / "guest"（📡オンラインモード・有料機能）
+  onlineCode: null,    // オンラインモードの部屋コード
 };
+
+/* ---------------- 🎵 BGMジャンルの切り替え順番 ---------------- */
+const BGM_CYCLE = ["jazz", "edm", "enka"];
 
 /* ---------------- 声のキャラクター ---------------- */
 const PERSONAS = {
@@ -83,6 +89,8 @@ const UI = {
       couple: "💑 1対1モード",
       theme: "🎨 ルーレットの着せ替え",
       rig: "🃏 イカサマモード",
+      romance: "💌 恋愛パック",
+      online: "📡 オンラインモード",
     },
     themes: { neon: "🌃 ネオン", casino: "🎰 カジノ", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 イカサマモード",
@@ -142,6 +150,29 @@ const UI = {
     ceremonyChallenge: (name, count) => `🎯 被弾大賞：【${name}】（${count}回）`,
     ceremonyNoKing: "👑 まだ王様は誕生していません",
     ceremonyContinue: "🎉 続ける",
+    bgmGenres: { jazz: "🎷 ジャズ", edm: "🎧 EDM", enka: "🎤 演歌" },
+    romanceOn: "💌 恋愛パックに切り替えました",
+    romanceOff: "🎲 通常パックに戻しました",
+    achTitle: "🏆 実績バッジ",
+    achClose: "とじる",
+    achUnlocked: (name) => `🏅 実績解除：${name}！`,
+    hlTitle: "📸 今夜のハイライト",
+    hlEmpty: "まだハイライトがありません。お題が発表されると自動で記録されます。",
+    hlClose: "とじる",
+    onlineTitle: "📡 オンライン飲み会モード",
+    onlineDesc: "Zoom等で画面を見せながら、離れた場所のみんなと一緒に遊べます",
+    onlineCreateBtn: "🖥️ 部屋を作る（幹事）",
+    onlineJoinPlaceholder: "4桁のコード",
+    onlineJoinBtn: "参加する",
+    onlineClose: "とじる",
+    onlineNotConfigured: "オンライン機能の設定がまだ完了していません。要件定義書の「オンラインモードの設定方法」をご確認ください。",
+    onlineRoomCreated: (code) => `部屋を作成しました！コード「${code}」をZoom等のチャットで参加者に共有してください。`,
+    onlineInvalidCode: "コードを4桁で入力してください",
+    onlineJoinFailed: "その部屋が見つかりませんでした",
+    onlineGuestTitle: "📡 待機中…",
+    onlineGuestWaiting: (code) => `ルームコード：${code}\nホストがルーレットを回すのを待っています…`,
+    onlineHostBadge: (code) => `📡 ルーム: ${code}（参加者にはこのコードを共有）`,
+    onlineLeave: "← 退出する",
   },
   en: {
     langName: "English",
@@ -157,6 +188,8 @@ const UI = {
       couple: "💑 Couple Mode",
       theme: "🎨 Roulette Themes",
       rig: "🃏 Rig Mode",
+      romance: "💌 Romance Pack",
+      online: "📡 Online Mode",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Rig Mode",
@@ -216,6 +249,29 @@ const UI = {
     ceremonyChallenge: (name, count) => `🎯 Most Challenges: 【${name}】 (${count}x)`,
     ceremonyNoKing: "👑 No King has appeared yet",
     ceremonyContinue: "🎉 Continue",
+    bgmGenres: { jazz: "🎷 Jazz", edm: "🎧 EDM", enka: "🎤 Enka" },
+    romanceOn: "💌 Switched to Romance Pack",
+    romanceOff: "🎲 Switched back to Standard Pack",
+    achTitle: "🏆 Achievements",
+    achClose: "Close",
+    achUnlocked: (name) => `🏅 Achievement unlocked: ${name}!`,
+    hlTitle: "📸 Tonight's Highlights",
+    hlEmpty: "No highlights yet. They're saved automatically when a challenge is revealed.",
+    hlClose: "Close",
+    onlineTitle: "📡 Online Party Mode",
+    onlineDesc: "Play together with people in other locations, e.g. over a Zoom call",
+    onlineCreateBtn: "🖥️ Create Room (Host)",
+    onlineJoinPlaceholder: "4-digit code",
+    onlineJoinBtn: "Join",
+    onlineClose: "Close",
+    onlineNotConfigured: "Online mode isn't set up yet. See \"Online Mode Setup\" in the requirements doc.",
+    onlineRoomCreated: (code) => `Room created! Share code "${code}" with your friends over Zoom chat, etc.`,
+    onlineInvalidCode: "Please enter a 4-digit code",
+    onlineJoinFailed: "That room could not be found",
+    onlineGuestTitle: "📡 Waiting…",
+    onlineGuestWaiting: (code) => `Room code: ${code}\nWaiting for the host to spin the wheel…`,
+    onlineHostBadge: (code) => `📡 Room: ${code} (share this code with guests)`,
+    onlineLeave: "← Leave",
   },
   zh: {
     langName: "繁體中文",
@@ -231,6 +287,8 @@ const UI = {
       couple: "💑 兩人模式",
       theme: "🎨 輪盤換裝",
       rig: "🃏 作弊模式",
+      romance: "💌 戀愛套組",
+      online: "📡 線上模式",
     },
     themes: { neon: "🌃 霓虹", casino: "🎰 賭場", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 作弊模式",
@@ -290,6 +348,29 @@ const UI = {
     ceremonyChallenge: (name, count) => `🎯 中獎大王：【${name}】（${count}次）`,
     ceremonyNoKing: "👑 目前還沒有國王誕生",
     ceremonyContinue: "🎉 繼續遊戲",
+    bgmGenres: { jazz: "🎷 爵士", edm: "🎧 電音", enka: "🎤 演歌" },
+    romanceOn: "💌 已切換為戀愛套組",
+    romanceOff: "🎲 已切回標準套組",
+    achTitle: "🏆 成就徽章",
+    achClose: "關閉",
+    achUnlocked: (name) => `🏅 解鎖成就：${name}！`,
+    hlTitle: "📸 今晚的精彩瞬間",
+    hlEmpty: "還沒有精彩瞬間，題目公布時會自動記錄。",
+    hlClose: "關閉",
+    onlineTitle: "📡 線上聚會模式",
+    onlineDesc: "一邊開Zoom等視訊，一邊和不同地點的大家一起玩",
+    onlineCreateBtn: "🖥️ 建立房間（主持人）",
+    onlineJoinPlaceholder: "4位數房號",
+    onlineJoinBtn: "加入",
+    onlineClose: "關閉",
+    onlineNotConfigured: "線上功能尚未設定完成，請參考需求文件中的「線上模式設定方法」。",
+    onlineRoomCreated: (code) => `房間已建立！請把房號「${code}」透過Zoom聊天室分享給大家。`,
+    onlineInvalidCode: "請輸入4位數房號",
+    onlineJoinFailed: "找不到這個房間",
+    onlineGuestTitle: "📡 等待中…",
+    onlineGuestWaiting: (code) => `房號：${code}\n正在等待主持人轉動輪盤…`,
+    onlineHostBadge: (code) => `📡 房間: ${code}（請分享給參加者）`,
+    onlineLeave: "← 離開",
   },
   ko: {
     langName: "한국어",
@@ -305,6 +386,8 @@ const UI = {
       couple: "💑 커플 모드",
       theme: "🎨 룰렛 테마 변경",
       rig: "🃏 조작 모드",
+      romance: "💌 로맨스 팩",
+      online: "📡 온라인 모드",
     },
     themes: { neon: "🌃 네온", casino: "🎰 카지노", izakaya: "🏮 이자카야" },
     rigTitle: "🃏 조작 모드",
@@ -364,6 +447,29 @@ const UI = {
     ceremonyChallenge: (name, count) => `🎯 당첨왕：【${name}】（${count}회）`,
     ceremonyNoKing: "👑 아직 왕이 탄생하지 않았습니다",
     ceremonyContinue: "🎉 계속하기",
+    bgmGenres: { jazz: "🎷 재즈", edm: "🎧 EDM", enka: "🎤 엔카" },
+    romanceOn: "💌 로맨스 팩으로 전환했습니다",
+    romanceOff: "🎲 기본 팩으로 되돌렸습니다",
+    achTitle: "🏆 업적 배지",
+    achClose: "닫기",
+    achUnlocked: (name) => `🏅 업적 달성: ${name}!`,
+    hlTitle: "📸 오늘 밤의 하이라이트",
+    hlEmpty: "아직 하이라이트가 없습니다. 벌칙이 발표되면 자동으로 기록됩니다.",
+    hlClose: "닫기",
+    onlineTitle: "📡 온라인 파티 모드",
+    onlineDesc: "Zoom 등으로 화면을 보여주면서 멀리 있는 사람들과 함께 즐길 수 있어요",
+    onlineCreateBtn: "🖥️ 방 만들기 (호스트)",
+    onlineJoinPlaceholder: "4자리 코드",
+    onlineJoinBtn: "참가하기",
+    onlineClose: "닫기",
+    onlineNotConfigured: "온라인 기능이 아직 설정되지 않았습니다. 요건정의서의 '온라인 모드 설정 방법'을 확인해주세요.",
+    onlineRoomCreated: (code) => `방이 생성되었습니다! 코드 "${code}"를 Zoom 채팅 등으로 참가자에게 공유하세요.`,
+    onlineInvalidCode: "코드를 4자리로 입력해주세요",
+    onlineJoinFailed: "해당 방을 찾을 수 없습니다",
+    onlineGuestTitle: "📡 대기 중…",
+    onlineGuestWaiting: (code) => `방 코드: ${code}\n호스트가 룰렛을 돌리기를 기다리는 중…`,
+    onlineHostBadge: (code) => `📡 방: ${code} (참가자에게 공유하세요)`,
+    onlineLeave: "← 나가기",
   },
   es: {
     langName: "Español",
@@ -379,6 +485,8 @@ const UI = {
       couple: "💑 Modo Pareja",
       theme: "🎨 Temas de la Ruleta",
       rig: "🃏 Modo Amañado",
+      romance: "💌 Paquete Romántico",
+      online: "📡 Modo Online",
     },
     themes: { neon: "🌃 Neón", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Modo Amañado",
@@ -438,6 +546,29 @@ const UI = {
     ceremonyChallenge: (name, count) => `🎯 Más retos: 【${name}】 (${count}x)`,
     ceremonyNoKing: "👑 Todavía no ha aparecido ningún Rey",
     ceremonyContinue: "🎉 Continuar",
+    bgmGenres: { jazz: "🎷 Jazz", edm: "🎧 EDM", enka: "🎤 Enka" },
+    romanceOn: "💌 Cambiado al Paquete Romántico",
+    romanceOff: "🎲 Vuelto al paquete estándar",
+    achTitle: "🏆 Logros",
+    achClose: "Cerrar",
+    achUnlocked: (name) => `🏅 ¡Logro desbloqueado: ${name}!`,
+    hlTitle: "📸 Momentos de esta noche",
+    hlEmpty: "Aún no hay momentos guardados. Se guardan automáticamente al revelar un reto.",
+    hlClose: "Cerrar",
+    onlineTitle: "📡 Modo Fiesta Online",
+    onlineDesc: "Juega junto a personas en otros lugares, por ejemplo en una llamada de Zoom",
+    onlineCreateBtn: "🖥️ Crear sala (anfitrión)",
+    onlineJoinPlaceholder: "Código de 4 dígitos",
+    onlineJoinBtn: "Unirse",
+    onlineClose: "Cerrar",
+    onlineNotConfigured: "El modo online aún no está configurado. Consulta \"Configuración del modo online\" en el documento de requisitos.",
+    onlineRoomCreated: (code) => `¡Sala creada! Comparte el código "${code}" con tus amigos por el chat de Zoom, etc.`,
+    onlineInvalidCode: "Por favor ingresa un código de 4 dígitos",
+    onlineJoinFailed: "No se pudo encontrar esa sala",
+    onlineGuestTitle: "📡 Esperando…",
+    onlineGuestWaiting: (code) => `Código de sala: ${code}\nEsperando a que el anfitrión gire la ruleta…`,
+    onlineHostBadge: (code) => `📡 Sala: ${code} (comparte este código con los invitados)`,
+    onlineLeave: "← Salir",
   },
 };
 
@@ -459,6 +590,8 @@ function applyLanguage() {
   document.getElementById("pack-adult").innerHTML = `${u.packs.adult} <span class="lock">🔒</span>`;
   document.getElementById("pack-family").innerHTML = `${u.packs.family} <span class="lock">🔒</span>`;
   document.getElementById("pack-couple").innerHTML = `${u.packs.couple} <span class="lock">🔒</span>`;
+  document.getElementById("pack-romance").innerHTML = `${u.packs.romance} <span class="lock">🔒</span>`;
+  document.getElementById("pack-online").innerHTML = `${u.packs.online} <span class="lock">🔒</span>`;
   document.getElementById("t-notice").innerHTML = u.noticeHTML;
 
   document.getElementById("t-setup-title").textContent = u.setupTitle;
@@ -487,7 +620,22 @@ function applyLanguage() {
   document.getElementById("t-modal-price").textContent = u.modalPrice;
   document.getElementById("modal-close").textContent = u.modalClose;
 
+  document.getElementById("t-online-title").textContent = u.onlineTitle;
+  document.getElementById("t-online-desc").textContent = u.onlineDesc;
+  document.getElementById("online-create").textContent = u.onlineCreateBtn;
+  document.getElementById("online-code-input").placeholder = u.onlineJoinPlaceholder;
+  document.getElementById("online-join").textContent = u.onlineJoinBtn;
+  document.getElementById("online-close").textContent = u.onlineClose;
+  document.getElementById("t-online-guest-title").textContent = u.onlineGuestTitle;
+  document.getElementById("btn-online-leave").textContent = u.onlineLeave;
+
+  document.getElementById("t-ach-title").textContent = u.achTitle;
+  document.getElementById("achievements-close").textContent = u.achClose;
+  document.getElementById("t-hl-title").textContent = u.hlTitle;
+  document.getElementById("highlights-close").textContent = u.hlClose;
+
   updateLangButton();
+  updateBgmGenreButton();
 }
 
 /* ---------------- 🌐 言語ボタン（どの画面からでも切り替え可能） ---------------- */
@@ -549,6 +697,7 @@ const screens = {
   setup: document.getElementById("screen-setup"),
   game: document.getElementById("screen-game"),
   ceremony: document.getElementById("screen-ceremony"),
+  onlineGuest: document.getElementById("screen-online-guest"),
 };
 
 function showScreen(name) {
@@ -567,6 +716,8 @@ document.getElementById("btn-start").addEventListener("click", () => {
 // 有料版（ロック中）ボタン → ご案内モーダル
 const modal = document.getElementById("modal-premium");
 document.querySelectorAll(".btn-locked").forEach((btn) => {
+  // romance と online は個別に実装済みの機能なので、専用ハンドラに任せる
+  if (btn.dataset.pack === "romance" || btn.dataset.pack === "online") return;
   btn.addEventListener("click", () => {
     const packName = UI[state.lang].packs[btn.dataset.pack];
     document.getElementById("modal-text").textContent = t("packTeaser")(packName);
@@ -625,6 +776,7 @@ btnRig.addEventListener("click", () => {
       modalRig.classList.add("hidden");
       btnRig.classList.add("active");
       showToast(t("rigSet")(p.name));
+      Achievements.bump("totalRigs");
     });
     list.appendChild(b);
   });
@@ -640,6 +792,170 @@ document.getElementById("rig-clear").addEventListener("click", () => {
 });
 document.getElementById("rig-close").addEventListener("click", () => {
   modalRig.classList.add("hidden");
+});
+
+/* ---------------- 🎵 BGMジャンル切り替えボタン ---------------- */
+const btnBgmGenre = document.getElementById("btn-bgm-genre");
+
+function updateBgmGenreButton() {
+  btnBgmGenre.textContent = BGM_GENRE_EMOJI[BGM.genre];
+}
+
+btnBgmGenre.addEventListener("click", () => {
+  const i = BGM_CYCLE.indexOf(BGM.genre);
+  const next = BGM_CYCLE[(i + 1) % BGM_CYCLE.length];
+  BGM.setGenre(next);
+  updateBgmGenreButton();
+  showToast(t("bgmGenres")[next]);
+});
+
+/* ---------------- 💌 恋愛パック切り替え（有料機能） ---------------- */
+const btnRomance = document.getElementById("pack-romance");
+btnRomance.addEventListener("click", () => {
+  if (blockIfNotPremium("romance")) return;
+  state.pack = state.pack === "romance" ? "standard" : "romance";
+  btnRomance.classList.toggle("active-pack", state.pack === "romance");
+  showToast(state.pack === "romance" ? t("romanceOn") : t("romanceOff"));
+});
+
+/* ---------------- 🏆 実績バッジ ---------------- */
+const modalAchievements = document.getElementById("modal-achievements");
+
+function renderAchievements() {
+  const grid = document.getElementById("achievements-grid");
+  const stats = Achievements.get();
+  const names = ACHIEVEMENT_NAMES[state.lang] || ACHIEVEMENT_NAMES.ja;
+  grid.innerHTML = "";
+  Achievements.list.forEach((a) => {
+    const unlocked = stats.unlocked.includes(a.id);
+    const box = document.createElement("div");
+    box.className = "achievement-badge" + (unlocked ? " unlocked" : "");
+    box.innerHTML = `<span class="emoji">${a.emoji}</span><span class="name">${names[a.id]}</span>`;
+    grid.appendChild(box);
+  });
+}
+
+document.getElementById("btn-achievements").addEventListener("click", () => {
+  renderAchievements();
+  modalAchievements.classList.remove("hidden");
+});
+document.getElementById("achievements-close").addEventListener("click", () => {
+  modalAchievements.classList.add("hidden");
+});
+
+// 新しいバッジが解除された瞬間にトーストで知らせる
+Achievements.setUnlockHandler((a) => {
+  const names = ACHIEVEMENT_NAMES[state.lang] || ACHIEVEMENT_NAMES.ja;
+  showToast(t("achUnlocked")(names[a.id]));
+});
+
+/* ---------------- 📸 ハイライトギャラリー ---------------- */
+const modalHighlights = document.getElementById("modal-highlights");
+
+function renderHighlights() {
+  const grid = document.getElementById("highlights-grid");
+  const empty = document.getElementById("hl-empty");
+  const items = Highlights.all();
+  grid.innerHTML = "";
+  empty.textContent = items.length === 0 ? t("hlEmpty") : "";
+  items.forEach((item, i) => {
+    const a = document.createElement("a");
+    a.href = item.dataUrl;
+    a.download = `batsu-highlight-${i + 1}.png`;
+    a.className = "highlight-item";
+    const img = document.createElement("img");
+    img.src = item.dataUrl;
+    a.appendChild(img);
+    grid.appendChild(a);
+  });
+}
+
+document.getElementById("btn-highlights").addEventListener("click", () => {
+  renderHighlights();
+  modalHighlights.classList.remove("hidden");
+});
+document.getElementById("highlights-close").addEventListener("click", () => {
+  modalHighlights.classList.add("hidden");
+});
+
+/* ---------------- 📡 オンライン飲み会モード（有料機能） ---------------- */
+const modalOnline = document.getElementById("modal-online");
+const onlineHostBadge = document.getElementById("online-host-badge");
+
+document.getElementById("pack-online").addEventListener("click", () => {
+  if (blockIfNotPremium("online")) return;
+  document.getElementById("online-message").textContent = "";
+  document.getElementById("online-code-input").value = "";
+  modalOnline.classList.remove("hidden");
+});
+
+document.getElementById("online-close").addEventListener("click", () => {
+  modalOnline.classList.add("hidden");
+});
+
+// 部屋を作る（幹事）
+document.getElementById("online-create").addEventListener("click", () => {
+  const code = Online.createRoom();
+  if (!code) {
+    document.getElementById("online-message").textContent = t("onlineNotConfigured");
+    return;
+  }
+  state.onlineRole = "host";
+  state.onlineCode = code;
+  document.getElementById("online-message").textContent = t("onlineRoomCreated")(code);
+  showToast(t("onlineRoomCreated")(code));
+  setTimeout(() => {
+    modalOnline.classList.add("hidden");
+    showScreen("setup");
+  }, 2200);
+});
+
+// 部屋に参加する（ゲスト）
+document.getElementById("online-join").addEventListener("click", () => {
+  const code = document.getElementById("online-code-input").value.trim();
+  if (!/^\d{4}$/.test(code)) {
+    document.getElementById("online-message").textContent = t("onlineInvalidCode");
+    return;
+  }
+  const ok = Online.joinRoom(code, handleOnlineResult);
+  if (!ok) {
+    document.getElementById("online-message").textContent = t("onlineNotConfigured");
+    return;
+  }
+  state.onlineRole = "guest";
+  state.onlineCode = code;
+  modalOnline.classList.add("hidden");
+  document.getElementById("online-guest-code-label").textContent = "";
+  document.getElementById("online-guest-status").textContent = t("onlineGuestWaiting")(code);
+  document.getElementById("online-guest-card").classList.add("hidden");
+  showScreen("onlineGuest");
+});
+
+// ホストからの結果を受け取ったとき（ゲスト側）
+function handleOnlineResult(data) {
+  const card = document.getElementById("online-guest-card");
+  card.textContent = data.displayText;
+  card.classList.remove("hidden");
+  card.classList.toggle("king-card", data.type === "king");
+  document.getElementById("online-guest-status").textContent = "";
+
+  const accentA = getComputedStyle(document.body).getPropertyValue("--c-accent-a").trim();
+  const accentB = getComputedStyle(document.body).getPropertyValue("--c-accent-b").trim();
+  if (data.type === "king") {
+    celebrate(["#ffe14b", "#ffb52d", "#ffffff"], [100, 50, 100, 50, 200]);
+    SFX.kingFanfare();
+  } else {
+    celebrate([accentA, accentB, "#ffffff"], 80);
+    SFX.reveal();
+  }
+  speakOdai(data.speechText, data.lang || state.lang, resolveVoice());
+}
+
+document.getElementById("btn-online-leave").addEventListener("click", () => {
+  Online.leave();
+  state.onlineRole = null;
+  state.onlineCode = null;
+  showScreen("title");
 });
 
 /* =========================================================
@@ -961,6 +1277,14 @@ function startRound() {
   wheelArea.classList.remove("hidden");
   odaiArea.classList.add("hidden");
   odaiCard.classList.remove("king-card");
+
+  // 📡 幹事としてオンライン部屋を開いている間は、コードを表示し続ける
+  if (state.onlineRole === "host" && state.onlineCode) {
+    onlineHostBadge.textContent = t("onlineHostBadge")(state.onlineCode);
+    onlineHostBadge.classList.remove("hidden");
+  } else {
+    onlineHostBadge.classList.add("hidden");
+  }
 }
 
 btnSpin.addEventListener("click", () => {
@@ -988,6 +1312,9 @@ btnSpin.addEventListener("click", () => {
     state.roundCount++;
     state.pendingCeremony = state.roundCount % CEREMONY_INTERVAL === 0;
 
+    Achievements.bump("totalRounds");
+    if (kingRound) Achievements.bump("totalKings");
+
     if (kingRound) {
       gameStatus.textContent = t("statusKing");
       setTimeout(() => showKing(winner), 700);
@@ -1012,7 +1339,7 @@ function showOdai(from, to) {
   state.isKing = false;
   state.currentPair = { from, to };
 
-  const odai = generateOdai(from.name, to.name, state.lang);
+  const odai = generateOdai(from.name, to.name, state.lang, state.pack);
   state.currentSpeech = odai.speechText;
 
   gameStatus.textContent = t("statusOdai");
@@ -1026,6 +1353,11 @@ function showOdai(from, to) {
   const accentB = getComputedStyle(document.body).getPropertyValue("--c-accent-b").trim();
   celebrate([accentA, accentB, "#ffffff"], 80);
   SFX.reveal();
+
+  Highlights.capture(odai.displayText, accentA, document.getElementById("t-logo").textContent);
+  if (state.onlineRole === "host") {
+    Online.broadcast({ type: "odai", displayText: odai.displayText, speechText: odai.speechText, lang: state.lang });
+  }
 
   speakOdai(odai.speechText, state.lang, resolveVoice());
 }
@@ -1046,6 +1378,11 @@ function showKing(king) {
   celebrate(["#ffe14b", "#ffb52d", "#ffffff"], [100, 50, 100, 50, 200]);
   SFX.kingFanfare();
 
+  Highlights.capture(t("kingCard")(king.name), "#ffe14b", document.getElementById("t-logo").textContent);
+  if (state.onlineRole === "host") {
+    Online.broadcast({ type: "king", displayText: t("kingCard")(king.name), speechText: state.currentSpeech, lang: state.lang });
+  }
+
   speakOdai(state.currentSpeech, state.lang, resolveVoice());
 }
 
@@ -1061,6 +1398,7 @@ btnPass.addEventListener("click", () => {
   void odaiCard.offsetWidth;
   odaiCard.style.animation = "";
   showOdai(state.currentPair.from, state.currentPair.to);
+  Achievements.bump("totalPasses");
 });
 
 // 次のルーレットへ（10ラウンドごとに表彰式を挟む）

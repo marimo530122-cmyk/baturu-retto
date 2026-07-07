@@ -15,9 +15,12 @@
   <!-- ============ 音の操作（全画面共通） ============ -->
   <div class="floating-controls">
     <button id="btn-bgm" class="btn-float off" title="BGM">🎷</button>
+    <button id="btn-bgm-genre" class="btn-float" title="BGM Genre">🎷</button>
     <button id="btn-voice" class="btn-float" title="Voice">🎲</button>
     <button id="btn-lang" class="btn-float btn-lang" title="Language">日</button>
     <button id="btn-theme" class="btn-float" title="Theme">🎨</button>
+    <button id="btn-highlights" class="btn-float" title="Highlights">📸</button>
+    <button id="btn-achievements" class="btn-float" title="Achievements">🏆</button>
   </div>
   <div id="toast" class="toast hidden"></div>
 
@@ -36,6 +39,8 @@
         <button class="btn btn-locked" data-pack="adult" id="pack-adult">🔞 大人向け <span class="lock">🔒</span></button>
         <button class="btn btn-locked" data-pack="family" id="pack-family">👨‍👩‍👧 ファミリー <span class="lock">🔒</span></button>
         <button class="btn btn-locked" data-pack="couple" id="pack-couple">💑 1対1モード <span class="lock">🔒</span></button>
+        <button class="btn btn-locked" data-pack="romance" id="pack-romance">💌 恋愛パック <span class="lock">🔒</span></button>
+        <button class="btn btn-locked" data-pack="online" id="pack-online">📡 オンライン <span class="lock">🔒</span></button>
       </div>
 
       <p class="notice" id="t-notice">※20歳未満の飲酒は法律で禁止されています。<br>お酒やお題の無理強いはやめましょう。</p>
@@ -92,6 +97,7 @@
 
   <!-- ============ 画面3：ゲーム本体 ============ -->
   <section id="screen-game" class="screen hidden">
+    <p id="online-host-badge" class="online-room-badge hidden"></p>
     <h2 id="game-status" class="screen-title neon-pink">🎯 罰ゲームをやる人は…！？</h2>
 
     <div id="wheel-area">
@@ -123,6 +129,15 @@
     <button id="btn-ceremony-continue" class="btn btn-primary btn-big">🎉 続ける</button>
   </section>
 
+  <!-- ============ 画面5：📡 オンライン参加者の待機画面 ============ -->
+  <section id="screen-online-guest" class="screen hidden">
+    <h2 class="screen-title neon-pink" id="t-online-guest-title">📡 待機中…</h2>
+    <p id="online-guest-code-label" class="message"></p>
+    <p id="online-guest-status" class="message"></p>
+    <div id="online-guest-card" class="odai-card hidden"></div>
+    <button id="btn-online-leave" class="btn btn-ghost">← 退出する</button>
+  </section>
+
   <!-- ============ 有料版のご案内モーダル ============ -->
   <div id="modal-premium" class="modal hidden">
     <div class="modal-box">
@@ -144,9 +159,51 @@
     </div>
   </div>
 
+  <!-- ============ 📡 オンラインモード：部屋の作成・参加 ============ -->
+  <div id="modal-online" class="modal hidden">
+    <div class="modal-box">
+      <h3 class="neon-pink" id="t-online-title">📡 オンライン飲み会モード</h3>
+      <p id="t-online-desc">Zoom等で画面を見せながら、離れた場所のみんなと一緒に遊べます</p>
+      <button id="online-create" class="btn btn-primary btn-big">🖥️ 部屋を作る（幹事）</button>
+      <div class="input-row" style="margin-top: 14px;">
+        <input id="online-code-input" type="text" maxlength="4" placeholder="4桁のコード" />
+        <button id="online-join" class="btn btn-add">参加する</button>
+      </div>
+      <p id="online-message" class="message"></p>
+      <button id="online-close" class="btn btn-ghost">とじる</button>
+    </div>
+  </div>
+
+  <!-- ============ 🏆 実績バッジ一覧 ============ -->
+  <div id="modal-achievements" class="modal hidden">
+    <div class="modal-box">
+      <h3 class="neon-pink" id="t-ach-title">🏆 実績バッジ</h3>
+      <div id="achievements-grid" class="achievements-grid"></div>
+      <button id="achievements-close" class="btn btn-primary">とじる</button>
+    </div>
+  </div>
+
+  <!-- ============ 📸 ハイライト集 ============ -->
+  <div id="modal-highlights" class="modal hidden">
+    <div class="modal-box">
+      <h3 class="neon-pink" id="t-hl-title">📸 今夜のハイライト</h3>
+      <p id="hl-empty" class="message"></p>
+      <div id="highlights-grid" class="highlights-grid"></div>
+      <button id="highlights-close" class="btn btn-primary">とじる</button>
+    </div>
+  </div>
+
+  <!-- Firebase（📡オンラインモード用。firebase-config.js が未設定でも他の機能には影響しません） -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="online.js"></script>
+
   <script src="bgm.js"></script>
   <script src="sfx.js"></script>
   <script src="confetti.js"></script>
+  <script src="achievements.js"></script>
+  <script src="highlights.js"></script>
   <script src="odai-generator.js"></script>
   <script src="game.js"></script>
 </body>

@@ -577,6 +577,127 @@ const ODAI_DATA = {
 };
 
 /* ---------------------------------------------------------
+   💌 恋愛特化パック（有料機能）
+   シチュエーション25種 × 行動25種 = 625通り（現在は日本語・英語のみ）
+   ※恋愛は「褒める・照れる・盛り上げる」までに統一し、
+     キス・身体的接触は入れない（世界お題ガイドの禁止事項に準拠）
+   --------------------------------------------------------- */
+const ROMANCE_DATA = {
+  ja: {
+    situations: [
+      "告白直前のドキドキを隠しきれずに",
+      "好きな人の前で緊張して声が裏返りながら",
+      "少女漫画のヒロインになりきって、恥じらいながら",
+      "運命の相手を見つけた占い師のように、確信を持って",
+      "恋愛リアリティ番組の告白シーンのように、カメラ目線で",
+      "好きな人を目の前にして舞い上がる気持ちを抑えきれずに",
+      "初めてのデートで緊張している大学生のように",
+      "ラブソングの主人公になりきって、切なく",
+      "幼なじみに今更ときめいてしまった顔で",
+      "遠距離恋愛中の恋人に電話するときのような優しい声で",
+      "プロポーズを控えた恋人のように、真剣な眼差しで",
+      "恋のキューピッドになりきって、2人を後押しするように",
+      "花束を抱えた告白直前の男の子のように",
+      "恋占いの結果に一喜一憂する乙女のように",
+      "好きな人からの返信を待つ間のソワソワした様子で",
+      "映画のクライマックスの告白シーンのような緊張感で",
+      "恋人の写真を見て頬が緩んでしまった顔で",
+      "デート前に鏡の前で自分を磨き上げる気持ちで",
+      "好きな人にだけ見せる特別な笑顔で",
+      "恋文をしたためる文豪のように、情熱的に",
+      "両想いだと分かった瞬間の飛び上がりたい気持ちで",
+      "恋のライバルに宣戦布告するように、堂々と",
+      "好きな人の名前を呼ぶだけで照れてしまう様子で",
+      "運命の再会を果たした恋人たちのように、感極まって",
+      "永遠の愛を誓う結婚式のスピーチのように",
+    ],
+    actions: [
+      "相手の目を見つめながら「好き」だと3回、違う言い方で伝える",
+      "相手のことが好きになった瞬間を、思い出話として語る",
+      "相手への愛のメッセージを、その場で即興の詩にして贈る",
+      "相手の手を取るふりをして、エスコートする紳士（淑女）を演じる",
+      "相手の名前を、世界で一番かわいい響きだと熱弁する",
+      "もし付き合うならの妄想デートプランを情熱的に発表する",
+      "相手の好きなところを、10秒間止まらずに言い続ける",
+      "相手との将来の夢（新婚旅行先など）を熱く語る",
+      "相手に贈る指輪を選ぶジュエリーショップの店員を演じる",
+      "相手のために書いたラブレターを、その場で朗読する",
+      "相手の笑顔が世界を救うレベルだと大げさに褒め称える",
+      "好き避けしてしまっていたことを、今さら白状する",
+      "相手との出会いに運命を感じたと、壮大に語る",
+      "相手の一日を気遣う優しいメッセージを、声に出して考える",
+      "相手のことを想いながら、空に向かって愛の叫びをする",
+      "相手をお姫様（王子様）扱いする執事（メイド）を演じる",
+      "相手のためだけの特別な愛称を、その場で考えて発表する",
+      "相手との相性を、占い師のように占って発表する",
+      "相手に贈る誕生日サプライズの計画を、興奮気味に発表する",
+      "相手の魅力を、就活の自己PRのような熱意でプレゼンする",
+      "相手と両想いになれた喜びを、全身で表現する",
+      "相手への想いを我慢できず、突然の愛の告白をする",
+      "相手の隣にいるだけで幸せだという気持ちを、静かに伝える",
+      "相手のことを想って書いた日記の一部を、恥ずかしそうに読み上げる",
+      "一生大切にするという誓いの言葉を、結婚式のスピーチ風に述べる",
+    ],
+  },
+  en: {
+    situations: [
+      "Barely holding back the nerves right before a confession",
+      "With your voice cracking from nervousness in front of your crush",
+      "Like the heroine of a romance movie, blushing the whole time",
+      "Like a fortune teller who just found your soulmate, with total certainty",
+      "Like the confession scene of a dating reality show, straight to camera",
+      "Unable to hide how giddy you are around your crush",
+      "Like a nervous college student on a first date",
+      "Like the lead singer of a heartfelt love song",
+      "With the face of someone who just realized they like their childhood friend",
+      "In the gentle voice you'd use calling a long-distance partner",
+      "With the serious gaze of someone about to propose",
+      "Like a matchmaking cupid, cheering the couple on",
+      "Like someone about to confess with a bouquet in hand",
+      "Like someone anxiously reading their love horoscope",
+      "Fidgeting nervously while waiting for a text back",
+      "With the tension of a movie's big confession scene",
+      "With the face of someone smiling at a photo of their crush",
+      "With the determination of someone getting ready for a big date",
+      "With a special smile reserved only for the one you love",
+      "Like a passionate poet writing a love letter",
+      "Wanting to jump for joy the moment you found out it's mutual",
+      "Like boldly declaring war on a rival in love",
+      "Blushing just from saying your crush's name out loud",
+      "Overcome with emotion like reuniting with the love of your life",
+      "Like a wedding speech vowing eternal love",
+    ],
+    actions: [
+      "look them in the eyes and say \"I like you\" three different ways",
+      "tell the story of the exact moment you fell for them",
+      "improvise a love poem for them on the spot",
+      "pretend to take their hand and escort them like a true gentleman (or lady)",
+      "passionately argue that their name is the cutest name in the world",
+      "pitch an imaginary dream date plan, \"if we were dating\"",
+      "list what you like about them non-stop for 10 seconds",
+      "talk excitedly about a future dream together, like a honeymoon destination",
+      "act like a jewelry store clerk helping pick out their ring",
+      "read out loud a love letter you supposedly wrote for them",
+      "gush that their smile could single-handedly save the world",
+      "finally confess that you've been acting distant because you actually like them",
+      "dramatically describe how meeting them felt like fate",
+      "say out loud the caring text message you'd send checking on their day",
+      "shout your feelings for them up at the sky",
+      "play the part of a butler (or maid) treating them like royalty",
+      "come up with a special nickname just for them, right now",
+      "read their compatibility with you like a fortune teller",
+      "excitedly reveal your plan for their surprise birthday party",
+      "pitch their best qualities like a job interview self-promotion",
+      "celebrate finding out your feelings are mutual with your whole body",
+      "suddenly confess your feelings, unable to hold them back any longer",
+      "quietly express how just being next to them makes you happy",
+      "shyly read a line from a diary entry you wrote about them",
+      "deliver a wedding-speech-style vow to cherish them forever",
+    ],
+  },
+};
+
+/* ---------------------------------------------------------
    お題の生成（掛け算：50 × 50 = 2500通り）
    --------------------------------------------------------- */
 
@@ -593,10 +714,14 @@ let lastCombinationKey = "";
  * @param {string} fromName - お題を実行する人の名前
  * @param {string} toName   - お題の相手の名前
  * @param {string} lang     - "ja" / "en" / "zh" / "ko" / "es"
+ * @param {string} pack     - "standard"（通常）または "romance"（💌恋愛パック・現在は日英のみ）
  * @returns {object} displayText: 画面表示用 / speechText: 朗読用
  */
-function generateOdai(fromName, toName, lang = "ja") {
-  const data = ODAI_DATA[lang] || ODAI_DATA.ja;
+function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
+  const data =
+    pack === "romance"
+      ? ROMANCE_DATA[lang] || ODAI_DATA[lang] || ODAI_DATA.ja // 恋愛パック未対応言語は通常パックに戻す
+      : ODAI_DATA[lang] || ODAI_DATA.ja;
   let situation, action, key;
 
   // 同じ組み合わせが2回連続したら引き直す
