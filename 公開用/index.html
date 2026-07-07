@@ -4,9 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>バツルーレット - Batsu Roulette</title>
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=6" />
 </head>
 <body>
+
+  <!-- ============ LINE等アプリ内ブラウザ向けの案内バナー ============ -->
+  <div id="inapp-browser-banner" class="inapp-banner hidden">
+    <p id="inapp-banner-text"></p>
+    <button id="inapp-banner-btn" class="btn btn-primary inapp-banner-btn hidden">Chromeで開く</button>
+    <button id="inapp-banner-close" class="inapp-banner-close" aria-label="閉じる">✕</button>
+  </div>
+  <script>
+    (function () {
+      var ua = navigator.userAgent || "";
+      var isInApp = /Line\//i.test(ua) || /FBAN|FBAV/i.test(ua) || /Instagram/i.test(ua);
+      if (!isInApp) return;
+      var isAndroid = /Android/i.test(ua);
+      var isIOS = /iPhone|iPad|iPod/i.test(ua);
+      var banner = document.getElementById("inapp-browser-banner");
+      var text = document.getElementById("inapp-banner-text");
+      var btn = document.getElementById("inapp-banner-btn");
+      var closeBtn = document.getElementById("inapp-banner-close");
+
+      if (isAndroid) {
+        text.textContent = "アプリ内のブラウザで開いています。音声・音楽が正しく再生されないことがあるため、下のボタンからChromeで開いてください。";
+        btn.classList.remove("hidden");
+        btn.addEventListener("click", function () {
+          var stripped = location.href.replace(/^https?:\/\//, "");
+          location.href = "intent://" + stripped + "#Intent;scheme=https;package=com.android.chrome;end";
+        });
+      } else if (isIOS) {
+        text.textContent = "アプリ内のブラウザで開いています。音声・音楽が正しく再生されないことがあるため、右下（または右上）のメニューから「Safariで開く」を選んでください。";
+      } else {
+        text.textContent = "アプリ内のブラウザで開いています。音声・音楽が正しく再生されないことがあるため、外部ブラウザで開くことをおすすめします。";
+      }
+
+      closeBtn.addEventListener("click", function () {
+        banner.classList.add("hidden");
+      });
+      banner.classList.remove("hidden");
+    })();
+  </script>
 
   <!-- ============ 背景の質感・紙吹雪（全画面共通の演出レイヤー） ============ -->
   <div class="grain-overlay"></div>
@@ -196,15 +234,15 @@
   <!-- Firebase（📡オンラインモード用。firebase-config.js が未設定でも他の機能には影響しません） -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-  <script src="firebase-config.js?v=5"></script>
-  <script src="online.js?v=5"></script>
+  <script src="firebase-config.js?v=6"></script>
+  <script src="online.js?v=6"></script>
 
-  <script src="bgm.js?v=5"></script>
-  <script src="sfx.js?v=5"></script>
-  <script src="confetti.js?v=5"></script>
-  <script src="achievements.js?v=5"></script>
-  <script src="highlights.js?v=5"></script>
-  <script src="odai-generator.js?v=5"></script>
-  <script src="game.js?v=5"></script>
+  <script src="bgm.js?v=6"></script>
+  <script src="sfx.js?v=6"></script>
+  <script src="confetti.js?v=6"></script>
+  <script src="achievements.js?v=6"></script>
+  <script src="highlights.js?v=6"></script>
+  <script src="odai-generator.js?v=6"></script>
+  <script src="game.js?v=6"></script>
 </body>
 </html>

@@ -4,8 +4,9 @@
     {
       "name": "batsu-roulette",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "http-server", "-p", "8321", "-c-1"],
-      "port": 8321
+      "runtimeArgs": ["--yes", "http-server", "-p", "$PORT", "-c-1"],
+      "port": 8321,
+      "autoPort": true
     }
   ]
 }

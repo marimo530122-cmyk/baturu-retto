@@ -251,6 +251,46 @@ body {
   color: #fff;
 }
 
+/* LINE等アプリ内ブラウザ向けの案内バナー */
+.inapp-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #ffb52d;
+  color: #241a08;
+  padding: 10px 40px 10px 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+.inapp-banner p {
+  flex: 1;
+  min-width: 200px;
+  margin: 0;
+}
+.inapp-banner-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.inapp-banner-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #241a08;
+  cursor: pointer;
+  padding: 4px;
+}
+
 /* ちいさなお知らせ表示 */
 .toast {
   position: fixed;
