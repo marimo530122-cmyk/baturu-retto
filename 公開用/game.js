@@ -710,6 +710,7 @@ function showScreen(name) {
    タイトル画面
    ========================================================= */
 document.getElementById("btn-start").addEventListener("click", () => {
+  unlockSpeech(); // ゲームの一番最初のタップで読み上げ機能を起こしておく
   showScreen("setup");
 });
 
@@ -912,6 +913,7 @@ document.getElementById("online-create").addEventListener("click", () => {
 
 // 部屋に参加する（ゲスト）
 document.getElementById("online-join").addEventListener("click", () => {
+  unlockSpeech(); // ホストからの読み上げは操作なしで届くため、ここで先に起こしておく
   const code = document.getElementById("online-code-input").value.trim();
   if (!/^\d{4}$/.test(code)) {
     document.getElementById("online-message").textContent = t("onlineInvalidCode");
@@ -1290,6 +1292,10 @@ function startRound() {
 btnSpin.addEventListener("click", () => {
   if (spinning) return;
   btnSpin.disabled = true;
+
+  // タップした瞬間（=ユーザー操作の直後）に読み上げ機能を一度起こしておく。
+  // これをしないと、iPhoneなどでは少し後で呼ばれる読み上げが無音になることがある
+  unlockSpeech();
 
   // 回転中は煽りテキストを点滅させる
   gameStatus.textContent = t("spinTaunt");

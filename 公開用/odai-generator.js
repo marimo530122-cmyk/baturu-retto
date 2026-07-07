@@ -854,21 +854,45 @@ function speakOdai(speechText, lang = "ja", persona = null) {
 
   speechSynthesis.cancel(); // 前の読み上げが残っていたら止める
 
-  const utterance = new SpeechSynthesisUtterance(speechText);
-  const BCP47_MAP = { en: "en-US", zh: "zh-TW", ko: "ko-KR", es: "es-ES", ja: "ja-JP" };
-  utterance.lang = BCP47_MAP[lang] || "ja-JP";
-  utterance.rate = persona && persona.rate ? persona.rate : 1.0;
-  utterance.pitch = persona && persona.pitch ? persona.pitch : 1.1;
+  function doSpeak() {
+    // 一部のAndroid/Chromeは、止めた直後にすぐ喋らせようとすると
+    // 無言のまま失敗することがあるため、ごくわずかに間を空ける
+    const utterance = new SpeechSynthesisUtterance(speechText);
+    const BCP47_MAP = { en: "en-US", zh: "zh-TW", ko: "ko-KR", es: "es-ES", ja: "ja-JP" };
+    utterance.lang = BCP47_MAP[lang] || "ja-JP";
+    utterance.rate = persona && persona.rate ? persona.rate : 1.0;
+    utterance.pitch = persona && persona.pitch ? persona.pitch : 1.1;
 
-  const voice = pickVoice(lang, persona ? persona.gender : null);
-  if (voice) utterance.voice = voice;
+    const voice = pickVoice(lang, persona ? persona.gender : null);
+    if (voice) utterance.voice = voice;
 
-  // 読み上げ中はBGMを小さくして、声を聞き取りやすくする
-  if (typeof BGM !== "undefined") {
-    utterance.onstart = () => BGM.duck(true);
-    utterance.onend = () => BGM.duck(false);
-    utterance.onerror = () => BGM.duck(false);
+    // 読み上げ中はBGMを小さくして、声を聞き取りやすくする
+    if (typeof BGM !== "undefined") {
+      utterance.onstart = () => BGM.duck(true);
+      utterance.onend = () => BGM.duck(false);
+      utterance.onerror = () => BGM.duck(false);
+    }
+
+    // 稀に「一時停止」状態のまま固まる端末があるための保険
+    if (speechSynthesis.paused) speechSynthesis.resume();
+    speechSynthesis.speak(utterance);
   }
 
-  speechSynthesis.speak(utterance);
+  setTimeout(doSpeak, 60);
+}
+
+// 一部のスマホは音声リストが後から非同期に届くため、
+// 届いたタイミングで声の候補を最新化しておく
+if ("speechSynthesis" in window && "onvoiceschanged" in speechSynthesis) {
+  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+}
+
+// iOS Safari等は「ユーザーの操作の中で直接呼ばれた読み上げ」しか
+// 声を出さない制限があるため、最初のタップの瞬間に無音の発話を1回
+// 送っておくことで、後から遅れて呼ばれる読み上げも解禁される
+function unlockSpeech() {
+  if (!("speechSynthesis" in window)) return;
+  const silent = new SpeechSynthesisUtterance(" ");
+  silent.volume = 0;
+  speechSynthesis.speak(silent);
 }
