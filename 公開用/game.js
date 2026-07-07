@@ -740,10 +740,21 @@ function blockIfNotPremium(packKey) {
 /* ---------------- 🎨 テーマ着せ替えボタン（有料機能） ---------------- */
 const btnTheme = document.getElementById("btn-theme");
 
+// テーマの色は毎フレーム取得すると重いので、切り替え時だけ計算してキャッシュする
+let cachedThemeColors = { a: "#ff2d95", b: "#8f4bff" };
+function updateCachedThemeColors() {
+  const style = getComputedStyle(document.body);
+  cachedThemeColors = {
+    a: style.getPropertyValue("--c-accent-a").trim() || "#ff2d95",
+    b: style.getPropertyValue("--c-accent-b").trim() || "#8f4bff",
+  };
+}
+
 function applyTheme() {
   document.body.classList.remove(...THEME_CYCLE.map((th) => `theme-${th}`));
   if (state.theme !== "neon") document.body.classList.add(`theme-${state.theme}`);
   btnTheme.textContent = THEME_EMOJI[state.theme];
+  updateCachedThemeColors();
   drawWheel();
 }
 
@@ -941,8 +952,8 @@ function handleOnlineResult(data) {
   card.classList.toggle("king-card", data.type === "king");
   document.getElementById("online-guest-status").textContent = "";
 
-  const accentA = getComputedStyle(document.body).getPropertyValue("--c-accent-a").trim();
-  const accentB = getComputedStyle(document.body).getPropertyValue("--c-accent-b").trim();
+  const accentA = cachedThemeColors.a;
+  const accentB = cachedThemeColors.b;
   if (data.type === "king") {
     celebrate(["#ffe14b", "#ffb52d", "#ffffff"], [100, 50, 100, 50, 200]);
     SFX.kingFanfare();
@@ -1140,9 +1151,10 @@ function drawWheel() {
     ctx.restore();
   }
 
-  // 外枠のネオンリング（🎨着せ替えのテーマ色に連動）
-  const accentA = getComputedStyle(document.body).getPropertyValue("--c-accent-a").trim() || "#ff2d95";
-  const accentB = getComputedStyle(document.body).getPropertyValue("--c-accent-b").trim() || "#8f4bff";
+  // 外枠のネオンリング（🎨着せ替えのテーマ色に連動。
+  // 色の取得は重い処理なので、毎フレームではなくテーマ変更時にキャッシュしたものを使う）
+  const accentA = cachedThemeColors.a;
+  const accentB = cachedThemeColors.b;
 
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
@@ -1355,8 +1367,8 @@ function showOdai(from, to) {
   wheelArea.classList.add("hidden");
   odaiArea.classList.remove("hidden");
 
-  const accentA = getComputedStyle(document.body).getPropertyValue("--c-accent-a").trim();
-  const accentB = getComputedStyle(document.body).getPropertyValue("--c-accent-b").trim();
+  const accentA = cachedThemeColors.a;
+  const accentB = cachedThemeColors.b;
   celebrate([accentA, accentB, "#ffffff"], 80);
   SFX.reveal();
 
