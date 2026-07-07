@@ -1,0 +1,424 @@
+/* =========================================
+   バツルーレット - ネオン・夜の街風デザイン
+   ========================================= */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  background:
+    radial-gradient(circle at 50% -10%, #2a1550 0%, transparent 55%),
+    radial-gradient(circle at 90% 90%, #3d0a33 0%, transparent 45%),
+    #0b0716;
+  color: #fff;
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 28px 18px 40px;
+  text-align: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+.hidden { display: none !important; }
+
+/* ---------- ネオン文字 ---------- */
+.neon-pink {
+  color: #fff;
+  text-shadow:
+    0 0 6px #ff2d95, 0 0 16px #ff2d95, 0 0 34px #ff2d95;
+}
+.neon-purple {
+  color: #fff;
+  text-shadow:
+    0 0 6px #8f4bff, 0 0 16px #8f4bff, 0 0 34px #8f4bff;
+}
+
+/* ---------- タイトル画面 ---------- */
+.title-wrap { padding-top: 9vh; }
+
+.title-sub {
+  font-size: 15px;
+  letter-spacing: 3px;
+  color: #c9b8ff;
+  margin-bottom: 6px;
+}
+
+.logo {
+  font-size: 46px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  animation: flicker 3.2s infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.6; }
+  94% { opacity: 1; }
+  96% { opacity: 0.75; }
+  97% { opacity: 1; }
+}
+
+.title-tag {
+  font-size: 14px;
+  color: #ff9ecf;
+  margin-bottom: 34px;
+}
+
+/* ---------- ボタン ---------- */
+.btn {
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.08s;
+}
+.btn:active { transform: scale(0.95); }
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff2d95, #8f4bff);
+  box-shadow: 0 0 14px rgba(255, 45, 149, 0.55), 0 0 30px rgba(143, 75, 255, 0.35);
+}
+
+.btn-big {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 10px auto;
+  padding: 16px 10px;
+  font-size: 20px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: default;
+}
+
+.btn-sub {
+  background: #241a3e;
+  border: 1px solid #8f4bff;
+  padding: 12px 14px;
+  font-size: 14px;
+  box-shadow: 0 0 8px rgba(143, 75, 255, 0.35);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #9d8fc7;
+  font-size: 14px;
+  margin-top: 26px;
+  padding: 8px 14px;
+}
+
+.btn-add {
+  background: linear-gradient(135deg, #ff2d95, #8f4bff);
+  padding: 10px 18px;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* ---------- 無料版を目立たせる演出 ---------- */
+.free-label {
+  color: #ffe14b;
+  text-shadow: 0 0 10px #ffb52d, 0 0 22px #ffb52d;
+  font-weight: bold;
+  font-size: 17px;
+  margin-bottom: 12px;
+  animation: bounce 1.6s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.btn-mega {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+  padding: 22px 10px;
+  font-size: 27px;
+  letter-spacing: 2px;
+}
+
+.btn-pulse {
+  animation: pulseGlow 1.8s ease-in-out infinite;
+}
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 16px rgba(255, 45, 149, 0.6), 0 0 36px rgba(143, 75, 255, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 28px rgba(255, 45, 149, 0.95), 0 0 64px rgba(143, 75, 255, 0.7);
+  }
+}
+
+/* ---------- 音の操作ボタン（🎷BGM・🎙️声） ---------- */
+.floating-controls {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+.btn-float {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #1c1430;
+  border: 1px solid #4a3a75;
+  font-size: 21px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(143, 75, 255, 0.35);
+  transition: transform 0.08s, opacity 0.2s;
+}
+.btn-float:active { transform: scale(0.92); }
+.btn-float.off { opacity: 0.4; }
+
+/* ちいさなお知らせ表示 */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #241a3e;
+  border: 1px solid #8f4bff;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 14px;
+  color: #fff;
+  white-space: nowrap;
+  z-index: 20;
+  box-shadow: 0 0 14px rgba(143, 75, 255, 0.55);
+}
+
+/* ---------- 言語切り替えボタン ---------- */
+.btn-lang {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: #1c1430;
+  border: 1px solid #4a3a75;
+  color: #b3a5dd;
+  font-size: 13px;
+  padding: 8px 14px;
+  z-index: 3;
+}
+
+/* 有料版（ロック中）ボタン */
+.premium-heading {
+  margin-top: 40px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #8d7fb5;
+  letter-spacing: 1px;
+}
+.premium-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-locked {
+  background: #1c1430;
+  border: 1px solid #4a3a75;
+  color: #b3a5dd;
+  font-size: 13px;
+  padding: 10px 12px;
+}
+.lock { font-size: 11px; }
+
+.notice {
+  margin-top: 34px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: #8d7fb5;
+}
+
+/* ---------- メンバー登録画面 ---------- */
+.screen-title {
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 20px;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+.mode-btn {
+  background: #1c1430;
+  border: 1px solid #4a3a75;
+  color: #b3a5dd;
+  padding: 10px 18px;
+  font-size: 14px;
+}
+.mode-btn.active {
+  background: linear-gradient(135deg, #ff2d95, #8f4bff);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 45, 149, 0.5);
+}
+
+.team-panel {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 14px;
+  border: 1px solid #2c2150;
+}
+.team-m h3 { color: #6fb6ff; text-shadow: 0 0 10px #2d6bff; }
+.team-f h3 { color: #ff8fd0; text-shadow: 0 0 10px #ff2d95; }
+.team-a h3 { color: #d3a5ff; text-shadow: 0 0 10px #8f4bff; }
+.team-panel h3 { font-size: 16px; margin-bottom: 10px; }
+
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+.input-row input {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #4a3a75;
+  background: #120c22;
+  color: #fff;
+  outline: none;
+}
+.input-row input:focus { border-color: #ff2d95; }
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: center;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #241a3e;
+  border: 1px solid #8f4bff;
+  border-radius: 999px;
+  padding: 6px 6px 6px 14px;
+  font-size: 15px;
+}
+.chip button {
+  background: #3a2a60;
+  border: none;
+  color: #ffb3d9;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.message {
+  min-height: 22px;
+  color: #ff7eb3;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+/* ---------- ゲーム画面 ---------- */
+#wheel-area { position: relative; }
+
+#wheel {
+  display: block;
+  margin: 6px auto 4px;
+  width: 340px;
+  max-width: 92vw;
+  height: auto;
+  filter: drop-shadow(0 0 18px rgba(143, 75, 255, 0.45));
+}
+
+.pointer {
+  width: 0;
+  height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 24px solid #ffe14b;
+  filter: drop-shadow(0 0 8px #ffe14b);
+  margin: 0 auto -12px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- お題カード ---------- */
+.odai-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #ff2d95;
+  box-shadow: 0 0 18px rgba(255, 45, 149, 0.4), inset 0 0 24px rgba(143, 75, 255, 0.12);
+  border-radius: 20px;
+  padding: 26px 18px;
+  font-size: 21px;
+  font-weight: bold;
+  line-height: 1.9;
+  white-space: pre-line;
+  margin: 12px 0 16px;
+  animation: cardIn 0.45s ease-out;
+}
+
+@keyframes cardIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* 👑 王様モードのカード（金色に輝く） */
+.odai-card.king-card {
+  border-color: #ffe14b;
+  box-shadow: 0 0 22px rgba(255, 225, 75, 0.6), inset 0 0 28px rgba(255, 180, 45, 0.15);
+}
+
+.odai-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+/* ---------- モーダル ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 3, 12, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 20px;
+}
+.modal-box {
+  background: #171028;
+  border: 1px solid #8f4bff;
+  box-shadow: 0 0 30px rgba(143, 75, 255, 0.5);
+  border-radius: 20px;
+  padding: 30px 22px;
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+}
+.modal-box h3 { font-size: 20px; margin-bottom: 14px; }
+.modal-box p { font-size: 15px; line-height: 1.8; margin-bottom: 10px; }
+.modal-price { color: #ffd76f; }
+.modal-box .btn { margin-top: 10px; padding: 12px 40px; font-size: 16px; }

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>バツルーレット - Batsu Roulette</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============ 音の操作（全画面共通） ============ -->
+  <div class="floating-controls">
+    <button id="btn-bgm" class="btn-float off" title="BGM">🎷</button>
+    <button id="btn-voice" class="btn-float" title="Voice">🎲</button>
+  </div>
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- ============ 画面1：タイトル ============ -->
+  <section id="screen-title" class="screen">
+    <button id="btn-lang" class="btn btn-lang">🌐 English</button>
+
+    <div class="title-wrap">
+      <p class="title-sub" id="t-sub">飲み会を爆上げする</p>
+      <h1 class="logo neon-pink" id="t-logo">バツ<span class="neon-purple">ルーレット</span></h1>
+      <p class="title-tag" id="t-tag">罰ゲーム2,500通り × 👑王様モード × 司会者ボイス</p>
+
+      <p class="free-label" id="t-free">＼ 今すぐ無料で遊べる！ ／</p>
+      <button id="btn-start" class="btn btn-primary btn-mega btn-pulse">🎰 はじめる</button>
+
+      <p class="premium-heading" id="t-premium-heading">✨ 有料版（じゅんび中）</p>
+      <div class="premium-row">
+        <button class="btn btn-locked" data-pack="adult" id="pack-adult">🔞 大人向け <span class="lock">🔒</span></button>
+        <button class="btn btn-locked" data-pack="family" id="pack-family">👨‍👩‍👧 ファミリー <span class="lock">🔒</span></button>
+        <button class="btn btn-locked" data-pack="couple" id="pack-couple">💑 1対1モード <span class="lock">🔒</span></button>
+      </div>
+
+      <p class="notice" id="t-notice">※20歳未満の飲酒は法律で禁止されています。<br>お酒やお題の無理強いはやめましょう。</p>
+    </div>
+  </section>
+
+  <!-- ============ 画面2：メンバー登録 ============ -->
+  <section id="screen-setup" class="screen hidden">
+    <h2 class="screen-title neon-pink" id="t-setup-title">メンバー登録</h2>
+
+    <div class="mode-toggle">
+      <button id="mode-mf" class="btn mode-btn active">男女に分ける</button>
+      <button id="mode-all" class="btn mode-btn">全員一緒</button>
+    </div>
+
+    <!-- 男女モード -->
+    <div id="setup-mf">
+      <div class="team-panel team-m">
+        <h3 id="t-team-m">♂ 男性チーム</h3>
+        <div class="input-row">
+          <input id="input-m" type="text" maxlength="10" placeholder="名前を入力" />
+          <button id="add-m" class="btn btn-add">追加</button>
+        </div>
+        <div id="list-m" class="chip-list"></div>
+      </div>
+
+      <div class="team-panel team-f">
+        <h3 id="t-team-f">♀ 女性チーム</h3>
+        <div class="input-row">
+          <input id="input-f" type="text" maxlength="10" placeholder="名前を入力" />
+          <button id="add-f" class="btn btn-add">追加</button>
+        </div>
+        <div id="list-f" class="chip-list"></div>
+      </div>
+    </div>
+
+    <!-- 全員一緒モード -->
+    <div id="setup-all" class="hidden">
+      <div class="team-panel team-a">
+        <h3 id="t-team-a">🍻 参加メンバー</h3>
+        <div class="input-row">
+          <input id="input-a" type="text" maxlength="10" placeholder="名前を入力" />
+          <button id="add-a" class="btn btn-add">追加</button>
+        </div>
+        <div id="list-a" class="chip-list"></div>
+      </div>
+    </div>
+
+    <p id="setup-message" class="message"></p>
+
+    <button id="btn-game-start" class="btn btn-primary btn-big">🎲 ゲームスタート！</button>
+    <button id="btn-back-title" class="btn btn-ghost">← タイトルへ戻る</button>
+  </section>
+
+  <!-- ============ 画面3：ゲーム本体 ============ -->
+  <section id="screen-game" class="screen hidden">
+    <h2 id="game-status" class="screen-title neon-pink">🎯 罰ゲームをやる人は…！？</h2>
+
+    <div id="wheel-area">
+      <div class="pointer"></div>
+      <canvas id="wheel" width="340" height="340"></canvas>
+      <button id="btn-spin" class="btn btn-primary btn-big">🎰 ルーレット スタート！</button>
+    </div>
+
+    <div id="odai-area" class="hidden">
+      <div id="odai-card" class="odai-card"></div>
+      <div class="odai-buttons">
+        <button id="btn-speak" class="btn btn-sub">🔊 もう一度読み上げ</button>
+        <button id="btn-pass" class="btn btn-sub">🔄 パス（お題を変える）</button>
+      </div>
+      <button id="btn-next" class="btn btn-primary btn-big">🎰 次のルーレットへ！</button>
+    </div>
+
+    <button id="btn-back-setup" class="btn btn-ghost">← メンバーを変える</button>
+  </section>
+
+  <!-- ============ 有料版のご案内モーダル ============ -->
+  <div id="modal-premium" class="modal hidden">
+    <div class="modal-box">
+      <h3 class="neon-pink" id="t-modal-title">✨ 有料版のご案内 ✨</h3>
+      <p id="modal-text">このコンテンツは有料版で遊べます。</p>
+      <p class="modal-price" id="t-modal-price">買い切り 480円（現在準備中です。お楽しみに！）</p>
+      <button id="modal-close" class="btn btn-primary">とじる</button>
+    </div>
+  </div>
+
+  <script src="bgm.js"></script>
+  <script src="odai-generator.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
