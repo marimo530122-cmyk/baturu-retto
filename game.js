@@ -9,12 +9,30 @@
 /* ---------------- 王様モードの発動確率 ---------------- */
 const KING_CHANCE = 0.10; // 10%
 
+/* ---------------- 表彰式の間隔 ---------------- */
+const CEREMONY_INTERVAL = 10; // 10ラウンドごとに表彰式
+
 /* ---------------- 言語の切り替え順番 ---------------- */
-const LANG_CYCLE = ["ja", "en", "zh"];
+const LANG_CYCLE = ["ja", "en", "zh", "ko", "es"];
+const LANG_LABELS = { ja: "日", en: "EN", zh: "中", ko: "한", es: "ES" };
+
+/* ---------------- 🎨 テーマの切り替え順番 ---------------- */
+const THEME_CYCLE = ["neon", "casino", "izakaya"];
+const THEME_EMOJI = { neon: "🌃", casino: "🎰", izakaya: "🏮" };
+
+/* ---------------- 🃏 イカサマモードの当選率 ---------------- */
+const RIG_BOOST = 0.7; // 仕込んだ人が当たる確率（70%）
+
+/* ---------------- 💎 有料版の解放判定 ----------------
+   本番のアプリストア課金（ステップ3）が入るまでの開発用の
+   確認手段として、URLに ?premium=1 を付けると有料機能を試せる。
+   ------------------------------------------------------ */
+const params = new URLSearchParams(location.search);
+const PREMIUM_UNLOCKED = params.get("premium") === "1";
 
 /* ---------------- 状態（ゲームの記憶） ---------------- */
 const state = {
-  lang: "ja",          // "ja" = 日本語 / "en" = 英語 / "zh" = 繁體中文
+  lang: "ja",          // "ja"日本語 / "en"英語 / "zh"繁體中文 / "ko"한국어 / "es"español
   mode: "mf",          // "mf" = 男女に分ける / "all" = 全員一緒
   men: [],
   women: [],
@@ -24,6 +42,11 @@ const state = {
   isKing: false,
   voicePersona: "random", // 声のキャラクター（random / mc / oyaji / girl）
   currentVoice: null,     // 今回の読み上げに使った声（もう一度読み上げ用）
+  roundCount: 0,       // これまでに終わったラウンド数（表彰の判定に使う）
+  stats: {},           // 名前 -> { king: 王様になった回数, challenge: お題をやった回数 }
+  pendingCeremony: false, // 次の「次のルーレットへ」で表彰画面を挟むかどうか
+  theme: "neon",       // "neon" / "casino" / "izakaya"（🎨着せ替え・有料機能）
+  riggedName: null,    // 🃏イカサマモードで仕込んだ名前（次の1回だけ有効）
 };
 
 /* ---------------- 声のキャラクター ---------------- */
@@ -47,7 +70,7 @@ function resolveVoice() {
 /* ---------------- 日本語／英語の文言集 ---------------- */
 const UI = {
   ja: {
-    langBtn: "🌐 English",
+    langName: "日本語",
     sub: "飲み会を爆上げする",
     logoHTML: 'バツ<span class="neon-purple">ルーレット</span>',
     tag: "罰ゲーム2,500通り × 👑王様モード × 司会者ボイス",
@@ -58,7 +81,15 @@ const UI = {
       adult: "🔞 大人向け",
       family: "👨‍👩‍👧 ファミリー",
       couple: "💑 1対1モード",
+      theme: "🎨 ルーレットの着せ替え",
+      rig: "🃏 イカサマモード",
     },
+    themes: { neon: "🌃 ネオン", casino: "🎰 カジノ", izakaya: "🏮 居酒屋" },
+    rigTitle: "🃏 イカサマモード",
+    rigDesc: "次のルーレット、当たりやすくする人を選んでください",
+    rigClear: "解除する",
+    rigSet: (name) => `次のルーレット、【${name}】が当たりやすくなります！`,
+    rigOff: "イカサマを解除しました",
     noticeHTML: "※20歳未満の飲酒は法律で禁止されています。<br>お酒やお題の無理強いはやめましょう。",
     setupTitle: "メンバー登録",
     modeMf: "男女に分ける",
@@ -105,9 +136,14 @@ const UI = {
     speak: "🔊 もう一度読み上げ",
     pass: "🔄 パス（お題を変える）",
     next: "🎰 次のルーレットへ！",
+    ceremonyTitle: (n) => `🏆 中間結果発表！（${n}回終了）`,
+    ceremonyKing: (name, count) => `👑 王様運No.1：【${name}】（${count}回）`,
+    ceremonyChallenge: (name, count) => `🎯 被弾大賞：【${name}】（${count}回）`,
+    ceremonyNoKing: "👑 まだ王様は誕生していません",
+    ceremonyContinue: "🎉 続ける",
   },
   en: {
-    langBtn: "🌐 中文",
+    langName: "English",
     sub: "The ultimate party starter",
     logoHTML: 'Batsu <span class="neon-purple">Roulette</span>',
     tag: "2,500 challenges × 👑 King Mode × MC voice",
@@ -118,7 +154,15 @@ const UI = {
       adult: "🔞 Adults Only",
       family: "👨‍👩‍👧 Family",
       couple: "💑 Couple Mode",
+      theme: "🎨 Roulette Themes",
+      rig: "🃏 Rig Mode",
     },
+    themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
+    rigTitle: "🃏 Rig Mode",
+    rigDesc: "Pick who should be more likely to win the next spin",
+    rigClear: "Clear",
+    rigSet: (name) => `【${name}】 is now more likely to win the next spin!`,
+    rigOff: "Rig mode cleared",
     noticeHTML: "Please drink responsibly and only if you are of legal age.<br>Never pressure anyone to drink or do a challenge.",
     setupTitle: "Add Players",
     modeMf: "Guys vs Girls",
@@ -165,9 +209,14 @@ const UI = {
     speak: "🔊 Read it again",
     pass: "🔄 Pass (new challenge)",
     next: "🎰 NEXT SPIN!",
+    ceremonyTitle: (n) => `🏆 RESULTS SO FAR! (${n} rounds)`,
+    ceremonyKing: (name, count) => `👑 King of the Night: 【${name}】 (${count}x)`,
+    ceremonyChallenge: (name, count) => `🎯 Most Challenges: 【${name}】 (${count}x)`,
+    ceremonyNoKing: "👑 No King has appeared yet",
+    ceremonyContinue: "🎉 Continue",
   },
   zh: {
-    langBtn: "🌐 日本語",
+    langName: "繁體中文",
     sub: "讓聚會嗨翻天",
     logoHTML: '罰遊戲<span class="neon-purple">大轉盤</span>',
     tag: "2,500種懲罰 × 👑國王模式 × 主持人語音",
@@ -178,7 +227,15 @@ const UI = {
       adult: "🔞 成人限定",
       family: "👨‍👩‍👧 家庭版",
       couple: "💑 兩人模式",
+      theme: "🎨 輪盤換裝",
+      rig: "🃏 作弊模式",
     },
+    themes: { neon: "🌃 霓虹", casino: "🎰 賭場", izakaya: "🏮 居酒屋" },
+    rigTitle: "🃏 作弊模式",
+    rigDesc: "選擇下一輪比較容易被抽中的人",
+    rigClear: "解除",
+    rigSet: (name) => `下一輪，【${name}】會比較容易被抽中！`,
+    rigOff: "已解除作弊設定",
     noticeHTML: "※未成年請勿飲酒。<br>請勿強迫他人喝酒或做懲罰遊戲。",
     setupTitle: "新增玩家",
     modeMf: "男女分隊",
@@ -225,6 +282,157 @@ const UI = {
     speak: "🔊 再唸一次",
     pass: "🔄 跳過（換一題）",
     next: "🎰 下一輪！",
+    ceremonyTitle: (n) => `🏆 目前戰績發表！（已進行${n}輪）`,
+    ceremonyKing: (name, count) => `👑 國王運第一名：【${name}】（${count}次）`,
+    ceremonyChallenge: (name, count) => `🎯 中獎大王：【${name}】（${count}次）`,
+    ceremonyNoKing: "👑 目前還沒有國王誕生",
+    ceremonyContinue: "🎉 繼續遊戲",
+  },
+  ko: {
+    langName: "한국어",
+    sub: "회식을 뜨겁게 달구는",
+    logoHTML: '바츠<span class="neon-purple">룰렛</span>',
+    tag: "2,500가지 벌칙 × 👑왕게임 모드 × MC 보이스",
+    free: "＼ 지금 바로 무료로 즐기기！ ／",
+    start: "🎰 시작하기",
+    premiumHeading: "✨ 프리미엄（준비중）",
+    packs: {
+      adult: "🔞 성인 전용",
+      family: "👨‍👩‍👧 가족 모드",
+      couple: "💑 커플 모드",
+      theme: "🎨 룰렛 테마 변경",
+      rig: "🃏 조작 모드",
+    },
+    themes: { neon: "🌃 네온", casino: "🎰 카지노", izakaya: "🏮 이자카야" },
+    rigTitle: "🃏 조작 모드",
+    rigDesc: "다음 룰렛에서 당첨되기 쉽게 만들 사람을 선택하세요",
+    rigClear: "해제하기",
+    rigSet: (name) => `다음 룰렛에서【${name}】이(가) 당첨되기 쉬워집니다!`,
+    rigOff: "조작 설정이 해제되었습니다",
+    noticeHTML: "※미성년자 음주는 법으로 금지되어 있습니다.<br>음주나 벌칙을 강요하지 마세요.",
+    setupTitle: "참가자 등록",
+    modeMf: "남녀로 나누기",
+    modeAll: "다 같이",
+    teamM: "♂ 남자팀",
+    teamF: "♀ 여자팀",
+    teamA: "🍻 참가자",
+    placeholder: "이름을 입력하세요",
+    add: "추가",
+    gameStart: "🎲 게임 시작！",
+    backTitle: "← 타이틀로 돌아가기",
+    backSetup: "← 참가자 변경",
+    msgDup: "이미 등록된 이름입니다",
+    msgMax: "최대 12명까지 등록할 수 있습니다",
+    msgNeedMf: "남자·여자 각 1명 이상, 총 3명 이상 등록해주세요",
+    msgNeedAll: "3명 이상 등록해주세요",
+    coupleTeaser: "단둘이라면 「커플 모드」 추천! 프리미엄 콘텐츠입니다.",
+    packTeaser: (packName) => `「${packName}」은 프리미엄 콘텐츠입니다.`,
+    modalTitle: "✨ 프리미엄 안내 ✨",
+    modalPrice: "일회성 결제 ₩3,900（현재 준비중입니다. 기대해주세요！）",
+    modalClose: "닫기",
+    voices: {
+      random: "🎲 무작위 목소리（매번 바뀜）",
+      mc: "🎤 표준 MC",
+      oyaji: "👨 중후한 아저씨 목소리",
+      girl: "👧 귀여운 여자 목소리",
+    },
+    voiceSample: {
+      mc: "제가 읽어드릴게요!",
+      oyaji: "내가 읽어주지.",
+      girl: "제가 읽을게요!",
+    },
+    bgmOn: "🎷 재즈 BGM 켜짐",
+    bgmOff: "🎷 재즈 BGM 꺼짐",
+    statusStart: "🎯 벌칙을 받을 사람은…！？",
+    spinBtn: "🎰 룰렛 시작！",
+    statusPicked: (name) => `당첨은…【${name}】!`,
+    statusOdai: "🔥 벌칙 공개！",
+    statusKing: "👑 왕 탄생！！",
+    kingCard: (name) =>
+      `👑 왕 탄생！！\n\n왕은【${name}】!\n\n왕의 명령은 절대적！\n모두에게 자유롭게 명령을 내려보세요！`,
+    kingSpeech: (name) =>
+      `왕은, ${name}! 왕의 명령은 절대적! 자유롭게 명령을 내려주세요!`,
+    speak: "🔊 다시 듣기",
+    pass: "🔄 패스（다른 벌칙으로）",
+    next: "🎰 다음 룰렛으로！",
+    ceremonyTitle: (n) => `🏆 중간 결과 발표！（${n}회 종료）`,
+    ceremonyKing: (name, count) => `👑 왕 운 1위：【${name}】（${count}회）`,
+    ceremonyChallenge: (name, count) => `🎯 당첨왕：【${name}】（${count}회）`,
+    ceremonyNoKing: "👑 아직 왕이 탄생하지 않았습니다",
+    ceremonyContinue: "🎉 계속하기",
+  },
+  es: {
+    langName: "Español",
+    sub: "La chispa de toda fiesta",
+    logoHTML: 'Batsu <span class="neon-purple">Ruleta</span>',
+    tag: "2.500 retos × 👑 Modo Rey × Voz de presentador",
+    free: "＼ ¡Juega GRATIS ahora mismo! ／",
+    start: "🎰 JUGAR",
+    premiumHeading: "✨ Versión Premium (próximamente)",
+    packs: {
+      adult: "🔞 Solo Adultos",
+      family: "👨‍👩‍👧 Familiar",
+      couple: "💑 Modo Pareja",
+      theme: "🎨 Temas de la Ruleta",
+      rig: "🃏 Modo Amañado",
+    },
+    themes: { neon: "🌃 Neón", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
+    rigTitle: "🃏 Modo Amañado",
+    rigDesc: "Elige quién tendrá más probabilidad de ganar el próximo giro",
+    rigClear: "Quitar",
+    rigSet: (name) => `¡【${name}】 ahora tiene más probabilidad de ganar el próximo giro!`,
+    rigOff: "Modo amañado desactivado",
+    noticeHTML: "Bebe con responsabilidad y solo si tienes la edad legal.<br>Nunca obligues a nadie a beber o hacer un reto.",
+    setupTitle: "Agregar Jugadores",
+    modeMf: "Chicos vs Chicas",
+    modeAll: "Todos juntos",
+    teamM: "♂ Equipo Chicos",
+    teamF: "♀ Equipo Chicas",
+    teamA: "🍻 Jugadores",
+    placeholder: "Escribe un nombre",
+    add: "Agregar",
+    gameStart: "🎲 ¡EMPEZAR!",
+    backTitle: "← Volver al inicio",
+    backSetup: "← Cambiar jugadores",
+    msgDup: "Ese nombre ya está registrado",
+    msgMax: "Puedes registrar hasta 12 jugadores",
+    msgNeedMf: "Agrega al menos 1 chico, 1 chica y 3 jugadores en total",
+    msgNeedAll: "Agrega al menos 3 jugadores",
+    coupleTeaser: "¿Solo ustedes dos? ¡Prueba el Modo Pareja! Es contenido premium.",
+    packTeaser: (packName) => `"${packName}" es contenido de la versión premium.`,
+    modalTitle: "✨ Versión Premium ✨",
+    modalPrice: "Pago único €3.49 / MX$29 (¡próximamente!)",
+    modalClose: "Cerrar",
+    voices: {
+      random: "🎲 Voz sorpresa (cambia cada vez)",
+      mc: "🎤 Presentador estándar",
+      oyaji: "👨 Voz grave de señor",
+      girl: "👧 Voz de chica tierna",
+    },
+    voiceSample: {
+      mc: "¡Yo leeré los retos!",
+      oyaji: "Yo los leeré por ustedes.",
+      girl: "¡Yo los leo, vamos!",
+    },
+    bgmOn: "🎷 Música jazz ACTIVADA",
+    bgmOff: "🎷 Música jazz DESACTIVADA",
+    statusStart: "🎯 ¿Quién recibirá el reto...!?",
+    spinBtn: "🎰 ¡GIRAR LA RULETA!",
+    statusPicked: (name) => `¡Es... 【${name}】!`,
+    statusOdai: "🔥 ¡AQUÍ ESTÁ EL RETO!",
+    statusKing: "👑 ¡TODOS ANTE EL REY!",
+    kingCard: (name) =>
+      `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n\n¡La orden del Rey es absoluta!\n¡Inventa el reto que quieras!`,
+    kingSpeech: (name) =>
+      `¡El Rey es ${name}! ¡La orden del Rey es absoluta! ¡Inventa el reto que quieras!`,
+    speak: "🔊 Leer de nuevo",
+    pass: "🔄 Pasar (nuevo reto)",
+    next: "🎰 ¡SIGUIENTE!",
+    ceremonyTitle: (n) => `🏆 ¡RESULTADOS HASTA AHORA! (${n} rondas)`,
+    ceremonyKing: (name, count) => `👑 Rey de la noche: 【${name}】 (${count}x)`,
+    ceremonyChallenge: (name, count) => `🎯 Más retos: 【${name}】 (${count}x)`,
+    ceremonyNoKing: "👑 Todavía no ha aparecido ningún Rey",
+    ceremonyContinue: "🎉 Continuar",
   },
 };
 
@@ -237,7 +445,6 @@ function applyLanguage() {
   const u = UI[state.lang];
   document.documentElement.lang = state.lang;
 
-  document.getElementById("btn-lang").textContent = u.langBtn;
   document.getElementById("t-sub").textContent = u.sub;
   document.getElementById("t-logo").innerHTML = u.logoHTML;
   document.getElementById("t-tag").textContent = u.tag;
@@ -269,17 +476,28 @@ function applyLanguage() {
   document.getElementById("btn-speak").textContent = u.speak;
   document.getElementById("btn-pass").textContent = u.pass;
   document.getElementById("btn-next").textContent = u.next;
+  document.getElementById("btn-ceremony-continue").textContent = u.ceremonyContinue;
 
   document.getElementById("t-modal-title").textContent = u.modalTitle;
   document.getElementById("t-modal-price").textContent = u.modalPrice;
   document.getElementById("modal-close").textContent = u.modalClose;
+
+  updateLangButton();
 }
 
-document.getElementById("btn-lang").addEventListener("click", () => {
+/* ---------------- 🌐 言語ボタン（どの画面からでも切り替え可能） ---------------- */
+const btnLang = document.getElementById("btn-lang");
+
+function updateLangButton() {
+  btnLang.textContent = LANG_LABELS[state.lang];
+}
+
+btnLang.addEventListener("click", () => {
   const i = LANG_CYCLE.indexOf(state.lang);
   state.lang = LANG_CYCLE[(i + 1) % LANG_CYCLE.length];
   try { localStorage.setItem("batsu-lang", state.lang); } catch (e) {}
   applyLanguage();
+  showToast(`🌐 ${UI[state.lang].langName}`);
 });
 
 /* ---------------- ちいさなお知らせ表示（トースト） ---------------- */
@@ -325,6 +543,7 @@ const screens = {
   title: document.getElementById("screen-title"),
   setup: document.getElementById("screen-setup"),
   game: document.getElementById("screen-game"),
+  ceremony: document.getElementById("screen-ceremony"),
 };
 
 function showScreen(name) {
@@ -351,6 +570,71 @@ document.querySelectorAll(".btn-locked").forEach((btn) => {
 });
 document.getElementById("modal-close").addEventListener("click", () => {
   modal.classList.add("hidden");
+});
+
+// 有料機能をブロックして案内モーダルを出す（未解放のときだけ true を返す）
+function blockIfNotPremium(packKey) {
+  if (PREMIUM_UNLOCKED) return false;
+  document.getElementById("modal-text").textContent = t("packTeaser")(UI[state.lang].packs[packKey]);
+  modal.classList.remove("hidden");
+  return true;
+}
+
+/* ---------------- 🎨 テーマ着せ替えボタン（有料機能） ---------------- */
+const btnTheme = document.getElementById("btn-theme");
+
+function applyTheme() {
+  document.body.classList.remove(...THEME_CYCLE.map((th) => `theme-${th}`));
+  if (state.theme !== "neon") document.body.classList.add(`theme-${state.theme}`);
+  btnTheme.textContent = THEME_EMOJI[state.theme];
+  drawWheel();
+}
+
+btnTheme.addEventListener("click", () => {
+  if (blockIfNotPremium("theme")) return;
+  const i = THEME_CYCLE.indexOf(state.theme);
+  state.theme = THEME_CYCLE[(i + 1) % THEME_CYCLE.length];
+  try { localStorage.setItem("batsu-theme", state.theme); } catch (e) {}
+  applyTheme();
+  showToast(t("themes")[state.theme]);
+});
+
+/* ---------------- 🃏 イカサマモード（幹事専用・有料機能） ---------------- */
+const btnRig = document.getElementById("btn-rig");
+const modalRig = document.getElementById("modal-rig");
+
+btnRig.addEventListener("click", () => {
+  if (blockIfNotPremium("rig")) return;
+  document.getElementById("t-rig-title").textContent = t("rigTitle");
+  document.getElementById("t-rig-desc").textContent = t("rigDesc");
+  document.getElementById("rig-clear").textContent = t("rigClear");
+
+  const list = document.getElementById("rig-list");
+  list.innerHTML = "";
+  participants().forEach((p) => {
+    const b = document.createElement("button");
+    b.className = "btn rig-name-btn" + (state.riggedName === p.name ? " selected" : "");
+    b.textContent = p.name;
+    b.addEventListener("click", () => {
+      state.riggedName = p.name;
+      modalRig.classList.add("hidden");
+      btnRig.classList.add("active");
+      showToast(t("rigSet")(p.name));
+    });
+    list.appendChild(b);
+  });
+
+  modalRig.classList.remove("hidden");
+});
+
+document.getElementById("rig-clear").addEventListener("click", () => {
+  state.riggedName = null;
+  btnRig.classList.remove("active");
+  modalRig.classList.add("hidden");
+  showToast(t("rigOff"));
+});
+document.getElementById("rig-close").addEventListener("click", () => {
+  modalRig.classList.add("hidden");
 });
 
 /* =========================================================
@@ -522,12 +806,15 @@ function drawWheel() {
     ctx.restore();
   }
 
-  // 外枠のネオンリング
+  // 外枠のネオンリング（🎨着せ替えのテーマ色に連動）
+  const accentA = getComputedStyle(document.body).getPropertyValue("--c-accent-a").trim() || "#ff2d95";
+  const accentB = getComputedStyle(document.body).getPropertyValue("--c-accent-b").trim() || "#8f4bff";
+
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.strokeStyle = "#ff2d95";
+  ctx.strokeStyle = accentA;
   ctx.lineWidth = 4;
-  ctx.shadowColor = "#ff2d95";
+  ctx.shadowColor = accentA;
   ctx.shadowBlur = 14;
   ctx.stroke();
   ctx.shadowBlur = 0;
@@ -537,9 +824,25 @@ function drawWheel() {
   ctx.arc(cx, cy, 26, 0, Math.PI * 2);
   ctx.fillStyle = "#171028";
   ctx.fill();
-  ctx.strokeStyle = "#8f4bff";
+  ctx.strokeStyle = accentB;
   ctx.lineWidth = 3;
   ctx.stroke();
+}
+
+// 🃏 イカサマモード：仕込んだ人がいれば高確率で当てる（なければ普通の抽選）
+function pickWinnerIndex() {
+  const riggedIndex = state.riggedName
+    ? wheelEntries.findIndex((p) => p.name === state.riggedName)
+    : -1;
+
+  if (riggedIndex === -1) {
+    return Math.floor(Math.random() * wheelEntries.length);
+  }
+  if (Math.random() < RIG_BOOST) return riggedIndex;
+
+  // 外れくじ：仕込んだ人以外からランダムに選ぶ
+  const others = wheelEntries.map((_, i) => i).filter((i) => i !== riggedIndex);
+  return others[Math.floor(Math.random() * others.length)];
 }
 
 // くるくる回して、ランダムに1人選ぶ
@@ -549,7 +852,7 @@ function spinWheel(onDone) {
 
   const n = wheelEntries.length;
   const seg = (Math.PI * 2) / n;
-  const winnerIndex = Math.floor(Math.random() * n);
+  const winnerIndex = pickWinnerIndex();
 
   // 当たりの扇形の中心が、真上の矢印（-90度）に来る角度を計算
   let target = -Math.PI / 2 - (winnerIndex + 0.5) * seg;
@@ -607,6 +910,12 @@ function pickPartner(winner) {
   return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
+// 王様回数・お題回数の記録（表彰式で使う）
+function bumpStat(name, field) {
+  if (!state.stats[name]) state.stats[name] = { king: 0, challenge: 0 };
+  state.stats[name][field]++;
+}
+
 // 1回戦の始まり
 function startRound() {
   wheelEntries = participants();
@@ -629,6 +938,14 @@ btnSpin.addEventListener("click", () => {
   const kingRound = Math.random() < KING_CHANCE;
 
   spinWheel((winner) => {
+    // 🃏 イカサマの仕込みは1回のスピンだけで自動的に解除する
+    state.riggedName = null;
+    btnRig.classList.remove("active");
+
+    bumpStat(winner.name, kingRound ? "king" : "challenge");
+    state.roundCount++;
+    state.pendingCeremony = state.roundCount % CEREMONY_INTERVAL === 0;
+
     if (kingRound) {
       gameStatus.textContent = t("statusKing");
       setTimeout(() => showKing(winner), 700);
@@ -688,19 +1005,55 @@ btnPass.addEventListener("click", () => {
   showOdai(state.currentPair.from, state.currentPair.to);
 });
 
-// 次のルーレットへ
+// 次のルーレットへ（10ラウンドごとに表彰式を挟む）
 document.getElementById("btn-next").addEventListener("click", () => {
   speechSynthesis.cancel();
+  if (state.pendingCeremony) {
+    state.pendingCeremony = false;
+    showCeremony();
+  } else {
+    startRound();
+  }
+});
+
+// 🏆 表彰式：王様回数・お題回数のランキングを表示
+function showCeremony() {
+  const entries = Object.entries(state.stats);
+
+  const topKing = entries.reduce(
+    (best, [name, s]) => (s.king > (best ? best[1].king : 0) ? [name, s] : best),
+    null
+  );
+  const topChallenge = entries.reduce(
+    (best, [name, s]) => (s.challenge > (best ? best[1].challenge : 0) ? [name, s] : best),
+    null
+  );
+
+  document.getElementById("ceremony-title").textContent = t("ceremonyTitle")(state.roundCount);
+  document.getElementById("ceremony-king").textContent =
+    topKing && topKing[1].king > 0 ? t("ceremonyKing")(topKing[0], topKing[1].king) : t("ceremonyNoKing");
+  document.getElementById("ceremony-challenge").textContent =
+    topChallenge && topChallenge[1].challenge > 0
+      ? t("ceremonyChallenge")(topChallenge[0], topChallenge[1].challenge)
+      : "";
+
+  showScreen("ceremony");
+}
+
+document.getElementById("btn-ceremony-continue").addEventListener("click", () => {
+  showScreen("game");
   startRound();
 });
 
 /* ---------------- 初期化 ---------------- */
-// 前回選んだ言語と声を覚えておく
+// 前回選んだ言語・声・テーマ（有料機能）を覚えておく
 try {
   const savedLang = localStorage.getItem("batsu-lang");
   if (LANG_CYCLE.includes(savedLang)) state.lang = savedLang;
   const savedVoice = localStorage.getItem("batsu-voice");
   if (PERSONA_CYCLE.includes(savedVoice)) state.voicePersona = savedVoice;
+  const savedTheme = localStorage.getItem("batsu-theme");
+  if (PREMIUM_UNLOCKED && THEME_CYCLE.includes(savedTheme)) state.theme = savedTheme;
 } catch (e) {}
 
 // 一部のスマホは音声リストの読み込みが遅れるため、先に読み込みを促しておく
@@ -708,4 +1061,5 @@ if ("speechSynthesis" in window) speechSynthesis.getVoices();
 
 applyLanguage();
 updateVoiceButton();
+applyTheme();
 renderChips();

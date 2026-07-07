@@ -351,6 +351,229 @@ const ODAI_DATA = {
       "對著全場大聲宣告明天也會是最棒的一天",
     ],
   },
+
+  /* =======================================================
+     한국어판（韓国語、直訳ではなく王様ゲーム・노래방・회식文化に
+     合わせて再構成。目上を落とすのではなく「目上の前で
+     緊張する自分」を演じる方向で、面子を守る設計）
+     ======================================================= */
+  ko: {
+    situations: [
+      "최고급 호스트바 나가고 있는 사람처럼, 달콤한 목소리로",
+      "조폭 영화 속 형님처럼, 눈에 힘을 잔뜩 주고",
+      "갓 태어난 아기처럼, 순수한 미소와 목소리로",
+      "자산 3조원의 재벌 회장처럼, 거만하게",
+      "홈쇼핑 최고의 쇼호스트처럼, 목숨을 걸고",
+      "사극 속 무사처럼, 근엄한 어조로",
+      "놀이공원에서 제일 텐션 높은 언니처럼",
+      "배터리가 다 되어가는 로봇처럼, 뚝뚝 끊기게",
+      "심야 라디오 DJ처럼, 속삭이는 저음으로",
+      "사과 기자회견 하는 대표처럼, 진지하게",
+      "오페라 가수처럼, 모든 말을 노래로",
+      "열혈 학원 강사처럼, 눈물을 흘리며",
+      "해외에서 막 귀국한 인플루언서처럼, 영어를 섞어가며",
+      "닌자처럼, 주변을 경계하며 작은 목소리로",
+      "집사(또는 메이드)처럼, 공손하게",
+      "다섯 살 아이에게 설명하듯, 아주 다정하게",
+      "스포츠 캐스터처럼, 엄청 빠른 속도로",
+      "노래방 단골처럼, 있는 힘껏 고음을 지르며",
+      "사흘 밤을 새운 사람처럼, 하품을 섞어가며",
+      "팬미팅 무대 위 아이돌처럼, 눈부신 미소로",
+      "회식 자리 신입사원처럼, 잔뜩 긴장한 채",
+      "베테랑 형사가 취조하듯, 한 걸음씩 다가가며",
+      "마법소녀처럼, 필살기 포즈를 잡으며",
+      "래퍼처럼, 초고속으로 라임을 맞춰가며",
+      "도서관 사서처럼, 세상에서 제일 작은 목소리로",
+      "외계인과 첫 교신하는 과학자처럼, 신중하게",
+      "맛집 먹방 유튜버처럼, 오버스럽게",
+      "대대로 내려오는 노포 사장님처럼, 관록 있게",
+      "한창 운동 중인 트레이너처럼, 온몸에 힘을 주며",
+      "세상의 종말을 예언하는 선지자처럼, 웅장하게",
+      "마음은 안 그런데 괜히 새침 떠는 츤데레 캐릭터처럼",
+      "비염이 심하게 온 사람처럼, 콧소리로",
+      "악당 보스처럼, 중간중간 큰 웃음을 섞으며",
+      "드라마 자백 장면처럼, 벼랑 끝에 몰린 심정으로",
+      "첫 심부름 나온 어린아이처럼, 잔뜩 긴장해서",
+      "파리 패션위크 모델처럼, 워킹을 하며",
+      "뽑기에서 대흉을 뽑은 사람처럼, 절망적인 텐션으로",
+      "스탠드업 코미디언처럼, 스스로 드립을 치고 받으며",
+      "생방송 중 사고 난 리포터처럼, 말을 더듬으며",
+      "잠자는 숲속의 공주를 깨우는 왕자처럼, 과장되게",
+      "독심술사가 마음을 읽는 척하듯, 신비롭게",
+      "좀비처럼, 신음소리를 섞어가며",
+      "명작 영화 고백 장면처럼, 가슴에 손을 얹고",
+      "아침 뉴스 날씨 캐스터처럼, 상쾌하게",
+      "비밀결사 입단식처럼, 알 수 없는 진지함으로",
+      "막차를 놓칠 뻔해서 전력질주하는 사람처럼, 숨을 헐떡이며",
+      "세계적인 지휘자처럼, 보이지 않는 지휘봉을 흔들며",
+      "인기 스트리머가 채팅을 읽어주듯",
+      "만원 지하철에서 발을 밟혔는데 사과도 못 받은 표정으로",
+      "졸업식 답사를 읽는 대표처럼, 감정이 북받쳐서",
+    ],
+    actions: [
+      "우롱차 주문받는 점원 역할을 연기한다",
+      "오늘 신은 신발(또는 양말)이 얼마나 멋진지 열변을 토한다",
+      "상대의 눈을 바라보며 부끄러워하지 않고 장점 3가지를 칭찬한다",
+      "누구에게도 말한 적 없는 인생 최고 흑역사를 고백한다",
+      "영상통화가 갑자기 멈춘 척 15초간 정지 상태를 유지한다",
+      "상대를 이 시대 최고의 천재라고 전 세계에 소개하는 프레젠테이션을 한다",
+      "눈앞의 컵(또는 음료)에게 진지한 인생 상담을 한다",
+      "자기 이름의 유래를 거창한 거짓말을 섞어 설명한다",
+      "내일부터 우주로 떠난다고 중대 발표를 한다",
+      "상대의 헤어스타일을 명품 브랜드 신상처럼 소개한다",
+      "제자리에서 투명 줄넘기를 10초간 전력으로 한다",
+      "오늘 아침에 먹은 것을 파인다이닝 코스요리처럼 설명한다",
+      "상대의 귀에만 들리게 여기서만 통하는 비밀을 속삭인다",
+      "보이지 않는 문에 부딪히는 마임을 선보인다",
+      "자기 휴대폰 배터리 잔량을 주식 속보처럼 발표한다",
+      "내일 세상이 끝난다면 어떻게 보낼지 연설한다",
+      "상대의 주로 쓰는 손을 국보급 예술품처럼 감정한다",
+      "자기 인생에서 가장 오래된 기억을 발표한다",
+      "이 자리에 있는 모두의 장점을 한 명씩 외친다",
+      "에어기타로 전설적인 콘서트의 클라이맥스를 재현한다",
+      "자기 베개가 얼마나 편한지 5성급 호텔 지배인처럼 소개한다",
+      "상대를 위한 오늘의 운세를 그 자리에서 즉흥으로 만들어 발표한다",
+      "상대와 10초간 진지한 표정으로 눈싸움을 한다",
+      "가장 좋아하는 음식에게 러브레터를 낭독한다",
+      "투명인간과 뜨거운 악수를 나눈다",
+      "상대의 이름을 넣어 즉흥 응원 구호를 외친다",
+      "사실 전생에 만난 적이 있다는 설정으로 추억담을 이야기한다",
+      "가방 속 물건 하나를 꺼내 홈쇼핑처럼 판매한다",
+      "인생에서 제일 크게 웃었던 순간을 몸짓을 섞어 재현한다",
+      "슬로모션으로 의자에서 일어났다 다시 앉는다",
+      "상대의 휴대폰을 최첨단 비밀무기처럼 설명한다",
+      "무인도에 하나만 가져간다면 무엇을 가져갈지 열정적으로 프레젠테이션한다",
+      "보이지 않는 아기를 안고 재우는 연기를 한다",
+      "오늘 코디에 담긴 패션 철학을 설명한다",
+      "엘리베이터가 급정지하는 순간의 반응을 연기한다",
+      "좋아하는 음료의 맛을 짧은 시로 낭송한다",
+      "보디가드가 되어 10초간 주변을 경계한다",
+      "자기 사용설명서에 있는 주의사항 3가지를 발표한다",
+      "눈앞의 공기를 고급 초밥처럼 빚어 상대에게 건넨다",
+      "학창시절 가장 부끄러웠던 흑역사를 고백한다",
+      "옆 사람의 어깨를 빌려 10초간 오열하는 연기를 한다",
+      "10년 후의 자신이 지금의 자신에게 보내는 메시지를 대신 읽는다",
+      "강아지(또는 고양이)가 되어 주인에 대한 불만을 토로한다",
+      "그 자리에서 즉흥으로 5초간 탭댄스를 선보인다",
+      "상대의 미소를 맑음이라고 알리는 일기예보처럼 중계한다",
+      "지갑을 열어 내용물을 확인하며 이달의 지출 반성회를 연다",
+      "사실 자신은 닌자의 후손이라며 가문의 비밀을 이야기한다",
+      "눈을 감고 단번에 자기 코를 만지거나, 3번 연속 성공에 도전한다",
+      "이 모임을 위한 캐치프레이즈를 즉흥으로 만들어 발표한다",
+      "모두를 향해 내일도 최고의 하루가 될 거라고 힘차게 선언한다",
+    ],
+  },
+
+  /* =======================================================
+     Español（スペイン語、直訳ではなく中南米・スペインの
+     テレノベラ・サッカー実況・ダンス文化に合わせて再構成）
+     ======================================================= */
+  es: {
+    situations: [
+      "Como el anfitrión de un club de lujo, con la voz más dulce",
+      "Como el protagonista de una telenovela en la escena de la gran traición",
+      "Como un bebé recién nacido, con la sonrisa más pura",
+      "Como un magnate con fortuna de tres billones, mirando a todos por encima del hombro",
+      "Como el mejor comentarista de un partido de fútbol, gritando el gol",
+      "Como un torero antes de la faena, con solemnidad absoluta",
+      "Como el animador más entusiasta de un parque de diversiones",
+      "Como un robot con la batería a punto de morir, entrecortadamente",
+      "Como un locutor de radio nocturno, con una voz grave y susurrante",
+      "Como un director dando una rueda de prensa de disculpas, muy serio",
+      "Como un cantante de ópera, convirtiendo cada palabra en canto",
+      "Como un profesor apasionado, con lágrimas en los ojos",
+      "Como una estrella recién llegada de Hollywood, mezclando palabras en inglés",
+      "Como un ninja, susurrando mientras vigilas los alrededores",
+      "Como un mayordomo de la realeza, con extrema cortesía",
+      "Como si le explicaras algo a un niño de cinco años, con muchísima ternura",
+      "Como un comentarista deportivo, a toda velocidad",
+      "Como el rey del karaoke en plena noche, sacando la voz al máximo",
+      "Como alguien que no duerme hace tres días, entre bostezos",
+      "Como un ídolo del pop en un encuentro con fans, con una sonrisa radiante",
+      "Como el director de una escuela dando un discurso interminable antes de ir al grano",
+      "Como un detective interrogando a un sospechoso, acercándote paso a paso",
+      "Como una heroína mágica de anime, en tu pose final",
+      "Como un rapero, improvisando rimas a toda velocidad",
+      "Como un bibliotecario, con el volumen más bajo posible",
+      "Como un científico haciendo primer contacto con extraterrestres, con muchísimo cuidado",
+      "Como un youtuber de comida probando el plato estrella, de forma exagerada",
+      "Como el chef de un restaurante familiar de toda la vida, con total autoridad",
+      "Como un entrenador personal a mitad de rutina, tensando cada músculo",
+      "Como un profeta anunciando el fin del mundo, de forma épica",
+      "Como un personaje de telenovela que niega sus sentimientos, fingiendo indiferencia",
+      "Como alguien con una alergia terrible, con la nariz completamente tapada",
+      "Como el villano de la película, soltando una carcajada malvada de vez en cuando",
+      "Como la escena de confesión de un thriller, al borde del abismo",
+      "Como un niño haciendo su primer mandado solo, paralizado de nervios",
+      "Como una top model en la Semana de la Moda de París, desfilando",
+      "Con la energía de quien acaba de recibir la peor noticia del mundo",
+      "Como un comediante de stand-up, improvisando tu propio remate",
+      "Como un reportero en vivo que se traba con cada palabra",
+      "Como el príncipe que despierta a la Bella Durmiente, de forma exageradamente teatral",
+      "Como si leyeras la mente con poderes psíquicos, con mucho misterio",
+      "Como un zombi, entre gemidos",
+      "Como la escena de amor más famosa del cine, con la mano en el corazón",
+      "Como el presentador del clima en las noticias matutinas, con mucha energía",
+      "Como el ritual de iniciación de una sociedad secreta, con solemnidad misteriosa",
+      "Como alguien corriendo para no perder el último tren, sin aliento",
+      "Como un director de orquesta de fama mundial, agitando una batuta invisible",
+      "Como un streamer leyendo comentarios falsos del chat en vivo",
+      "Con la cara de quien le pisaron el pie en el metro y nadie se disculpó",
+      "Como el mejor amigo dando el discurso en una boda, a punto de llorar de la emoción",
+    ],
+    actions: [
+      "actuar como el mesero que toma el pedido de un té helado",
+      "explicar con pasión por qué los zapatos (o calcetines) que llevas hoy son una maravilla",
+      "mirar a los ojos de la otra persona y darle tres cumplidos sinceros sin reírte",
+      "confesar el secreto más vergonzoso que nunca le has contado a nadie",
+      "fingir que se congeló tu videollamada y quedarte inmóvil 15 segundos",
+      "presentar a esa persona como el genio más grande del siglo",
+      "tener una sesión seria de consejos de vida con tu bebida",
+      "explicar el origen de tu nombre con una historia completamente inventada",
+      "anunciar que mañana te vas al espacio",
+      "presentar el peinado de esa persona como la nueva colección de una marca de lujo",
+      "saltar la cuerda imaginaria durante 10 segundos con toda tu energía",
+      "describir lo que desayunaste como si fuera el menú de un restaurante de lujo",
+      "susurrarle al oído un secreto que solo esa persona puede escuchar",
+      "hacer un mimo de chocar contra una puerta invisible",
+      "anunciar el porcentaje de batería de tu celular como una noticia de última hora",
+      "dar un discurso sobre cómo pasarías tu último día si el mundo se acabara mañana",
+      "tasar la mano dominante de esa persona como si fuera una obra de arte invaluable",
+      "compartir tu recuerdo más antiguo de la infancia",
+      "gritarle a cada persona presente algo bueno de ella, una por una",
+      "recrear el clímax de un concierto legendario con guitarra de aire",
+      "describir lo cómoda que es tu almohada como el gerente de un hotel de cinco estrellas",
+      "inventar y anunciar el horóscopo de hoy solo para esa persona",
+      "hacer un concurso de miradas serias con esa persona durante 10 segundos",
+      "leerle una carta de amor a tu comida favorita",
+      "darle un apretón de manos apasionado a una persona invisible",
+      "gritar una porra improvisada usando el nombre de esa persona",
+      "contar una anécdota de cuando se conocieron en una vida pasada",
+      "sacar algo de tu bolso y venderlo como en un comercial de televisión",
+      "recrear con gestos exagerados la vez que más te has reído en tu vida",
+      "levantarte de la silla y volver a sentarte en cámara lenta",
+      "explicar el celular de esa persona como si fuera tecnología militar secreta",
+      "presentar con pasión qué te llevarías si solo pudieras tener una cosa en una isla desierta",
+      "mecer a un bebé invisible para dormirlo",
+      "explicar el concepto de moda detrás de tu outfit de hoy",
+      "actuar tu reacción a un elevador que se detiene de golpe",
+      "recitar un pequeño poema sobre tu bebida favorita",
+      "hacer de guardaespaldas, vigilando la zona durante 10 segundos",
+      "anunciar tres advertencias de tu propio manual de instrucciones",
+      "moldear el aire como si fuera sushi de lujo y ofrecérselo a esa persona",
+      "confesar lo más vergonzoso que hiciste en la escuela",
+      "usar el hombro de la persona de al lado y sollozar dramáticamente 10 segundos",
+      "leer un mensaje de tu yo del futuro, dentro de 10 años, para tu yo de ahora",
+      "convertirte en perro (o gato) y quejarte de tu dueño",
+      "hacer una rutina improvisada de tap de 5 segundos",
+      "reportar la sonrisa de esa persona como el clima perfecto en un pronóstico",
+      "revisar tu cartera y hacer una junta de revisión de tus gastos del mes",
+      "revelar el secreto de tu familia como descendiente de ninjas",
+      "cerrar los ojos e intentar tocarte la nariz al primer intento, o lograrlo 3 veces seguidas",
+      "inventar una frase publicitaria para esta reunión",
+      "declarar a todo pulmón que mañana también será el mejor día de sus vidas",
+    ],
+  },
 };
 
 /* ---------------------------------------------------------
@@ -369,7 +592,7 @@ let lastCombinationKey = "";
  * お題を生成する
  * @param {string} fromName - お題を実行する人の名前
  * @param {string} toName   - お題の相手の名前
- * @param {string} lang     - "ja"（日本語）/ "en"（英語）/ "zh"（繁體中文）
+ * @param {string} lang     - "ja" / "en" / "zh" / "ko" / "es"
  * @returns {object} displayText: 画面表示用 / speechText: 朗読用
  */
 function generateOdai(fromName, toName, lang = "ja") {
@@ -400,6 +623,20 @@ function generateOdai(fromName, toName, lang = "ja") {
       `${action}！`;
     speechText =
       `${fromName}，你的對象是${toName}！${situation}，${action}！`;
+  } else if (lang === "ko") {
+    displayText =
+      `【${fromName}】➜【${toName}】!\n` +
+      `${situation},\n` +
+      `${action}!`;
+    speechText =
+      `${fromName}, 상대는 ${toName}! ${situation}, ${action}!`;
+  } else if (lang === "es") {
+    displayText =
+      `【${fromName}】 ➜ 【${toName}】!\n` +
+      `${situation},\n` +
+      `${action}!`;
+    speechText =
+      `${fromName}, tu objetivo es ${toName}! ${situation}, ${action}!`;
   } else {
     // 日本語：名前に「さん」を付けて「から」「へ」がどんな名前でも自然につながるようにする
     displayText =
@@ -448,12 +685,14 @@ const FEMALE_VOICE_HINTS = [
   "o-ren", "mizuki", "zira", "jenny", "aria", "samantha", "victoria",
   "eva", "hazel", "susan", "linda", "michelle", "sonia", "natasha",
   "hanhan", "yaoyao", "huihui", "mei-jia", "meijia", "sin-ji", "sinji", "tingting",
+  "heami", "sora", "helena", "sabina", "monica", "paulina", "elvira", "laura",
 ];
 const MALE_VOICE_HINTS = [
   "male", "man", "ichiro", "keita", "otoya", "daichi", "show",
   "david", "mark", "guy", "christopher", "daniel", "alex", "fred",
   "george", "james", "ryan", "eric", "william", "liam",
   "zhiwei", "kangkang", "yunjian",
+  "injoon", "pablo", "raul", "jorge", "diego", "juan",
 ];
 
 function classifyVoiceGender(voice) {
@@ -465,7 +704,8 @@ function classifyVoiceGender(voice) {
 
 // 希望の言語＆性別に一番近い声を選ぶ
 function pickVoice(lang, gender) {
-  const prefix = lang === "en" ? "en" : lang === "zh" ? "zh" : "ja";
+  const PREFIX_MAP = { en: "en", zh: "zh", ko: "ko", es: "es", ja: "ja" };
+  const prefix = PREFIX_MAP[lang] || "ja";
   const list = speechSynthesis
     .getVoices()
     .filter((v) => v.lang && v.lang.replace("_", "-").startsWith(prefix));
@@ -480,7 +720,7 @@ function pickVoice(lang, gender) {
 /**
  * お題を朗読する
  * @param {string} speechText - 朗読するテキスト
- * @param {string} lang       - "ja" / "en" / "zh"
+ * @param {string} lang       - "ja" / "en" / "zh" / "ko" / "es"
  * @param {object} persona    - 声のキャラクター設定（省略可）
  *                              例: { pitch: 0.45, rate: 0.9, gender: "male" }
  */
@@ -490,7 +730,8 @@ function speakOdai(speechText, lang = "ja", persona = null) {
   speechSynthesis.cancel(); // 前の読み上げが残っていたら止める
 
   const utterance = new SpeechSynthesisUtterance(speechText);
-  utterance.lang = lang === "en" ? "en-US" : lang === "zh" ? "zh-TW" : "ja-JP";
+  const BCP47_MAP = { en: "en-US", zh: "zh-TW", ko: "ko-KR", es: "es-ES", ja: "ja-JP" };
+  utterance.lang = BCP47_MAP[lang] || "ja-JP";
   utterance.rate = persona && persona.rate ? persona.rate : 1.0;
   utterance.pitch = persona && persona.pitch ? persona.pitch : 1.1;
 

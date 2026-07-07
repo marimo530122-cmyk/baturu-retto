@@ -1,18 +1,53 @@
 /* =========================================
    バツルーレット - ネオン・夜の街風デザイン
+   （🎨着せ替え：色はすべてCSS変数化してあり、
+     body への theme-xxx クラスで一括切り替えできる）
    ========================================= */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+  --c-bg-1: #2a1550;
+  --c-bg-2: #3d0a33;
+  --c-bg-3: #0b0716;
+  --c-accent-a: #ff2d95; /* メインのピンク */
+  --c-accent-b: #8f4bff; /* メインの紫 */
+  --c-panel: #1c1430;
+  --c-panel-border: #4a3a75;
+}
+
+/* 🎰 カジノテーマ（金・黒・赤） */
+body.theme-casino {
+  --c-bg-1: #331200;
+  --c-bg-2: #4d0000;
+  --c-bg-3: #0a0500;
+  --c-accent-a: #ffd700;
+  --c-accent-b: #c81e2c;
+  --c-panel: #241a08;
+  --c-panel-border: #7a5a20;
+}
+
+/* 🏮 居酒屋テーマ（暖色・提灯の灯り） */
+body.theme-izakaya {
+  --c-bg-1: #3a1408;
+  --c-bg-2: #4d1c0a;
+  --c-bg-3: #0f0704;
+  --c-accent-a: #ff6b35;
+  --c-accent-b: #d4a017;
+  --c-panel: #2a1a10;
+  --c-panel-border: #6b4a2a;
+}
+
 body {
   font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
   background:
-    radial-gradient(circle at 50% -10%, #2a1550 0%, transparent 55%),
-    radial-gradient(circle at 90% 90%, #3d0a33 0%, transparent 45%),
-    #0b0716;
+    radial-gradient(circle at 50% -10%, var(--c-bg-1) 0%, transparent 55%),
+    radial-gradient(circle at 90% 90%, var(--c-bg-2) 0%, transparent 45%),
+    var(--c-bg-3);
   color: #fff;
   min-height: 100vh;
   -webkit-tap-highlight-color: transparent;
+  transition: background 0.4s;
 }
 
 .screen {
@@ -30,12 +65,12 @@ body {
 .neon-pink {
   color: #fff;
   text-shadow:
-    0 0 6px #ff2d95, 0 0 16px #ff2d95, 0 0 34px #ff2d95;
+    0 0 6px var(--c-accent-a), 0 0 16px var(--c-accent-a), 0 0 34px var(--c-accent-a);
 }
 .neon-purple {
   color: #fff;
   text-shadow:
-    0 0 6px #8f4bff, 0 0 16px #8f4bff, 0 0 34px #8f4bff;
+    0 0 6px var(--c-accent-b), 0 0 16px var(--c-accent-b), 0 0 34px var(--c-accent-b);
 }
 
 /* ---------- タイトル画面 ---------- */
@@ -84,8 +119,9 @@ body {
 .btn:active { transform: scale(0.95); }
 
 .btn-primary {
-  background: linear-gradient(135deg, #ff2d95, #8f4bff);
-  box-shadow: 0 0 14px rgba(255, 45, 149, 0.55), 0 0 30px rgba(143, 75, 255, 0.35);
+  background: linear-gradient(135deg, var(--c-accent-a), var(--c-accent-b));
+  box-shadow: 0 0 14px color-mix(in srgb, var(--c-accent-a) 55%, transparent),
+              0 0 30px color-mix(in srgb, var(--c-accent-b) 35%, transparent);
 }
 
 .btn-big {
@@ -104,11 +140,11 @@ body {
 }
 
 .btn-sub {
-  background: #241a3e;
-  border: 1px solid #8f4bff;
+  background: var(--c-panel);
+  border: 1px solid var(--c-accent-b);
   padding: 12px 14px;
   font-size: 14px;
-  box-shadow: 0 0 8px rgba(143, 75, 255, 0.35);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--c-accent-b) 35%, transparent);
 }
 
 .btn-ghost {
@@ -120,7 +156,7 @@ body {
 }
 
 .btn-add {
-  background: linear-gradient(135deg, #ff2d95, #8f4bff);
+  background: linear-gradient(135deg, var(--c-accent-a), var(--c-accent-b));
   padding: 10px 18px;
   font-size: 15px;
   flex-shrink: 0;
@@ -156,15 +192,17 @@ body {
 @keyframes pulseGlow {
   0%, 100% {
     transform: scale(1);
-    box-shadow: 0 0 16px rgba(255, 45, 149, 0.6), 0 0 36px rgba(143, 75, 255, 0.4);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--c-accent-a) 60%, transparent),
+                0 0 36px color-mix(in srgb, var(--c-accent-b) 40%, transparent);
   }
   50% {
     transform: scale(1.05);
-    box-shadow: 0 0 28px rgba(255, 45, 149, 0.95), 0 0 64px rgba(143, 75, 255, 0.7);
+    box-shadow: 0 0 28px color-mix(in srgb, var(--c-accent-a) 95%, transparent),
+                0 0 64px color-mix(in srgb, var(--c-accent-b) 70%, transparent);
   }
 }
 
-/* ---------- 音の操作ボタン（🎷BGM・🎙️声） ---------- */
+/* ---------- 音の操作ボタン（🎷BGM・🎙️声・🌐言語・🎨テーマ） ---------- */
 .floating-controls {
   position: fixed;
   top: 12px;
@@ -172,20 +210,27 @@ body {
   display: flex;
   gap: 8px;
   z-index: 5;
+  flex-wrap: wrap;
+  max-width: calc(100vw - 24px);
 }
 .btn-float {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: #1c1430;
-  border: 1px solid #4a3a75;
+  background: var(--c-panel);
+  border: 1px solid var(--c-panel-border);
   font-size: 21px;
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(143, 75, 255, 0.35);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--c-accent-b) 35%, transparent);
   transition: transform 0.08s, opacity 0.2s;
 }
 .btn-float:active { transform: scale(0.92); }
 .btn-float.off { opacity: 0.4; }
+.btn-lang {
+  font-size: 15px;
+  font-weight: bold;
+  color: #fff;
+}
 
 /* ちいさなお知らせ表示 */
 .toast {
@@ -193,28 +238,15 @@ body {
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  background: #241a3e;
-  border: 1px solid #8f4bff;
+  background: var(--c-panel);
+  border: 1px solid var(--c-accent-b);
   border-radius: 999px;
   padding: 10px 22px;
   font-size: 14px;
   color: #fff;
   white-space: nowrap;
   z-index: 20;
-  box-shadow: 0 0 14px rgba(143, 75, 255, 0.55);
-}
-
-/* ---------- 言語切り替えボタン ---------- */
-.btn-lang {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  background: #1c1430;
-  border: 1px solid #4a3a75;
-  color: #b3a5dd;
-  font-size: 13px;
-  padding: 8px 14px;
-  z-index: 3;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--c-accent-b) 55%, transparent);
 }
 
 /* 有料版（ロック中）ボタン */
@@ -232,8 +264,8 @@ body {
   flex-wrap: wrap;
 }
 .btn-locked {
-  background: #1c1430;
-  border: 1px solid #4a3a75;
+  background: var(--c-panel);
+  border: 1px solid var(--c-panel-border);
   color: #b3a5dd;
   font-size: 13px;
   padding: 10px 12px;
@@ -261,17 +293,17 @@ body {
   margin-bottom: 18px;
 }
 .mode-btn {
-  background: #1c1430;
-  border: 1px solid #4a3a75;
+  background: var(--c-panel);
+  border: 1px solid var(--c-panel-border);
   color: #b3a5dd;
   padding: 10px 18px;
   font-size: 14px;
 }
 .mode-btn.active {
-  background: linear-gradient(135deg, #ff2d95, #8f4bff);
+  background: linear-gradient(135deg, var(--c-accent-a), var(--c-accent-b));
   border-color: transparent;
   color: #fff;
-  box-shadow: 0 0 10px rgba(255, 45, 149, 0.5);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--c-accent-a) 50%, transparent);
 }
 
 .team-panel {
@@ -282,8 +314,8 @@ body {
   border: 1px solid #2c2150;
 }
 .team-m h3 { color: #6fb6ff; text-shadow: 0 0 10px #2d6bff; }
-.team-f h3 { color: #ff8fd0; text-shadow: 0 0 10px #ff2d95; }
-.team-a h3 { color: #d3a5ff; text-shadow: 0 0 10px #8f4bff; }
+.team-f h3 { color: #ff8fd0; text-shadow: 0 0 10px var(--c-accent-a); }
+.team-a h3 { color: #d3a5ff; text-shadow: 0 0 10px var(--c-accent-b); }
 .team-panel h3 { font-size: 16px; margin-bottom: 10px; }
 
 .input-row {
@@ -296,12 +328,12 @@ body {
   font-size: 16px;
   padding: 10px 14px;
   border-radius: 999px;
-  border: 1px solid #4a3a75;
+  border: 1px solid var(--c-panel-border);
   background: #120c22;
   color: #fff;
   outline: none;
 }
-.input-row input:focus { border-color: #ff2d95; }
+.input-row input:focus { border-color: var(--c-accent-a); }
 
 .chip-list {
   display: flex;
@@ -314,8 +346,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #241a3e;
-  border: 1px solid #8f4bff;
+  background: var(--c-panel);
+  border: 1px solid var(--c-accent-b);
   border-radius: 999px;
   padding: 6px 6px 6px 14px;
   font-size: 15px;
@@ -348,7 +380,7 @@ body {
   width: 340px;
   max-width: 92vw;
   height: auto;
-  filter: drop-shadow(0 0 18px rgba(143, 75, 255, 0.45));
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--c-accent-b) 45%, transparent));
 }
 
 .pointer {
@@ -363,11 +395,24 @@ body {
   z-index: 2;
 }
 
+/* 🃏 イカサマモードボタン（幹事専用） */
+.btn-rig {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 18px;
+}
+.btn-rig.active {
+  border-color: #ffe14b;
+  box-shadow: 0 0 12px rgba(255, 225, 75, 0.7);
+}
+
 /* ---------- お題カード ---------- */
 .odai-card {
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid #ff2d95;
-  box-shadow: 0 0 18px rgba(255, 45, 149, 0.4), inset 0 0 24px rgba(143, 75, 255, 0.12);
+  border: 1px solid var(--c-accent-a);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--c-accent-a) 40%, transparent),
+              inset 0 0 24px color-mix(in srgb, var(--c-accent-b) 12%, transparent);
   border-radius: 20px;
   padding: 26px 18px;
   font-size: 21px;
@@ -397,6 +442,21 @@ body {
   flex-wrap: wrap;
 }
 
+/* ---------- 表彰式画面 ---------- */
+.ceremony-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #ffe14b;
+  box-shadow: 0 0 18px rgba(255, 225, 75, 0.4);
+  border-radius: 20px;
+  padding: 30px 18px;
+  margin: 30px 0;
+}
+.ceremony-line {
+  font-size: 19px;
+  font-weight: bold;
+  line-height: 2.1;
+}
+
 /* ---------- モーダル ---------- */
 .modal {
   position: fixed;
@@ -410,8 +470,8 @@ body {
 }
 .modal-box {
   background: #171028;
-  border: 1px solid #8f4bff;
-  box-shadow: 0 0 30px rgba(143, 75, 255, 0.5);
+  border: 1px solid var(--c-accent-b);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--c-accent-b) 50%, transparent);
   border-radius: 20px;
   padding: 30px 22px;
   max-width: 340px;
@@ -422,3 +482,24 @@ body {
 .modal-box p { font-size: 15px; line-height: 1.8; margin-bottom: 10px; }
 .modal-price { color: #ffd76f; }
 .modal-box .btn { margin-top: 10px; padding: 12px 40px; font-size: 16px; }
+
+/* 🃏 イカサマモードの名前選択リスト */
+.rig-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.rig-name-btn {
+  background: var(--c-panel);
+  border: 1px solid var(--c-panel-border);
+  padding: 12px;
+  font-size: 15px;
+  color: #fff;
+}
+.rig-name-btn.selected {
+  border-color: #ffe14b;
+  box-shadow: 0 0 10px rgba(255, 225, 75, 0.6);
+}
