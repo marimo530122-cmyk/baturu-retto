@@ -144,6 +144,10 @@ const UI = {
       `王様は、${name}さん！王様の命令は、絶対！好きなお題を出してください！`,
     speak: "🔊 もう一度読み上げ",
     pass: "🔄 パス（お題を変える）",
+    share: "📤 シェア",
+    shareCopied: "リンクをコピーしました！",
+    shareAppText: "🎰 バツルーレット - 飲み会を爆上げする罰ゲームルーレット！",
+    shareOdaiText: (text) => `${text}\n\n#バツルーレット`,
     next: "🎰 次のルーレットへ！",
     ceremonyTitle: (n) => `🏆 中間結果発表！（${n}回終了）`,
     ceremonyKing: (name, count) => `👑 王様運No.1：【${name}】（${count}回）`,
@@ -243,6 +247,10 @@ const UI = {
       `The King is ${name}! The King's command is absolute! Make up any challenge you want!`,
     speak: "🔊 Read it again",
     pass: "🔄 Pass (new challenge)",
+    share: "📤 Share",
+    shareCopied: "Link copied!",
+    shareAppText: "🎰 Batsu Roulette - the ultimate party dare game!",
+    shareOdaiText: (text) => `${text}\n\n#BatsuRoulette`,
     next: "🎰 NEXT SPIN!",
     ceremonyTitle: (n) => `🏆 RESULTS SO FAR! (${n} rounds)`,
     ceremonyKing: (name, count) => `👑 King of the Night: 【${name}】 (${count}x)`,
@@ -342,6 +350,10 @@ const UI = {
       `國王是，${name}！國王的命令是絕對的！請自由對大家出題！`,
     speak: "🔊 再唸一次",
     pass: "🔄 跳過（換一題）",
+    share: "📤 分享",
+    shareCopied: "已複製連結！",
+    shareAppText: "🎰 罰遊戲輪盤 - 讓聚會爆棚的懲罰遊戲轉盤！",
+    shareOdaiText: (text) => `${text}\n\n#罰遊戲輪盤`,
     next: "🎰 下一輪！",
     ceremonyTitle: (n) => `🏆 目前戰績發表！（已進行${n}輪）`,
     ceremonyKing: (name, count) => `👑 國王運第一名：【${name}】（${count}次）`,
@@ -441,6 +453,10 @@ const UI = {
       `왕은, ${name}! 왕의 명령은 절대적! 자유롭게 명령을 내려주세요!`,
     speak: "🔊 다시 듣기",
     pass: "🔄 패스（다른 벌칙으로）",
+    share: "📤 공유",
+    shareCopied: "링크가 복사되었습니다!",
+    shareAppText: "🎰 벌칙 룰렛 - 회식을 뜨겁게 달구는 벌칙 게임!",
+    shareOdaiText: (text) => `${text}\n\n#벌칙룰렛`,
     next: "🎰 다음 룰렛으로！",
     ceremonyTitle: (n) => `🏆 중간 결과 발표！（${n}회 종료）`,
     ceremonyKing: (name, count) => `👑 왕 운 1위：【${name}】（${count}회）`,
@@ -540,6 +556,10 @@ const UI = {
       `¡El Rey es ${name}! ¡La orden del Rey es absoluta! ¡Inventa el reto que quieras!`,
     speak: "🔊 Leer de nuevo",
     pass: "🔄 Pasar (nuevo reto)",
+    share: "📤 Compartir",
+    shareCopied: "¡Enlace copiado!",
+    shareAppText: "🎰 Batsu Roulette - ¡el juego de retos definitivo para fiestas!",
+    shareOdaiText: (text) => `${text}\n\n#BatsuRoulette`,
     next: "🎰 ¡SIGUIENTE!",
     ceremonyTitle: (n) => `🏆 ¡RESULTADOS HASTA AHORA! (${n} rondas)`,
     ceremonyKing: (name, count) => `👑 Rey de la noche: 【${name}】 (${count}x)`,
@@ -613,6 +633,7 @@ function applyLanguage() {
   document.getElementById("btn-spin").textContent = u.spinBtn;
   document.getElementById("btn-speak").textContent = u.speak;
   document.getElementById("btn-pass").textContent = u.pass;
+  document.getElementById("btn-share").textContent = u.share;
   document.getElementById("btn-next").textContent = u.next;
   document.getElementById("btn-ceremony-continue").textContent = u.ceremonyContinue;
 
@@ -1417,6 +1438,35 @@ btnPass.addEventListener("click", () => {
   odaiCard.style.animation = "";
   showOdai(state.currentPair.from, state.currentPair.to);
   Achievements.bump("totalPasses");
+});
+
+// 📤 共有（対応端末はOSの共有シートを開き、非対応ならリンクをコピーする）
+const GAME_URL = "https://marimo530122-cmyk.github.io/baturu-retto/";
+
+async function shareContent(text) {
+  if (navigator.share) {
+    try {
+      await navigator.share({ text, url: GAME_URL });
+      return;
+    } catch (e) {
+      return; // ユーザーがキャンセルした場合など
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(`${text}\n${GAME_URL}`);
+    showToast(t("shareCopied"));
+  } catch (e) {
+    showToast(GAME_URL);
+  }
+}
+
+document.getElementById("btn-share-app").addEventListener("click", () => {
+  shareContent(t("shareAppText"));
+});
+
+document.getElementById("btn-share").addEventListener("click", () => {
+  if (!odaiCard.textContent) return;
+  shareContent(t("shareOdaiText")(odaiCard.textContent));
 });
 
 // 次のルーレットへ（10ラウンドごとに表彰式を挟む）
