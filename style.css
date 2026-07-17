@@ -556,6 +556,72 @@ body {
 .modal-price { color: #ffd76f; }
 .modal-box .btn { margin-top: 10px; padding: 12px 40px; font-size: 16px; }
 
+/* 📮 罰ゲーム投稿・共有 */
+.modal-box-wide {
+  max-width: 460px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.submission-input {
+  width: 100%;
+  min-height: 70px;
+  font-size: 15px;
+  font-family: inherit;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--c-panel-border);
+  background: #120c22;
+  color: #fff;
+  outline: none;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+.submission-input:focus { border-color: var(--c-accent-a); }
+.modal-divider {
+  border: none;
+  border-top: 1px solid var(--c-panel-border);
+  margin: 20px 0 14px;
+}
+.submission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  margin-bottom: 14px;
+}
+.submission-item {
+  position: relative;
+  background: var(--c-panel);
+  border: 1px solid var(--c-panel-border);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+.submission-item p {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-right: 40px;
+}
+.submission-lang {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 10px;
+  color: #8d7fb5;
+  border: 1px solid var(--c-panel-border);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.submission-actions {
+  display: flex;
+  gap: 8px;
+}
+.submission-actions .btn {
+  padding: 8px 12px;
+  font-size: 12px;
+  margin-top: 0;
+}
+
 /* 💎 プレミアム解放のお祝いモーダル */
 .modal-box-gold {
   border-color: #ffe14b;

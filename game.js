@@ -92,6 +92,7 @@ const UI = {
       rig: "🃏 イカサマモード",
       romance: "💌 恋愛パック",
       online: "📡 オンラインモード",
+      post: "📮 罰ゲーム投稿・共有",
     },
     themes: { neon: "🌃 ネオン", casino: "🎰 カジノ", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 イカサマモード",
@@ -169,6 +170,26 @@ const UI = {
     unlockedTitle: "✨ 有料版が有効になりました！",
     unlockedDesc: "ご購入ありがとうございます！大人向けパック・イカサマモード・着せ替えテーマなど、有料コンテンツが全て解放されました。乾杯🍻",
     unlockedClose: "はじめる",
+    subTitle: "📮 罰ゲーム投稿・共有",
+    subDesc: "あなたが考えたオリジナルの罰ゲームを投稿できます。自動審査＋確認を経てから、他のユーザーに共有されます（個人情報や誹謗中傷は含めないでください）。",
+    subPlaceholder: "例：好きな芸能人のモノマネをする",
+    subPostBtn: "投稿する",
+    subListTitle: "🌟 みんなの投稿",
+    subEmpty: "まだ投稿がありません。最初の投稿者になりませんか？",
+    subSpeak: "🔊 読み上げる",
+    subReport: "🚩 通報",
+    subClose: "とじる",
+    subPostedPending: "投稿しました！審査後、みんなに共有されます。",
+    subRejectedNgWord: "ごめんなさい、この内容は投稿できません（不適切な表現が含まれています）。",
+    subRejectedEmpty: "罰ゲームの内容を入力してください。",
+    subRejectedTooLong: `200文字以内で入力してください。`,
+    subNotConfigured: "投稿・共有機能の設定がまだ完了していません。",
+    subReported: "通報しました。ご協力ありがとうございます。",
+    adminTitle: "🛡️ 承認待ちの投稿",
+    adminApprove: "✅ 承認",
+    adminReject: "❌ 却下",
+    adminEmpty: "審査待ちの投稿はありません。",
+    adminClose: "とじる",
     achTitle: "🏆 実績バッジ",
     achClose: "とじる",
     achUnlocked: (name) => `🏅 実績解除：${name}！`,
@@ -206,6 +227,7 @@ const UI = {
       rig: "🃏 Rig Mode",
       romance: "💌 Romance Pack",
       online: "📡 Online Mode",
+      post: "📮 Post & Share Dares",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Rig Mode",
@@ -283,6 +305,26 @@ const UI = {
     unlockedTitle: "✨ Premium Unlocked!",
     unlockedDesc: "Thanks for your purchase! All premium content — the Adults Only pack, Rig Mode, roulette themes, and more — is now unlocked. Cheers! 🍻",
     unlockedClose: "Let's go",
+    subTitle: "📮 Post & Share Dares",
+    subDesc: "Submit an original dare you came up with. After passing automatic screening and review, it'll be shared with other users (please don't include personal info or insults).",
+    subPlaceholder: "e.g. do an impression of your favorite celebrity",
+    subPostBtn: "Submit",
+    subListTitle: "🌟 Community Dares",
+    subEmpty: "No submissions yet. Be the first!",
+    subSpeak: "🔊 Read aloud",
+    subReport: "🚩 Report",
+    subClose: "Close",
+    subPostedPending: "Submitted! It'll be shared with everyone after review.",
+    subRejectedNgWord: "Sorry, this can't be posted (it contains inappropriate content).",
+    subRejectedEmpty: "Please enter a dare.",
+    subRejectedTooLong: "Please keep it under 200 characters.",
+    subNotConfigured: "The posting & sharing feature isn't set up yet.",
+    subReported: "Reported. Thanks for helping keep things safe.",
+    adminTitle: "🛡️ Pending Submissions",
+    adminApprove: "✅ Approve",
+    adminReject: "❌ Reject",
+    adminEmpty: "No submissions awaiting review.",
+    adminClose: "Close",
     achTitle: "🏆 Achievements",
     achClose: "Close",
     achUnlocked: (name) => `🏅 Achievement unlocked: ${name}!`,
@@ -320,6 +362,7 @@ const UI = {
       rig: "🃏 作弊模式",
       romance: "💌 戀愛套組",
       online: "📡 線上模式",
+      post: "📮 罰遊戲投稿・分享",
     },
     themes: { neon: "🌃 霓虹", casino: "🎰 賭場", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 作弊模式",
@@ -397,6 +440,26 @@ const UI = {
     unlockedTitle: "✨ 付費版已啟用！",
     unlockedDesc: "感謝您的購買！成人限定套組、作弊模式、輪盤換裝等所有付費內容現已全部解鎖。乾杯🍻",
     unlockedClose: "開始",
+    subTitle: "📮 罰遊戲投稿・分享",
+    subDesc: "您可以投稿自己想的原創罰遊戲。經過自動審查與確認後，會分享給其他使用者（請勿包含個人資訊或誹謗中傷內容）。",
+    subPlaceholder: "例：模仿喜歡的藝人",
+    subPostBtn: "投稿",
+    subListTitle: "🌟 大家的投稿",
+    subEmpty: "還沒有投稿。要不要成為第一位投稿者？",
+    subSpeak: "🔊 朗讀",
+    subReport: "🚩 檢舉",
+    subClose: "關閉",
+    subPostedPending: "已投稿！審核後將分享給大家。",
+    subRejectedNgWord: "抱歉，此內容無法投稿（包含不適當的表現）。",
+    subRejectedEmpty: "請輸入罰遊戲的內容。",
+    subRejectedTooLong: "請在200字以內輸入。",
+    subNotConfigured: "投稿・分享功能尚未設定完成。",
+    subReported: "已檢舉，感謝您的協助。",
+    adminTitle: "🛡️ 審核中的投稿",
+    adminApprove: "✅ 核准",
+    adminReject: "❌ 駁回",
+    adminEmpty: "目前沒有待審核的投稿。",
+    adminClose: "關閉",
     achTitle: "🏆 成就徽章",
     achClose: "關閉",
     achUnlocked: (name) => `🏅 解鎖成就：${name}！`,
@@ -434,6 +497,7 @@ const UI = {
       rig: "🃏 조작 모드",
       romance: "💌 로맨스 팩",
       online: "📡 온라인 모드",
+      post: "📮 벌칙 투고・공유",
     },
     themes: { neon: "🌃 네온", casino: "🎰 카지노", izakaya: "🏮 이자카야" },
     rigTitle: "🃏 조작 모드",
@@ -511,6 +575,26 @@ const UI = {
     unlockedTitle: "✨ 프리미엄이 활성화되었습니다!",
     unlockedDesc: "구매해주셔서 감사합니다! 성인 전용 팩·조작 모드·룰렛 테마 변경 등 모든 프리미엄 콘텐츠가 해제되었습니다. 건배🍻",
     unlockedClose: "시작하기",
+    subTitle: "📮 벌칙 투고・공유",
+    subDesc: "직접 생각한 오리지널 벌칙을 투고할 수 있습니다. 자동 심사와 확인을 거친 후 다른 사용자와 공유됩니다（개인정보나 비방은 포함하지 말아주세요）.",
+    subPlaceholder: "예：좋아하는 연예인 성대모사하기",
+    subPostBtn: "투고하기",
+    subListTitle: "🌟 모두의 투고",
+    subEmpty: "아직 투고가 없습니다. 첫 투고자가 되어보세요！",
+    subSpeak: "🔊 읽어주기",
+    subReport: "🚩 신고",
+    subClose: "닫기",
+    subPostedPending: "투고했습니다! 심사 후 모두에게 공유됩니다.",
+    subRejectedNgWord: "죄송합니다, 이 내용은 투고할 수 없습니다（부적절한 표현이 포함되어 있습니다）.",
+    subRejectedEmpty: "벌칙 내용을 입력해주세요.",
+    subRejectedTooLong: "200자 이내로 입력해주세요.",
+    subNotConfigured: "투고・공유 기능이 아직 설정되지 않았습니다.",
+    subReported: "신고했습니다. 협조해주셔서 감사합니다.",
+    adminTitle: "🛡️ 심사 대기 중인 투고",
+    adminApprove: "✅ 승인",
+    adminReject: "❌ 거부",
+    adminEmpty: "심사 대기 중인 투고가 없습니다.",
+    adminClose: "닫기",
     achTitle: "🏆 업적 배지",
     achClose: "닫기",
     achUnlocked: (name) => `🏅 업적 달성: ${name}!`,
@@ -548,6 +632,7 @@ const UI = {
       rig: "🃏 Modo Amañado",
       romance: "💌 Paquete Romántico",
       online: "📡 Modo Online",
+      post: "📮 Publicar y Compartir Retos",
     },
     themes: { neon: "🌃 Neón", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Modo Amañado",
@@ -625,6 +710,26 @@ const UI = {
     unlockedTitle: "✨ ¡Versión Premium Activada!",
     unlockedDesc: "¡Gracias por tu compra! Todo el contenido premium — el Paquete Solo Adultos, Modo Amañado, temas de la ruleta y más — ya está desbloqueado. ¡Salud! 🍻",
     unlockedClose: "Empezar",
+    subTitle: "📮 Publicar y Compartir Retos",
+    subDesc: "Envía un reto original que se te haya ocurrido. Tras pasar la revisión automática y la confirmación, se compartirá con otros usuarios (no incluyas información personal ni insultos).",
+    subPlaceholder: "ej: imita a tu famoso favorito",
+    subPostBtn: "Enviar",
+    subListTitle: "🌟 Retos de la Comunidad",
+    subEmpty: "Aún no hay envíos. ¡Sé el primero!",
+    subSpeak: "🔊 Leer en voz alta",
+    subReport: "🚩 Reportar",
+    subClose: "Cerrar",
+    subPostedPending: "¡Enviado! Se compartirá con todos después de la revisión.",
+    subRejectedNgWord: "Lo sentimos, esto no se puede publicar (contiene contenido inapropiado).",
+    subRejectedEmpty: "Por favor escribe un reto.",
+    subRejectedTooLong: "Por favor, no superes los 200 caracteres.",
+    subNotConfigured: "La función de publicar y compartir aún no está configurada.",
+    subReported: "Reportado. Gracias por tu ayuda.",
+    adminTitle: "🛡️ Envíos Pendientes",
+    adminApprove: "✅ Aprobar",
+    adminReject: "❌ Rechazar",
+    adminEmpty: "No hay envíos pendientes de revisión.",
+    adminClose: "Cerrar",
     achTitle: "🏆 Logros",
     achClose: "Cerrar",
     achUnlocked: (name) => `🏅 ¡Logro desbloqueado: ${name}!`,
@@ -713,6 +818,13 @@ function applyLanguage() {
   document.getElementById("achievements-close").textContent = u.achClose;
   document.getElementById("t-hl-title").textContent = u.hlTitle;
   document.getElementById("highlights-close").textContent = u.hlClose;
+
+  document.getElementById("t-sub-title").textContent = u.subTitle;
+  document.getElementById("t-sub-desc").textContent = u.subDesc;
+  document.getElementById("submission-input").placeholder = u.subPlaceholder;
+  document.getElementById("submission-post").textContent = u.subPostBtn;
+  document.getElementById("t-sub-list-title").textContent = u.subListTitle;
+  document.getElementById("submissions-close").textContent = u.subClose;
 
   updateLangButton();
   updateBgmGenreButton();
@@ -1027,6 +1139,164 @@ document.getElementById("btn-highlights").addEventListener("click", () => {
 document.getElementById("highlights-close").addEventListener("click", () => {
   modalHighlights.classList.add("hidden");
 });
+
+/* ---------------- 📮 罰ゲーム投稿・共有（有料機能） ---------------- */
+const modalSubmissions = document.getElementById("modal-submissions");
+const btnSubmissions = document.getElementById("btn-submissions");
+const submissionList = document.getElementById("submission-list");
+const submissionEmpty = document.getElementById("submission-empty");
+let submissionsWatching = false;
+
+function renderSubmissionList(items) {
+  submissionList.innerHTML = "";
+  submissionEmpty.textContent = items.length === 0 ? t("subEmpty") : "";
+  items.forEach((item) => {
+    const box = document.createElement("div");
+    box.className = "submission-item";
+
+    const p = document.createElement("p");
+    p.textContent = item.text;
+    box.appendChild(p);
+
+    const langTag = document.createElement("span");
+    langTag.className = "submission-lang";
+    langTag.textContent = (item.lang || "ja").toUpperCase();
+    box.appendChild(langTag);
+
+    const actions = document.createElement("div");
+    actions.className = "submission-actions";
+
+    const speakBtn = document.createElement("button");
+    speakBtn.className = "btn btn-sub";
+    speakBtn.textContent = t("subSpeak");
+    speakBtn.addEventListener("click", () => {
+      speakOdai(item.text, item.lang || state.lang, resolveVoice());
+    });
+
+    const reportBtn = document.createElement("button");
+    reportBtn.className = "btn btn-ghost";
+    reportBtn.textContent = t("subReport");
+    reportBtn.addEventListener("click", () => {
+      Submissions.report(item.id);
+      showToast(t("subReported"));
+    });
+
+    actions.appendChild(speakBtn);
+    actions.appendChild(reportBtn);
+    box.appendChild(actions);
+    submissionList.appendChild(box);
+  });
+}
+
+btnSubmissions.addEventListener("click", () => {
+  if (blockIfNotPremium("post")) return;
+  document.getElementById("submission-message").textContent = "";
+  document.getElementById("submission-input").value = "";
+  modalSubmissions.classList.remove("hidden");
+
+  if (!Submissions.isConfigured()) {
+    submissionEmpty.textContent = t("subNotConfigured");
+    submissionList.innerHTML = "";
+    return;
+  }
+  if (!submissionsWatching) {
+    submissionsWatching = true;
+    Submissions.watchApproved(renderSubmissionList);
+  }
+});
+
+document.getElementById("submissions-close").addEventListener("click", () => {
+  modalSubmissions.classList.add("hidden");
+});
+
+document.getElementById("submission-post").addEventListener("click", () => {
+  const input = document.getElementById("submission-input");
+  const msg = document.getElementById("submission-message");
+  const text = input.value.trim();
+
+  if (!Submissions.isConfigured()) {
+    msg.textContent = t("subNotConfigured");
+    return;
+  }
+  if (!text) {
+    msg.textContent = t("subRejectedEmpty");
+    return;
+  }
+  if (text.length > Moderation.MAX_LENGTH) {
+    msg.textContent = t("subRejectedTooLong");
+    return;
+  }
+
+  const result = Submissions.submit(text, state.lang);
+  if (!result.ok) {
+    msg.textContent = result.reason === "ng_word" ? t("subRejectedNgWord") : t("subNotConfigured");
+    return;
+  }
+  input.value = "";
+  msg.textContent = t("subPostedPending");
+});
+
+/* ---------------- 🛡️ 管理者用：承認待ちの投稿（?admin=1でのみ表示） ---------------- */
+const isAdminView = new URLSearchParams(location.search).get("admin") === "1";
+if (isAdminView) {
+  const btnAdmin = document.createElement("button");
+  btnAdmin.id = "btn-admin";
+  btnAdmin.className = "btn-float";
+  btnAdmin.title = "Admin";
+  btnAdmin.textContent = "🛡️";
+  document.querySelector(".floating-controls").appendChild(btnAdmin);
+
+  const modalAdmin = document.getElementById("modal-admin");
+  const adminList = document.getElementById("admin-list");
+  const adminEmpty = document.getElementById("admin-empty");
+  let adminWatching = false;
+
+  const renderAdminList = (items) => {
+    adminList.innerHTML = "";
+    adminEmpty.textContent = items.length === 0 ? t("adminEmpty") : "";
+    items.forEach((item) => {
+      const box = document.createElement("div");
+      box.className = "submission-item";
+
+      const p = document.createElement("p");
+      p.textContent = `[${(item.lang || "ja").toUpperCase()}] ${item.text}`;
+      box.appendChild(p);
+
+      const actions = document.createElement("div");
+      actions.className = "submission-actions";
+
+      const approveBtn = document.createElement("button");
+      approveBtn.className = "btn btn-primary";
+      approveBtn.textContent = t("adminApprove");
+      approveBtn.addEventListener("click", () => Submissions.moderate(item.id, true));
+
+      const rejectBtn = document.createElement("button");
+      rejectBtn.className = "btn btn-ghost";
+      rejectBtn.textContent = t("adminReject");
+      rejectBtn.addEventListener("click", () => Submissions.moderate(item.id, false));
+
+      actions.appendChild(approveBtn);
+      actions.appendChild(rejectBtn);
+      box.appendChild(actions);
+      adminList.appendChild(box);
+    });
+  };
+
+  btnAdmin.addEventListener("click", () => {
+    modalAdmin.classList.remove("hidden");
+    if (!Submissions.isConfigured()) {
+      adminEmpty.textContent = t("subNotConfigured");
+      return;
+    }
+    if (!adminWatching) {
+      adminWatching = true;
+      Submissions.watchPending(renderAdminList);
+    }
+  });
+  document.getElementById("admin-close").addEventListener("click", () => {
+    modalAdmin.classList.add("hidden");
+  });
+}
 
 /* ---------------- 📡 オンライン飲み会モード（有料機能） ---------------- */
 const modalOnline = document.getElementById("modal-online");
