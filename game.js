@@ -162,6 +162,7 @@ const UI = {
     pass: "🔄 パス（お題を変える）",
     share: "📤 シェア",
     shareCopied: "リンクをコピーしました！",
+    shareCopiedOpenApp: (app) => `コピーしました！${app}を開いたら貼り付けてください`,
     shareAppText: "🎰 バツルーレット - 飲み会を爆上げする罰ゲームルーレット！",
     shareOdaiText: (text) => text, // 個人間のチャット共有はハッシュタグなし（Xシェアは別途 shareToX() で付与）
     shareOnX: "𝕏でシェア",
@@ -300,6 +301,7 @@ const UI = {
     pass: "🔄 Pass (new challenge)",
     share: "📤 Share",
     shareCopied: "Link copied!",
+    shareCopiedOpenApp: (app) => `Copied! Paste it once ${app} opens`,
     shareAppText: "🎰 Batsu Roulette - the ultimate party dare game!",
     shareOdaiText: (text) => text, // no hashtags for 1:1 chat shares (X sharing adds hashtags separately via shareToX())
     shareOnX: "Share on 𝕏",
@@ -438,6 +440,7 @@ const UI = {
     pass: "🔄 跳過（換一題）",
     share: "📤 分享",
     shareCopied: "已複製連結！",
+    shareCopiedOpenApp: (app) => `已複製！打開${app}後請貼上`,
     shareAppText: "🎰 罰遊戲輪盤 - 讓聚會爆棚的懲罰遊戲轉盤！",
     shareOdaiText: (text) => text, // 一對一聊天分享不附加標籤（X分享另由shareToX()附加）
     shareOnX: "在𝕏分享",
@@ -576,6 +579,7 @@ const UI = {
     pass: "🔄 패스（다른 벌칙으로）",
     share: "📤 공유",
     shareCopied: "링크가 복사되었습니다!",
+    shareCopiedOpenApp: (app) => `복사했습니다! ${app}을(를) 연 후 붙여넣어 주세요`,
     shareAppText: "🎰 벌칙 룰렛 - 회식을 뜨겁게 달구는 벌칙 게임!",
     shareOdaiText: (text) => text, // 1:1 채팅 공유는 해시태그 없음（X 공유는 shareToX()에서 별도로 추가）
     shareOnX: "𝕏에 공유하기",
@@ -714,6 +718,7 @@ const UI = {
     pass: "🔄 Pasar (nuevo reto)",
     share: "📤 Compartir",
     shareCopied: "¡Enlace copiado!",
+    shareCopiedOpenApp: (app) => `¡Copiado! Pégalo cuando se abra ${app}`,
     shareAppText: "🎰 Batsu Roulette - ¡el juego de retos definitivo para fiestas!",
     shareOdaiText: (text) => text, // sin hashtags para chats 1:1 (los hashtags de X se añaden en shareToX())
     shareOnX: "Compartir en 𝕏",
@@ -852,6 +857,7 @@ const UI = {
     pass: "🔄 Pular (novo desafio)",
     share: "📤 Compartilhar",
     shareCopied: "Link copiado!",
+    shareCopiedOpenApp: (app) => `Copiado! Cole assim que o ${app} abrir`,
     shareAppText: "🎰 Batsu Roulette - o jogo de desafios definitivo para festas!",
     shareOdaiText: (text) => text, // sem hashtags em chats 1:1 (hashtags do X são adicionadas em shareToX())
     shareOnX: "Compartilhar no 𝕏",
@@ -2039,6 +2045,51 @@ function shareToX(text) {
   window.open(intentUrl, "_blank", "noopener,width=550,height=420");
 }
 
+/* ---------------------------------------------------------
+   📲 WhatsApp / Telegram / Instagram / WeChat 専用シェア
+   ---------------------------------------------------------
+   ・WhatsApp / Telegramは公式のWeb Intentがあるため、
+     本文とURLをセットした状態で送信先選択画面まで自動で開ける
+   ・Instagram / WeChatには、投稿画面に本文を自動セットする
+     公式な仕組みが存在しない（スパム対策のため非公開）。
+     そのため「本文をコピー → アプリを開く → 貼り付けてもらう」
+     方式で代用する
+   --------------------------------------------------------- */
+
+// WhatsApp：DM共有と同じ扱いなのでハッシュタグは付けない
+function shareToWhatsApp(text) {
+  const url = "https://wa.me/?text=" + encodeURIComponent(`${text}\n${GAME_URL}`);
+  window.open(url, "_blank", "noopener");
+}
+
+// Telegram：DM共有と同じ扱いなのでハッシュタグは付けない
+function shareToTelegram(text) {
+  const url =
+    "https://t.me/share/url?url=" + encodeURIComponent(GAME_URL) +
+    "&text=" + encodeURIComponent(text);
+  window.open(url, "_blank", "noopener");
+}
+
+// Instagram / WeChat 共通：本文をコピーしてからアプリを開く（公開SNS扱いのInstagramのみハッシュタグを付与）
+async function shareViaCopyAndOpen(text, appUrl, appLabel) {
+  try {
+    await navigator.clipboard.writeText(`${text}\n${GAME_URL}`);
+    showToast(t("shareCopiedOpenApp")(appLabel));
+  } catch (e) {
+    showToast(GAME_URL);
+  }
+  window.open(appUrl, "_blank", "noopener");
+}
+
+function shareToInstagram(text) {
+  const fullText = `${text}\n\n${WORLD_HASHTAGS}`; // Instagramは公開SNS扱いなのでハッシュタグを付与
+  shareViaCopyAndOpen(fullText, "https://www.instagram.com/", "Instagram");
+}
+
+function shareToWeChat(text) {
+  shareViaCopyAndOpen(text, "https://www.wechat.com/", "WeChat"); // DM/グループ共有と同じ扱いなのでハッシュタグは付けない
+}
+
 // dataURL(PNG) を共有用のFileに変換する
 async function dataUrlToFile(dataUrl, filename) {
   const res = await fetch(dataUrl);
@@ -2082,6 +2133,18 @@ document.getElementById("btn-share-app").addEventListener("click", () => {
 document.getElementById("btn-share-x-app").addEventListener("click", () => {
   shareToX(t("shareAppText"));
 });
+document.getElementById("btn-share-whatsapp-app").addEventListener("click", () => {
+  shareToWhatsApp(t("shareAppText"));
+});
+document.getElementById("btn-share-telegram-app").addEventListener("click", () => {
+  shareToTelegram(t("shareAppText"));
+});
+document.getElementById("btn-share-instagram-app").addEventListener("click", () => {
+  shareToInstagram(t("shareAppText"));
+});
+document.getElementById("btn-share-wechat-app").addEventListener("click", () => {
+  shareToWeChat(t("shareAppText"));
+});
 
 document.getElementById("btn-share").addEventListener("click", () => {
   if (!odaiCard.textContent) return;
@@ -2090,6 +2153,22 @@ document.getElementById("btn-share").addEventListener("click", () => {
 document.getElementById("btn-share-x").addEventListener("click", () => {
   if (!odaiCard.textContent) return;
   shareToX(odaiCard.textContent);
+});
+document.getElementById("btn-share-whatsapp").addEventListener("click", () => {
+  if (!odaiCard.textContent) return;
+  shareToWhatsApp(odaiCard.textContent);
+});
+document.getElementById("btn-share-telegram").addEventListener("click", () => {
+  if (!odaiCard.textContent) return;
+  shareToTelegram(odaiCard.textContent);
+});
+document.getElementById("btn-share-instagram").addEventListener("click", () => {
+  if (!odaiCard.textContent) return;
+  shareToInstagram(odaiCard.textContent);
+});
+document.getElementById("btn-share-wechat").addEventListener("click", () => {
+  if (!odaiCard.textContent) return;
+  shareToWeChat(odaiCard.textContent);
 });
 
 // 次のルーレットへ（10ラウンドごとに表彰式を挟む）
