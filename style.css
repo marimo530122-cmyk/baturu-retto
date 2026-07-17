@@ -50,6 +50,46 @@ body {
   transition: background 0.4s;
 }
 
+/* 🎬 RECモード：説明文を隠し、演出だけを強調する撮影用の見た目 */
+body.rec-mode .title-tag,
+body.rec-mode .free-label,
+body.rec-mode .premium-heading,
+body.rec-mode .premium-row,
+body.rec-mode .notice,
+body.rec-mode .viral-footer,
+body.rec-mode .spice-row,
+body.rec-mode .online-room-badge,
+body.rec-mode .share-icon-row,
+body.rec-mode .odai-buttons,
+body.rec-mode .floating-controls > button:not(#btn-rec-mode) {
+  display: none !important;
+}
+body.rec-mode .logo {
+  font-size: clamp(34px, 10vw, 68px);
+  animation: premiumShimmer 2.4s ease-in-out infinite;
+}
+body.rec-mode #wheel {
+  filter: drop-shadow(0 0 34px color-mix(in srgb, var(--c-accent-b) 75%, transparent));
+}
+body.rec-mode .odai-card {
+  animation: cardIn 0.45s ease-out, recGlow 1.6s ease-in-out infinite alternate;
+}
+@keyframes recGlow {
+  from { box-shadow: 0 0 22px color-mix(in srgb, var(--c-accent-a) 55%, transparent); }
+  to   { box-shadow: 0 0 55px color-mix(in srgb, var(--c-accent-a) 90%, transparent),
+                     0 0 95px color-mix(in srgb, var(--c-accent-b) 55%, transparent); }
+}
+#btn-rec-mode.active {
+  border-color: #ff2d2d;
+  color: #ff2d2d;
+  box-shadow: 0 0 14px rgba(255, 45, 45, 0.7);
+  animation: recPulse 1.2s ease-in-out infinite;
+}
+@keyframes recPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
 /* 💎 プレミアム解放中：背景・ボタンを大人っぽく豪華に演出する */
 body.premium-active {
   background:
@@ -638,6 +678,39 @@ body.premium-active .logo {
 .modal-box p { font-size: 15px; line-height: 1.8; margin-bottom: 10px; }
 .modal-price { color: #ffd76f; }
 .modal-box .btn { margin-top: 10px; padding: 12px 40px; font-size: 16px; }
+
+/* 🚀 バイラル投稿キット */
+.viral-caption-box {
+  background: var(--c-panel);
+  border: 1px solid var(--c-panel-border);
+  border-radius: 14px;
+  padding: 14px;
+  margin: 10px 0;
+}
+.viral-caption-box p {
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 1.6;
+}
+.viral-hashtags {
+  font-size: 13px;
+  color: #9fd7ff;
+  margin: 10px 0;
+  word-break: break-word;
+}
+.viral-script {
+  font-size: 12px;
+  color: #b3a5dd;
+  line-height: 1.8;
+  margin-bottom: 10px;
+  text-align: left;
+  white-space: pre-line;
+}
+.viral-footer {
+  margin-top: 18px;
+  font-size: 12px;
+  color: #9fd7ff;
+}
 
 /* 📮 罰ゲーム投稿・共有 */
 .modal-box-wide {

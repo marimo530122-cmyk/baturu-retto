@@ -91,6 +91,8 @@
     <button id="btn-share-telegram-app" class="btn-float" title="Share on Telegram">✈️</button>
     <button id="btn-share-instagram-app" class="btn-float" title="Share on Instagram">📷</button>
     <button id="btn-share-wechat-app" class="btn-float" title="Share on WeChat">💚</button>
+    <button id="btn-rec-mode" class="btn-float" title="REC Mode">🎬</button>
+    <button id="btn-viral-kit" class="btn-float" title="Viral Kit">🚀</button>
   </div>
   <div id="toast" class="toast hidden"></div>
   <div id="premium-badge" class="premium-badge hidden">💎 PREMIUM</div>
@@ -116,6 +118,7 @@
       </div>
 
       <p class="notice" id="t-notice">※20歳未満の飲酒は法律で禁止されています。<br>お酒やお題の無理強いはやめましょう。</p>
+      <p class="viral-footer" id="t-viral-footer">📮 #BatsuRoulette を付けて投稿してね！面白い動画は公式が紹介するかも！</p>
     </div>
   </section>
 
@@ -242,6 +245,25 @@
       <h3 class="gold-glow" id="t-unlocked-title">✨ 有料版が有効になりました！</h3>
       <p id="t-unlocked-desc">ご購入ありがとうございます！プレミアムコンテンツが全て解放されました。</p>
       <button id="unlocked-close" class="btn btn-primary">はじめる</button>
+    </div>
+  </div>
+
+  <!-- ============ 🚀 バイラル投稿キット ============ -->
+  <div id="modal-viral" class="modal hidden">
+    <div class="modal-box modal-box-wide">
+      <h3 class="neon-pink" id="t-viral-title">🚀 バイラル投稿キット</h3>
+      <p id="t-viral-desc">動画を撮ったら、そのままコピペで投稿できます。</p>
+      <div class="viral-caption-box">
+        <p id="viral-caption-text"></p>
+      </div>
+      <button id="viral-regenerate" class="btn btn-sub">🔄 別の案にする</button>
+      <p id="viral-hashtags" class="viral-hashtags"></p>
+      <p id="viral-script" class="viral-script"></p>
+      <button id="viral-copy-all" class="btn btn-primary">📋 全部コピーする</button>
+      <hr class="modal-divider" />
+      <button id="viral-copy-shorturl" class="btn btn-sub">🔗 短縮URLをコピー</button>
+      <p id="viral-shorturl-message" class="message"></p>
+      <button id="viral-close" class="btn btn-ghost">とじる</button>
     </div>
   </div>
 

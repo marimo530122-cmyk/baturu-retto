@@ -183,6 +183,19 @@ const UI = {
     adultOff: "🎲 通常パックに戻しました",
     nerutoonOn: "💘 ねるとんZoomモードに切り替えました",
     nerutoonOff: "🎲 通常パックに戻しました",
+    recModeOn: "🎬 RECモードON（撮影用の見た目に切り替えました）",
+    recModeOff: "🎬 RECモードOFF",
+    viralTitle: "🚀 バイラル投稿キット",
+    viralDesc: "動画を撮ったら、そのままコピペで投稿できます。",
+    viralRegenerate: "🔄 別の案にする",
+    viralScript: "①名前を入れる → ②ルーレットを回す → ③お題発表の瞬間の顔を撮る（ここが一番バズる）",
+    viralCopyAll: "📋 全部コピーする",
+    viralCopyShortUrl: "🔗 短縮URLをコピー",
+    viralShortening: "短縮中…",
+    viralShortUrlCopied: (url) => `コピーしました！ ${url}`,
+    viralShortUrlFallback: "短縮に失敗したので、通常のリンクをコピーしました",
+    viralClose: "とじる",
+    viralFooter: "📮 #BatsuRoulette を付けて投稿してね！面白い動画は公式が紹介するかも！",
     agegateTitle: "🔞 年齢確認",
     agegateDesc: "大人向けパックには、恋人・パートナー間の軽いスキンシップを含むお題があります。18歳以上の方のみお進みください。",
     agegateYes: "18歳以上です",
@@ -328,6 +341,19 @@ const UI = {
     adultOff: "🎲 Switched back to Standard Pack",
     nerutoonOn: "💘 Switched to Matchmaking Zoom Mode",
     nerutoonOff: "🎲 Switched back to Standard Pack",
+    recModeOn: "🎬 REC Mode ON (switched to filming-friendly view)",
+    recModeOff: "🎬 REC Mode OFF",
+    viralTitle: "🚀 Viral Post Kit",
+    viralDesc: "Once you've filmed a clip, just copy-paste this straight into your post.",
+    viralRegenerate: "🔄 Try another one",
+    viralScript: "① Enter names → ② Spin the wheel → ③ Film the reaction the moment the dare is revealed (that's the money shot)",
+    viralCopyAll: "📋 Copy everything",
+    viralCopyShortUrl: "🔗 Copy short URL",
+    viralShortening: "Shortening…",
+    viralShortUrlCopied: (url) => `Copied! ${url}`,
+    viralShortUrlFallback: "Shortening failed, so the regular link was copied instead",
+    viralClose: "Close",
+    viralFooter: "📮 Tag your post with #BatsuRoulette — the best videos might get featured!",
     agegateTitle: "🔞 Age Verification",
     agegateDesc: "The Adults Only pack includes challenges with light physical affection between partners. Please continue only if you are 18 or older.",
     agegateYes: "I'm 18 or older",
@@ -473,6 +499,19 @@ const UI = {
     adultOff: "🎲 已切回標準套組",
     nerutoonOn: "💘 已切換為聯誼Zoom模式",
     nerutoonOff: "🎲 已切回標準套組",
+    recModeOn: "🎬 拍攝模式已開啟（切換為適合拍攝的畫面）",
+    recModeOff: "🎬 拍攝模式已關閉",
+    viralTitle: "🚀 爆紅投稿套件",
+    viralDesc: "拍完影片後，直接複製貼上就能投稿。",
+    viralRegenerate: "🔄 換一個文案",
+    viralScript: "①輸入名字 → ②轉動輪盤 → ③拍下題目公布瞬間的表情（這裡最容易爆紅）",
+    viralCopyAll: "📋 全部複製",
+    viralCopyShortUrl: "🔗 複製短網址",
+    viralShortening: "縮短中…",
+    viralShortUrlCopied: (url) => `已複製！${url}`,
+    viralShortUrlFallback: "縮短失敗，已改為複製一般連結",
+    viralClose: "關閉",
+    viralFooter: "📮 記得標註 #BatsuRoulette 投稿哦！有趣的影片可能會被官方介紹！",
     agegateTitle: "🔞 年齡確認",
     agegateDesc: "成人限定套組包含伴侶間輕度親密接觸的題目。請確認您已年滿18歲再繼續。",
     agegateYes: "我已年滿18歲",
@@ -618,6 +657,19 @@ const UI = {
     adultOff: "🎲 기본 팩으로 되돌렸습니다",
     nerutoonOn: "💘 미팅 Zoom 모드로 전환했습니다",
     nerutoonOff: "🎲 기본 팩으로 되돌렸습니다",
+    recModeOn: "🎬 REC 모드 ON (촬영용 화면으로 전환했습니다)",
+    recModeOff: "🎬 REC 모드 OFF",
+    viralTitle: "🚀 바이럴 게시 키트",
+    viralDesc: "영상을 촬영했다면, 그대로 복사해서 게시글에 붙여넣으세요.",
+    viralRegenerate: "🔄 다른 문구로",
+    viralScript: "①이름 입력 → ②룰렛 돌리기 → ③벌칙 공개 순간의 표정 촬영(여기가 가장 화제가 됨)",
+    viralCopyAll: "📋 전체 복사하기",
+    viralCopyShortUrl: "🔗 단축 URL 복사",
+    viralShortening: "단축 중…",
+    viralShortUrlCopied: (url) => `복사했습니다! ${url}`,
+    viralShortUrlFallback: "단축에 실패하여 일반 링크를 복사했습니다",
+    viralClose: "닫기",
+    viralFooter: "📮 #BatsuRoulette 태그를 붙여서 올려주세요! 재밌는 영상은 공식 계정이 소개할 수도 있어요!",
     agegateTitle: "🔞 연령 확인",
     agegateDesc: "성인 전용 팩에는 연인·파트너 사이의 가벼운 스킨십이 포함된 미션이 있습니다. 18세 이상만 진행해주세요.",
     agegateYes: "18세 이상입니다",
@@ -763,6 +815,19 @@ const UI = {
     adultOff: "🎲 Vuelto al paquete estándar",
     nerutoonOn: "💘 Cambiado al Modo Zoom de Citas",
     nerutoonOff: "🎲 Vuelto al paquete estándar",
+    recModeOn: "🎬 Modo REC activado (vista optimizada para grabar)",
+    recModeOff: "🎬 Modo REC desactivado",
+    viralTitle: "🚀 Kit de Publicación Viral",
+    viralDesc: "Cuando grabes tu video, solo copia y pega esto en tu publicación.",
+    viralRegenerate: "🔄 Probar otra frase",
+    viralScript: "① Ingresa los nombres → ② Gira la ruleta → ③ Graba la reacción al revelar el reto (ese es el momento clave)",
+    viralCopyAll: "📋 Copiar todo",
+    viralCopyShortUrl: "🔗 Copiar URL corta",
+    viralShortening: "Acortando…",
+    viralShortUrlCopied: (url) => `¡Copiado! ${url}`,
+    viralShortUrlFallback: "No se pudo acortar, así que se copió el enlace normal",
+    viralClose: "Cerrar",
+    viralFooter: "📮 ¡Etiqueta tu publicación con #BatsuRoulette! ¡Los mejores videos podrían ser destacados!",
     agegateTitle: "🔞 Verificación de edad",
     agegateDesc: "El paquete Solo Adultos incluye retos con contacto físico ligero entre parejas. Continúa solo si tienes 18 años o más.",
     agegateYes: "Tengo 18 años o más",
@@ -908,6 +973,19 @@ const UI = {
     adultOff: "🎲 Voltou ao pacote padrão",
     nerutoonOn: "💘 Mudou para o Modo Zoom de Paquera",
     nerutoonOff: "🎲 Voltou ao pacote padrão",
+    recModeOn: "🎬 Modo REC ativado (visual otimizado para gravação)",
+    recModeOff: "🎬 Modo REC desativado",
+    viralTitle: "🚀 Kit de Postagem Viral",
+    viralDesc: "Depois de gravar seu vídeo, é só copiar e colar isso na sua postagem.",
+    viralRegenerate: "🔄 Tentar outra frase",
+    viralScript: "① Digite os nomes → ② Gire a roleta → ③ Grave a reação no momento em que o desafio é revelado (esse é o momento chave)",
+    viralCopyAll: "📋 Copiar tudo",
+    viralCopyShortUrl: "🔗 Copiar URL curta",
+    viralShortening: "Encurtando…",
+    viralShortUrlCopied: (url) => `Copiado! ${url}`,
+    viralShortUrlFallback: "Não foi possível encurtar, então o link normal foi copiado",
+    viralClose: "Fechar",
+    viralFooter: "📮 Marque sua postagem com #BatsuRoulette! Os melhores vídeos podem ser destacados!",
     agegateTitle: "🔞 Verificação de idade",
     agegateDesc: "O pacote Somente Adultos inclui desafios com contato físico leve entre parceiros. Continue apenas se tiver 18 anos ou mais.",
     agegateYes: "Tenho 18 anos ou mais",
@@ -1053,6 +1131,19 @@ const UI = {
     adultOff: "🎲 Đã quay lại gói tiêu chuẩn",
     nerutoonOn: "💘 Đã chuyển sang Chế độ Zoom Ghép đôi",
     nerutoonOff: "🎲 Đã quay lại gói tiêu chuẩn",
+    recModeOn: "🎬 Đã bật Chế độ Quay phim (chuyển sang giao diện tối ưu cho quay video)",
+    recModeOff: "🎬 Đã tắt Chế độ Quay phim",
+    viralTitle: "🚀 Bộ Công Cụ Đăng Bài Viral",
+    viralDesc: "Sau khi quay video, chỉ cần sao chép và dán nội dung này vào bài đăng của bạn.",
+    viralRegenerate: "🔄 Thử câu khác",
+    viralScript: "① Nhập tên → ② Quay vòng quay → ③ Quay lại phản ứng ngay lúc thử thách được công bố (đây là khoảnh khắc đắt giá nhất)",
+    viralCopyAll: "📋 Sao chép tất cả",
+    viralCopyShortUrl: "🔗 Sao chép URL rút gọn",
+    viralShortening: "Đang rút gọn…",
+    viralShortUrlCopied: (url) => `Đã sao chép! ${url}`,
+    viralShortUrlFallback: "Rút gọn thất bại, đã sao chép liên kết thông thường thay thế",
+    viralClose: "Đóng",
+    viralFooter: "📮 Gắn thẻ #BatsuRoulette khi đăng bài nhé! Video hay có thể được trang chính thức giới thiệu!",
     agegateTitle: "🔞 Xác nhận độ tuổi",
     agegateDesc: "Gói Chỉ dành cho người lớn bao gồm các thử thách có tiếp xúc cơ thể nhẹ nhàng giữa hai người. Vui lòng chỉ tiếp tục nếu bạn từ 18 tuổi trở lên.",
     agegateYes: "Tôi từ 18 tuổi trở lên",
@@ -1126,6 +1217,7 @@ function applyLanguage() {
   document.getElementById("pack-romance").innerHTML = `${u.packs.romance} <span class="lock">🔒</span>`;
   document.getElementById("pack-online").innerHTML = `${u.packs.online} <span class="lock">🔒</span>`;
   document.getElementById("t-notice").innerHTML = u.noticeHTML;
+  document.getElementById("t-viral-footer").textContent = u.viralFooter;
 
   document.getElementById("t-setup-title").textContent = u.setupTitle;
   document.getElementById("mode-mf").textContent = u.modeMf;
@@ -2239,6 +2331,61 @@ let lastHighlightDataUrl = null; // 直前のお題ハイライト画像（TikTo
 // ※「#DirtyDare」案は「不快感を与えない」基準に沿うよう「#NaughtyDare」（茶目っ気のある響き）に調整した
 const WORLD_HASHTAGS = "#BatsuRoulette #AdultPartyGame #SpicyRoulette #NaughtyDare #SafeFun";
 
+// 🚀 バイラル投稿キット用のキャプション案（言語別・ランダム表示）
+// ※ゲーム本来の面白さ（お題発表の反応・王様モードの驚き等）にフォーカスし、
+//   誰かを欺いたり不快にさせたりする内容は含めない
+const VIRAL_CAPTIONS = {
+  ja: [
+    "この罰ゲーム、当たった瞬間の顔が面白すぎたｗｗｗ",
+    "友達に見せたら即ダウンロードされた神アプリ",
+    "王様降臨した瞬間、テンションぶち上がったwww",
+    "スマホ1台でここまで盛り上がるとは思わなかった",
+    "音声で読み上げてくれるのが地味に神すぎる",
+  ],
+  en: [
+    "The reaction when the dare got revealed was priceless lol",
+    "My friends downloaded this the second they saw it",
+    "The King Mode moment broke the entire room 😭",
+    "Didn't expect one phone to turn the whole party upside down",
+    "It reads the dare out loud and it's somehow the best part",
+  ],
+  zh: [
+    "題目公布的那一瞬間，表情太好笑了ｗｗｗ",
+    "朋友看到馬上就下載的神App",
+    "國王降臨的瞬間，全場氣氛直接爆炸",
+    "沒想到一支手機就能讓聚會嗨成這樣",
+    "還會語音唸出題目，這個功能太神了",
+  ],
+  ko: [
+    "벌칙 공개되는 순간 표정이 레전드였음ㅋㅋㅋ",
+    "친구한테 보여줬더니 바로 다운받은 앱",
+    "왕 탄생하는 순간 분위기 미쳤다",
+    "폰 하나로 이렇게까지 분위기 살아날 줄이야",
+    "음성으로 읽어주는 게 은근 신의 한 수",
+  ],
+  es: [
+    "La cara que puso al revelar el reto fue oro puro jaja",
+    "Mis amigos lo descargaron en cuanto lo vieron",
+    "El Modo Rey rompió la fiesta por completo 😭",
+    "No esperaba que un solo celular animara toda la fiesta así",
+    "Lee el reto en voz alta y es lo mejor de todo",
+  ],
+  pt: [
+    "A cara que ela fez quando o desafio apareceu foi impagável kkkk",
+    "Meus amigos baixaram na hora que viram",
+    "O Modo Rei detonou a festa inteira 😭",
+    "Não esperava que um celular animasse a festa desse jeito",
+    "Ele lê o desafio em voz alta e essa é a melhor parte",
+  ],
+  vi: [
+    "Biểu cảm lúc thử thách được công bố buồn cười xỉu ｗｗｗ",
+    "Cho bạn bè xem là tải app liền luôn",
+    "Khoảnh khắc Vua xuất hiện làm cả phòng nổ tung 😭",
+    "Không ngờ một chiếc điện thoại lại làm bữa tiệc bùng nổ đến vậy",
+    "Còn đọc to thử thách nữa, chi tiết này quá đỉnh",
+  ],
+};
+
 // X（旧Twitter）専用シェア：投稿画面をタブで開く（Web Intent）。ハッシュタグはここでのみ付与する
 function shareToX(text) {
   const fullText = `${text}\n\n${WORLD_HASHTAGS}`;
@@ -2367,6 +2514,78 @@ document.getElementById("btn-share-instagram-app").addEventListener("click", () 
 });
 document.getElementById("btn-share-wechat-app").addEventListener("click", () => {
   shareToWeChat(t("shareAppText"));
+});
+
+/* ---------------- 🎬 RECモード（動画撮影用の見た目に切り替える） ---------------- */
+const btnRecMode = document.getElementById("btn-rec-mode");
+btnRecMode.addEventListener("click", () => {
+  const on = document.body.classList.toggle("rec-mode");
+  btnRecMode.classList.toggle("active", on);
+  showToast(on ? t("recModeOn") : t("recModeOff"));
+});
+
+/* ---------------- 🚀 バイラル投稿キット ---------------- */
+const btnViralKit = document.getElementById("btn-viral-kit");
+const modalViral = document.getElementById("modal-viral");
+let currentViralCaption = "";
+
+function pickViralCaption() {
+  const list = VIRAL_CAPTIONS[state.lang] || VIRAL_CAPTIONS.en;
+  currentViralCaption = list[Math.floor(Math.random() * list.length)];
+  document.getElementById("viral-caption-text").textContent = currentViralCaption;
+}
+
+function renderViralKit() {
+  document.getElementById("t-viral-title").textContent = t("viralTitle");
+  document.getElementById("t-viral-desc").textContent = t("viralDesc");
+  document.getElementById("viral-regenerate").textContent = t("viralRegenerate");
+  document.getElementById("viral-copy-all").textContent = t("viralCopyAll");
+  document.getElementById("viral-copy-shorturl").textContent = t("viralCopyShortUrl");
+  document.getElementById("viral-close").textContent = t("viralClose");
+  document.getElementById("viral-hashtags").textContent = WORLD_HASHTAGS;
+  document.getElementById("viral-script").textContent = t("viralScript");
+  document.getElementById("viral-shorturl-message").textContent = "";
+  pickViralCaption();
+}
+
+btnViralKit.addEventListener("click", () => {
+  renderViralKit();
+  modalViral.classList.remove("hidden");
+});
+document.getElementById("viral-regenerate").addEventListener("click", pickViralCaption);
+document.getElementById("viral-close").addEventListener("click", () => {
+  modalViral.classList.add("hidden");
+});
+
+document.getElementById("viral-copy-all").addEventListener("click", async () => {
+  const full = `${currentViralCaption}\n\n${t("viralScript")}\n\n${WORLD_HASHTAGS}\n${GAME_URL}`;
+  try {
+    await navigator.clipboard.writeText(full);
+    showToast(t("shareCopied"));
+  } catch (e) {
+    showToast(GAME_URL);
+  }
+});
+
+// 短縮URL：TinyURLの無認証APIを使用。失敗したら通常のURLをコピーする
+document.getElementById("viral-copy-shorturl").addEventListener("click", async () => {
+  const msg = document.getElementById("viral-shorturl-message");
+  msg.textContent = t("viralShortening");
+  try {
+    const res = await fetch("https://tinyurl.com/api-create.php?url=" + encodeURIComponent(GAME_URL));
+    if (!res.ok) throw new Error("shorten failed");
+    const shortUrl = (await res.text()).trim();
+    if (!shortUrl.startsWith("http")) throw new Error("unexpected response");
+    await navigator.clipboard.writeText(shortUrl);
+    msg.textContent = t("viralShortUrlCopied")(shortUrl);
+  } catch (e) {
+    try {
+      await navigator.clipboard.writeText(GAME_URL);
+      msg.textContent = t("viralShortUrlFallback");
+    } catch (e2) {
+      msg.textContent = GAME_URL;
+    }
+  }
 });
 
 document.getElementById("btn-share").addEventListener("click", () => {
