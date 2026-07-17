@@ -556,6 +556,21 @@ body {
 .modal-price { color: #ffd76f; }
 .modal-box .btn { margin-top: 10px; padding: 12px 40px; font-size: 16px; }
 
+/* 💎 プレミアム解放のお祝いモーダル */
+.modal-box-gold {
+  border-color: #ffe14b;
+  box-shadow: 0 0 30px rgba(255, 225, 75, 0.55), 0 0 60px rgba(255, 180, 45, 0.25);
+  animation: goldModalIn 0.5s ease-out;
+}
+@keyframes goldModalIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+.gold-glow {
+  color: #ffe14b;
+  text-shadow: 0 0 8px #ffe14b, 0 0 20px #ffb52d;
+}
+
 /* 💎 アップグレードボタン（有料版ご案内モーダル内） */
 .btn-upgrade {
   display: block;

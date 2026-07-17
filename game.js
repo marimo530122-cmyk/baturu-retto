@@ -166,6 +166,9 @@ const UI = {
     agegateNo: "やめておく",
     upgradeBtn: "💎 いますぐアップグレード",
     upgradeNotConfigured: "決済の準備中です。もうしばらくお待ちください。",
+    unlockedTitle: "✨ 有料版が有効になりました！",
+    unlockedDesc: "ご購入ありがとうございます！大人向けパック・イカサマモード・着せ替えテーマなど、有料コンテンツが全て解放されました。乾杯🍻",
+    unlockedClose: "はじめる",
     achTitle: "🏆 実績バッジ",
     achClose: "とじる",
     achUnlocked: (name) => `🏅 実績解除：${name}！`,
@@ -277,6 +280,9 @@ const UI = {
     agegateNo: "Never mind",
     upgradeBtn: "💎 Upgrade Now",
     upgradeNotConfigured: "Payments aren't set up yet. Please check back soon.",
+    unlockedTitle: "✨ Premium Unlocked!",
+    unlockedDesc: "Thanks for your purchase! All premium content — the Adults Only pack, Rig Mode, roulette themes, and more — is now unlocked. Cheers! 🍻",
+    unlockedClose: "Let's go",
     achTitle: "🏆 Achievements",
     achClose: "Close",
     achUnlocked: (name) => `🏅 Achievement unlocked: ${name}!`,
@@ -388,6 +394,9 @@ const UI = {
     agegateNo: "先不要",
     upgradeBtn: "💎 立即升級",
     upgradeNotConfigured: "付款功能尚未設定完成，請稍候再試。",
+    unlockedTitle: "✨ 付費版已啟用！",
+    unlockedDesc: "感謝您的購買！成人限定套組、作弊模式、輪盤換裝等所有付費內容現已全部解鎖。乾杯🍻",
+    unlockedClose: "開始",
     achTitle: "🏆 成就徽章",
     achClose: "關閉",
     achUnlocked: (name) => `🏅 解鎖成就：${name}！`,
@@ -499,6 +508,9 @@ const UI = {
     agegateNo: "그만두기",
     upgradeBtn: "💎 지금 업그레이드",
     upgradeNotConfigured: "결제 기능을 준비 중입니다. 조금만 기다려주세요.",
+    unlockedTitle: "✨ 프리미엄이 활성화되었습니다!",
+    unlockedDesc: "구매해주셔서 감사합니다! 성인 전용 팩·조작 모드·룰렛 테마 변경 등 모든 프리미엄 콘텐츠가 해제되었습니다. 건배🍻",
+    unlockedClose: "시작하기",
     achTitle: "🏆 업적 배지",
     achClose: "닫기",
     achUnlocked: (name) => `🏅 업적 달성: ${name}!`,
@@ -610,6 +622,9 @@ const UI = {
     agegateNo: "Mejor no",
     upgradeBtn: "💎 Actualizar ahora",
     upgradeNotConfigured: "Los pagos aún no están configurados. Vuelve a intentarlo pronto.",
+    unlockedTitle: "✨ ¡Versión Premium Activada!",
+    unlockedDesc: "¡Gracias por tu compra! Todo el contenido premium — el Paquete Solo Adultos, Modo Amañado, temas de la ruleta y más — ya está desbloqueado. ¡Salud! 🍻",
+    unlockedClose: "Empezar",
     achTitle: "🏆 Logros",
     achClose: "Cerrar",
     achUnlocked: (name) => `🏅 ¡Logro desbloqueado: ${name}!`,
@@ -681,6 +696,9 @@ function applyLanguage() {
   document.getElementById("t-modal-title").textContent = u.modalTitle;
   document.getElementById("t-modal-price").textContent = u.modalPrice;
   document.getElementById("modal-close").textContent = u.modalClose;
+  document.getElementById("t-unlocked-title").textContent = u.unlockedTitle;
+  document.getElementById("t-unlocked-desc").textContent = u.unlockedDesc;
+  document.getElementById("unlocked-close").textContent = u.unlockedClose;
 
   document.getElementById("t-online-title").textContent = u.onlineTitle;
   document.getElementById("t-online-desc").textContent = u.onlineDesc;
@@ -809,6 +827,21 @@ function blockIfNotPremium(packKey) {
   showPremiumModal(t("packTeaser")(UI[state.lang].packs[packKey]));
   return true;
 }
+
+/* ---------------- 💎 決済成功後：プレミアム解放のお祝い演出 ---------------- */
+const modalUnlocked = document.getElementById("modal-unlocked");
+
+function showPremiumUnlockedCelebration() {
+  document.getElementById("t-unlocked-title").textContent = t("unlockedTitle");
+  document.getElementById("t-unlocked-desc").textContent = t("unlockedDesc");
+  document.getElementById("unlocked-close").textContent = t("unlockedClose");
+  modalUnlocked.classList.remove("hidden");
+  celebrate(["#ffe14b", "#ffb52d", "#ffffff"], [100, 50, 100, 50, 200]);
+  SFX.kingFanfare();
+}
+document.getElementById("unlocked-close").addEventListener("click", () => {
+  modalUnlocked.classList.add("hidden");
+});
 
 /* ---------------- 🎨 テーマ着せ替えボタン（有料機能） ---------------- */
 const btnTheme = document.getElementById("btn-theme");
@@ -1630,3 +1663,8 @@ applyLanguage();
 updateVoiceButton();
 applyTheme();
 renderChips();
+
+// Stripeの決済リンクから戻ってきて、たった今プレミアムが解放された場合だけお祝いを出す
+if (typeof Billing !== "undefined" && Billing.wasJustUnlocked()) {
+  showPremiumUnlockedCelebration();
+}
