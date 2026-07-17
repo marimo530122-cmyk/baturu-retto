@@ -556,6 +556,37 @@ body {
 .modal-price { color: #ffd76f; }
 .modal-box .btn { margin-top: 10px; padding: 12px 40px; font-size: 16px; }
 
+/* 💎 アップグレードボタン（有料版ご案内モーダル内） */
+.btn-upgrade {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, #ffd76f, #ff8f2d);
+  color: #241206;
+  box-shadow: 0 0 16px rgba(255, 183, 45, 0.6), 0 0 34px rgba(255, 143, 45, 0.35);
+  animation: upgradePulse 1.8s ease-in-out infinite;
+}
+@keyframes upgradePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* 📤 シェアボタン（結果発表後、目立たせて拡散を後押しする） */
+.btn-share-glow {
+  background: linear-gradient(135deg, var(--c-accent-a), var(--c-accent-b));
+  border: none;
+  padding: 12px 20px;
+  font-size: 15px;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--c-accent-a) 65%, transparent),
+              0 0 30px color-mix(in srgb, var(--c-accent-b) 45%, transparent);
+  animation: sharePulse 2.2s ease-in-out infinite;
+}
+@keyframes sharePulse {
+  0%, 100% { box-shadow: 0 0 14px color-mix(in srgb, var(--c-accent-a) 65%, transparent),
+                          0 0 30px color-mix(in srgb, var(--c-accent-b) 45%, transparent); }
+  50% { box-shadow: 0 0 22px color-mix(in srgb, var(--c-accent-a) 90%, transparent),
+                     0 0 46px color-mix(in srgb, var(--c-accent-b) 65%, transparent); }
+}
+
 /* 🏆 実績バッジ一覧 */
 .achievements-grid {
   display: grid;

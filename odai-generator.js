@@ -698,6 +698,108 @@ const ROMANCE_DATA = {
 };
 
 /* ---------------------------------------------------------
+   🔞 大人向けパック（有料機能・年齢確認必須）
+   シチュエーション20種 × 行動20種 = 400通り（現在は日本語・英語のみ）
+   ※世界お題ガイドのルール3・4に基づき、大人向けパックのみ
+     軽い身体接触（ハグ・手や額へのキスなど）を許可。
+     露骨な性的表現・脱衣は含めない。
+   --------------------------------------------------------- */
+const ADULT_DATA = {
+  ja: {
+    situations: [
+      "セクシーなバーテンダーになりきって、色気たっぷりに",
+      "カジノの凄腕ディーラーのように、妖艶な流し目で",
+      "深夜のジャズバーの歌姫のように、艶っぽい声で",
+      "高級クラブのオーナーのように、余裕たっぷりの色気で",
+      "お忍びで店に来た人気モデルのように、意味深な視線で",
+      "危険な色気を纏う裏社会のボスのように",
+      "一夜限りの恋を演出するホテルのバーテンダーのように",
+      "セクシー女優のインタビューシーン風に、艶やかに",
+      "ダンスクラブのメインダンサーのように、腰を揺らしながら",
+      "秘密のパーティーに招かれたセレブのように、色っぽく",
+      "官能小説の主人公になりきって、情熱的に",
+      "妖艶な魔女が誘惑するように、蠱惑的な声で",
+      "カリスマホストの指名No.1のように、甘く低い声で",
+      "仮面舞踏会の貴族のように、謎めいた色気で",
+      "セクシーな刑事ドラマの尋問シーン風に、迫るように",
+      "大人の隠れ家バーのマダムのように、艶っぽく微笑みながら",
+      "タンゴの情熱的なダンサーのように、熱い視線を送りながら",
+      "深夜のラブソングのMVの主演のように、切なく色っぽく",
+      "シャンパンタワーの主役のセレブのように、華やかに色気を振りまきながら",
+      "一夜の恋人役を演じる俳優のように、真剣な眼差しで",
+    ],
+    actions: [
+      "相手の手の甲に、そっと騎士のようなキスをする",
+      "相手をやさしくハグして「今夜は離さない」と甘く囁く",
+      "相手の耳元で、とびきり色っぽい褒め言葉を3つ囁く",
+      "相手の頬に軽くキスをするふりをして、寸前で耳元に囁く",
+      "相手を見つめながら、10秒間のセクシーなスローダンスに誘う",
+      "相手の肩をそっと抱き寄せて、甘い一言を告げる",
+      "相手の手を取り、色っぽいタンゴのポーズを1つ決める",
+      "相手をお姫様（王子様）抱っこする勢いで持ち上げるふりをする",
+      "相手の目をじっと見つめたまま、5秒間沈黙して色気で語る",
+      "相手の手のひらにハートを描きながら、甘い言葉を添える",
+      "相手を椅子に座らせ、肩に手を置いて色っぽく耳打ちする",
+      "相手のおでこに、そっとキスをする",
+      "相手を後ろから軽くハグして「今日は特別な夜だね」と囁く",
+      "相手の髪をそっとなでながら、とびきり甘い一言を伝える",
+      "相手と腕を組んで、セクシーな流し目を送る",
+      "相手の手を取り、指先にそっと口づけをするふりをする",
+      "相手をぎゅっと抱きしめて、5秒間そのままキープする",
+      "相手に色っぽいウィンクを送りながら、殺し文句を1つ言う",
+      "相手の背中にそっと手を添えて、甘くエスコートする",
+      "相手と至近距離で見つめ合いながら、10秒間セクシーに沈黙する",
+    ],
+  },
+  en: {
+    situations: [
+      "Like a sultry bartender mixing the last drink of the night",
+      "Like a smooth casino dealer with a smoldering gaze",
+      "Like a lounge singer crooning a late-night torch song",
+      "Like the owner of an exclusive VIP club, dripping with confidence",
+      "Like a celebrity sneaking into a bar in disguise, giving a knowing look",
+      "Like a dangerously charming underworld boss",
+      "Like a hotel bartender setting the mood for a one-night romance",
+      "Like a movie star giving a sultry red-carpet interview",
+      "Like the lead dancer at an exclusive club, swaying to the beat",
+      "Like a celebrity slipping into a secret VIP party",
+      "Like the passionate lead of a steamy romance novel",
+      "Like an enchanting witch casting a spell of seduction",
+      "Like the most requested host at an exclusive lounge, low and sweet",
+      "Like a mysterious noble at a masquerade ball",
+      "Like the sultry interrogation scene in a detective drama",
+      "Like the madame of a hidden speakeasy, smiling knowingly",
+      "Like a passionate tango dancer, locking eyes the whole time",
+      "Like the star of a late-night love song music video",
+      "Like the celebrity of the night under a champagne tower, radiating charm",
+      "Like an actor playing the role of a one-night romance, with total sincerity",
+    ],
+    actions: [
+      "place a gentle, knightly kiss on the back of their hand",
+      "pull them into a warm hug and whisper \"I'm not letting go tonight\"",
+      "whisper three irresistibly smooth compliments in their ear",
+      "lean in like you're about to kiss their cheek, then whisper in their ear instead",
+      "lock eyes and pull them into a slow, sultry 10-second dance",
+      "draw them close by the shoulder and deliver one sweet line",
+      "take their hand and strike one dramatic tango pose",
+      "pretend to sweep them off their feet like a movie hero would",
+      "hold their gaze in total silence for 5 seconds, letting the tension speak",
+      "trace a heart on their palm while saying something sweet",
+      "seat them down, rest a hand on their shoulder, and whisper something smooth",
+      "place a gentle kiss on their forehead",
+      "hug them from behind and whisper \"tonight feels different\"",
+      "gently stroke their hair while delivering one irresistibly sweet line",
+      "link arms with them and give them your most sultry glance",
+      "take their hand and pretend to kiss their fingertips",
+      "pull them into a tight hug and hold it for a full 5 seconds",
+      "give them a smoldering wink and deliver one killer pickup line",
+      "place a hand gently on their back and escort them like royalty",
+      "hold their gaze up close in silence for 10 sultry seconds",
+    ],
+  },
+};
+
+/* ---------------------------------------------------------
    お題の生成（掛け算：50 × 50 = 2500通り）
    --------------------------------------------------------- */
 
@@ -714,13 +816,13 @@ let lastCombinationKey = "";
  * @param {string} fromName - お題を実行する人の名前
  * @param {string} toName   - お題の相手の名前
  * @param {string} lang     - "ja" / "en" / "zh" / "ko" / "es"
- * @param {string} pack     - "standard"（通常）または "romance"（💌恋愛パック・現在は日英のみ）
+ * @param {string} pack     - "standard"（通常）または "romance"（💌恋愛パック）または "adult"（🔞大人向けパック・いずれも現在は日英のみ）
  * @returns {object} displayText: 画面表示用 / speechText: 朗読用
  */
 function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
+  const PACK_DATA = { romance: ROMANCE_DATA, adult: ADULT_DATA };
   const data =
-    pack === "romance"
-      ? ROMANCE_DATA[lang] || ODAI_DATA[lang] || ODAI_DATA.ja // 恋愛パック未対応言語は通常パックに戻す
+    PACK_DATA[pack] ? PACK_DATA[pack][lang] || ODAI_DATA[lang] || ODAI_DATA.ja // 未対応言語は通常パックに戻す
       : ODAI_DATA[lang] || ODAI_DATA.ja;
   let situation, action, key;
 

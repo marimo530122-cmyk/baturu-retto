@@ -167,7 +167,7 @@
       <div class="odai-buttons">
         <button id="btn-speak" class="btn btn-sub">🔊 もう一度読み上げ</button>
         <button id="btn-pass" class="btn btn-sub">🔄 パス（お題を変える）</button>
-        <button id="btn-share" class="btn btn-sub">📤 シェア</button>
+        <button id="btn-share" class="btn btn-share-glow">📤 シェア</button>
       </div>
       <button id="btn-next" class="btn btn-primary btn-big">🎰 次のルーレットへ！</button>
     </div>
@@ -200,7 +200,18 @@
       <h3 class="neon-pink" id="t-modal-title">✨ 有料版のご案内 ✨</h3>
       <p id="modal-text">このコンテンツは有料版で遊べます。</p>
       <p class="modal-price" id="t-modal-price">買い切り 480円（現在準備中です。お楽しみに！）</p>
+      <button id="modal-upgrade" class="btn btn-upgrade hidden">💎 いますぐアップグレード</button>
       <button id="modal-close" class="btn btn-primary">とじる</button>
+    </div>
+  </div>
+
+  <!-- ============ 🔞 大人向けパック：年齢確認モーダル ============ -->
+  <div id="modal-agegate" class="modal hidden">
+    <div class="modal-box">
+      <h3 class="neon-pink" id="t-agegate-title">🔞 年齢確認</h3>
+      <p id="t-agegate-desc">大人向けパックには、恋人・パートナー間の軽いスキンシップを含むお題があります。18歳以上の方のみお進みください。</p>
+      <button id="agegate-yes" class="btn btn-primary">18歳以上です</button>
+      <button id="agegate-no" class="btn btn-ghost">やめておく</button>
     </div>
   </div>
 
@@ -254,6 +265,10 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
   <script src="firebase-config.js?v=7"></script>
   <script src="online.js?v=7"></script>
+
+  <!-- 💎 プレミアム課金（Stripe決済リンク用。billing-config.js が未設定でも他の機能には影響しません） -->
+  <script src="billing-config.js?v=7"></script>
+  <script src="billing.js?v=7"></script>
 
   <script src="bgm.js?v=7"></script>
   <script src="sfx.js?v=7"></script>

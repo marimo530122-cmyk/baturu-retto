@@ -24,11 +24,12 @@ const THEME_EMOJI = { neon: "🌃", casino: "🎰", izakaya: "🏮" };
 const RIG_BOOST = 0.7; // 仕込んだ人が当たる確率（70%）
 
 /* ---------------- 💎 有料版の解放判定 ----------------
-   本番のアプリストア課金（ステップ3）が入るまでの開発用の
-   確認手段として、URLに ?premium=1 を付けると有料機能を試せる。
+   Billing（billing.js）が、Stripe決済リンクからの復帰または
+   開発確認用の ?premium=1 を見て判定する。
    ------------------------------------------------------ */
-const params = new URLSearchParams(location.search);
-const PREMIUM_UNLOCKED = params.get("premium") === "1";
+function isPremiumUnlocked() {
+  return typeof Billing !== "undefined" && Billing.isPremium();
+}
 
 /* ---------------- 状態（ゲームの記憶） ---------------- */
 const state = {
@@ -157,6 +158,14 @@ const UI = {
     bgmGenres: { jazz: "🎷 ジャズ", edm: "🎧 EDM", enka: "🎤 演歌" },
     romanceOn: "💌 恋愛パックに切り替えました",
     romanceOff: "🎲 通常パックに戻しました",
+    adultOn: "🔞 大人向けパックに切り替えました",
+    adultOff: "🎲 通常パックに戻しました",
+    agegateTitle: "🔞 年齢確認",
+    agegateDesc: "大人向けパックには、恋人・パートナー間の軽いスキンシップを含むお題があります。18歳以上の方のみお進みください。",
+    agegateYes: "18歳以上です",
+    agegateNo: "やめておく",
+    upgradeBtn: "💎 いますぐアップグレード",
+    upgradeNotConfigured: "決済の準備中です。もうしばらくお待ちください。",
     achTitle: "🏆 実績バッジ",
     achClose: "とじる",
     achUnlocked: (name) => `🏅 実績解除：${name}！`,
@@ -260,6 +269,14 @@ const UI = {
     bgmGenres: { jazz: "🎷 Jazz", edm: "🎧 EDM", enka: "🎤 Enka" },
     romanceOn: "💌 Switched to Romance Pack",
     romanceOff: "🎲 Switched back to Standard Pack",
+    adultOn: "🔞 Switched to Adults Only Pack",
+    adultOff: "🎲 Switched back to Standard Pack",
+    agegateTitle: "🔞 Age Verification",
+    agegateDesc: "The Adults Only pack includes challenges with light physical affection between partners. Please continue only if you are 18 or older.",
+    agegateYes: "I'm 18 or older",
+    agegateNo: "Never mind",
+    upgradeBtn: "💎 Upgrade Now",
+    upgradeNotConfigured: "Payments aren't set up yet. Please check back soon.",
     achTitle: "🏆 Achievements",
     achClose: "Close",
     achUnlocked: (name) => `🏅 Achievement unlocked: ${name}!`,
@@ -363,6 +380,14 @@ const UI = {
     bgmGenres: { jazz: "🎷 爵士", edm: "🎧 電音", enka: "🎤 演歌" },
     romanceOn: "💌 已切換為戀愛套組",
     romanceOff: "🎲 已切回標準套組",
+    adultOn: "🔞 已切換為成人限定套組",
+    adultOff: "🎲 已切回標準套組",
+    agegateTitle: "🔞 年齡確認",
+    agegateDesc: "成人限定套組包含伴侶間輕度親密接觸的題目。請確認您已年滿18歲再繼續。",
+    agegateYes: "我已年滿18歲",
+    agegateNo: "先不要",
+    upgradeBtn: "💎 立即升級",
+    upgradeNotConfigured: "付款功能尚未設定完成，請稍候再試。",
     achTitle: "🏆 成就徽章",
     achClose: "關閉",
     achUnlocked: (name) => `🏅 解鎖成就：${name}！`,
@@ -466,6 +491,14 @@ const UI = {
     bgmGenres: { jazz: "🎷 재즈", edm: "🎧 EDM", enka: "🎤 엔카" },
     romanceOn: "💌 로맨스 팩으로 전환했습니다",
     romanceOff: "🎲 기본 팩으로 되돌렸습니다",
+    adultOn: "🔞 성인 전용 팩으로 전환했습니다",
+    adultOff: "🎲 기본 팩으로 되돌렸습니다",
+    agegateTitle: "🔞 연령 확인",
+    agegateDesc: "성인 전용 팩에는 연인·파트너 사이의 가벼운 스킨십이 포함된 미션이 있습니다. 18세 이상만 진행해주세요.",
+    agegateYes: "18세 이상입니다",
+    agegateNo: "그만두기",
+    upgradeBtn: "💎 지금 업그레이드",
+    upgradeNotConfigured: "결제 기능을 준비 중입니다. 조금만 기다려주세요.",
     achTitle: "🏆 업적 배지",
     achClose: "닫기",
     achUnlocked: (name) => `🏅 업적 달성: ${name}!`,
@@ -569,6 +602,14 @@ const UI = {
     bgmGenres: { jazz: "🎷 Jazz", edm: "🎧 EDM", enka: "🎤 Enka" },
     romanceOn: "💌 Cambiado al Paquete Romántico",
     romanceOff: "🎲 Vuelto al paquete estándar",
+    adultOn: "🔞 Cambiado al Paquete Solo Adultos",
+    adultOff: "🎲 Vuelto al paquete estándar",
+    agegateTitle: "🔞 Verificación de edad",
+    agegateDesc: "El paquete Solo Adultos incluye retos con contacto físico ligero entre parejas. Continúa solo si tienes 18 años o más.",
+    agegateYes: "Tengo 18 años o más",
+    agegateNo: "Mejor no",
+    upgradeBtn: "💎 Actualizar ahora",
+    upgradeNotConfigured: "Los pagos aún no están configurados. Vuelve a intentarlo pronto.",
     achTitle: "🏆 Logros",
     achClose: "Cerrar",
     achUnlocked: (name) => `🏅 ¡Logro desbloqueado: ${name}!`,
@@ -737,24 +778,35 @@ document.getElementById("btn-start").addEventListener("click", () => {
 
 // 有料版（ロック中）ボタン → ご案内モーダル
 const modal = document.getElementById("modal-premium");
+const modalUpgradeBtn = document.getElementById("modal-upgrade");
+
+// 有料版ご案内モーダルを、アップグレードボタン付きで表示する
+function showPremiumModal(text) {
+  document.getElementById("modal-text").textContent = text;
+  modalUpgradeBtn.textContent = t("upgradeBtn");
+  modalUpgradeBtn.classList.remove("hidden");
+  modal.classList.remove("hidden");
+}
+
 document.querySelectorAll(".btn-locked").forEach((btn) => {
-  // romance と online は個別に実装済みの機能なので、専用ハンドラに任せる
-  if (btn.dataset.pack === "romance" || btn.dataset.pack === "online") return;
+  // romance と online と adult は個別に実装済みの機能なので、専用ハンドラに任せる
+  if (["romance", "online", "adult"].includes(btn.dataset.pack)) return;
   btn.addEventListener("click", () => {
-    const packName = UI[state.lang].packs[btn.dataset.pack];
-    document.getElementById("modal-text").textContent = t("packTeaser")(packName);
-    modal.classList.remove("hidden");
+    showPremiumModal(t("packTeaser")(UI[state.lang].packs[btn.dataset.pack]));
   });
 });
 document.getElementById("modal-close").addEventListener("click", () => {
   modal.classList.add("hidden");
 });
+modalUpgradeBtn.addEventListener("click", () => {
+  const opened = Billing.openCheckout();
+  if (!opened) showToast(t("upgradeNotConfigured"));
+});
 
 // 有料機能をブロックして案内モーダルを出す（未解放のときだけ true を返す）
 function blockIfNotPremium(packKey) {
-  if (PREMIUM_UNLOCKED) return false;
-  document.getElementById("modal-text").textContent = t("packTeaser")(UI[state.lang].packs[packKey]);
-  modal.classList.remove("hidden");
+  if (isPremiumUnlocked()) return false;
+  showPremiumModal(t("packTeaser")(UI[state.lang].packs[packKey]));
   return true;
 }
 
@@ -844,11 +896,43 @@ btnBgmGenre.addEventListener("click", () => {
 
 /* ---------------- 💌 恋愛パック切り替え（有料機能） ---------------- */
 const btnRomance = document.getElementById("pack-romance");
+const btnAdult = document.getElementById("pack-adult");
+
 btnRomance.addEventListener("click", () => {
   if (blockIfNotPremium("romance")) return;
   state.pack = state.pack === "romance" ? "standard" : "romance";
   btnRomance.classList.toggle("active-pack", state.pack === "romance");
+  btnAdult.classList.remove("active-pack");
   showToast(state.pack === "romance" ? t("romanceOn") : t("romanceOff"));
+});
+
+/* ---------------- 🔞 大人向けパック切り替え（有料機能・年齢確認つき） ---------------- */
+const modalAgeGate = document.getElementById("modal-agegate");
+
+btnAdult.addEventListener("click", () => {
+  if (blockIfNotPremium("adult")) return;
+  if (state.pack === "adult") {
+    state.pack = "standard";
+    btnAdult.classList.remove("active-pack");
+    showToast(t("adultOff"));
+    return;
+  }
+  document.getElementById("t-agegate-title").textContent = t("agegateTitle");
+  document.getElementById("t-agegate-desc").textContent = t("agegateDesc");
+  document.getElementById("agegate-yes").textContent = t("agegateYes");
+  document.getElementById("agegate-no").textContent = t("agegateNo");
+  modalAgeGate.classList.remove("hidden");
+});
+
+document.getElementById("agegate-yes").addEventListener("click", () => {
+  modalAgeGate.classList.add("hidden");
+  state.pack = "adult";
+  btnRomance.classList.remove("active-pack");
+  btnAdult.classList.add("active-pack");
+  showToast(t("adultOn"));
+});
+document.getElementById("agegate-no").addEventListener("click", () => {
+  modalAgeGate.classList.add("hidden");
 });
 
 /* ---------------- 🏆 実績バッジ ---------------- */
@@ -1071,8 +1155,7 @@ document.getElementById("btn-game-start").addEventListener("click", () => {
   if (state.mode === "mf") {
     const total = state.men.length + state.women.length;
     if (total === 2 && state.men.length === 1 && state.women.length === 1) {
-      document.getElementById("modal-text").textContent = t("coupleTeaser");
-      modal.classList.remove("hidden");
+      showPremiumModal(t("coupleTeaser"));
       return;
     }
     if (state.men.length < 1 || state.women.length < 1 || total < 3) {
@@ -1081,8 +1164,7 @@ document.getElementById("btn-game-start").addEventListener("click", () => {
     }
   } else {
     if (state.everyone.length === 2) {
-      document.getElementById("modal-text").textContent = t("coupleTeaser");
-      modal.classList.remove("hidden");
+      showPremiumModal(t("coupleTeaser"));
       return;
     }
     if (state.everyone.length < 3) {
@@ -1393,7 +1475,7 @@ function showOdai(from, to) {
   celebrate([accentA, accentB, "#ffffff"], 80);
   SFX.reveal();
 
-  Highlights.capture(odai.displayText, accentA, document.getElementById("t-logo").textContent);
+  lastHighlightDataUrl = Highlights.capture(odai.displayText, accentA, document.getElementById("t-logo").textContent);
   if (state.onlineRole === "host") {
     Online.broadcast({ type: "odai", displayText: odai.displayText, speechText: odai.speechText, lang: state.lang });
   }
@@ -1417,7 +1499,7 @@ function showKing(king) {
   celebrate(["#ffe14b", "#ffb52d", "#ffffff"], [100, 50, 100, 50, 200]);
   SFX.kingFanfare();
 
-  Highlights.capture(t("kingCard")(king.name), "#ffe14b", document.getElementById("t-logo").textContent);
+  lastHighlightDataUrl = Highlights.capture(t("kingCard")(king.name), "#ffe14b", document.getElementById("t-logo").textContent);
   if (state.onlineRole === "host") {
     Online.broadcast({ type: "king", displayText: t("kingCard")(king.name), speechText: state.currentSpeech, lang: state.lang });
   }
@@ -1442,8 +1524,29 @@ btnPass.addEventListener("click", () => {
 
 // 📤 共有（対応端末はOSの共有シートを開き、非対応ならリンクをコピーする）
 const GAME_URL = "https://marimo530122-cmyk.github.io/baturu-retto/";
+let lastHighlightDataUrl = null; // 直前のお題ハイライト画像（TikTok/Instagram向けの画像共有用）
 
-async function shareContent(text) {
+// dataURL(PNG) を共有用のFileに変換する
+async function dataUrlToFile(dataUrl, filename) {
+  const res = await fetch(dataUrl);
+  const blob = await res.blob();
+  return new File([blob], filename, { type: "image/png" });
+}
+
+async function shareContent(text, dataUrl) {
+  // 画像つき共有に対応した端末では、ハイライト画像を添えて共有する
+  // （ショート動画のサムネにも使いやすいよう、正方形の画像を用意している）
+  if (navigator.share && navigator.canShare && dataUrl) {
+    try {
+      const file = await dataUrlToFile(dataUrl, "batsu-roulette.png");
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({ text, url: GAME_URL, files: [file] });
+        return;
+      }
+    } catch (e) {
+      // 画像共有に失敗したら、下のテキスト共有にフォールバックする
+    }
+  }
   if (navigator.share) {
     try {
       await navigator.share({ text, url: GAME_URL });
@@ -1466,7 +1569,7 @@ document.getElementById("btn-share-app").addEventListener("click", () => {
 
 document.getElementById("btn-share").addEventListener("click", () => {
   if (!odaiCard.textContent) return;
-  shareContent(t("shareOdaiText")(odaiCard.textContent));
+  shareContent(t("shareOdaiText")(odaiCard.textContent), lastHighlightDataUrl);
 });
 
 // 次のルーレットへ（10ラウンドごとに表彰式を挟む）
@@ -1517,7 +1620,7 @@ try {
   const savedVoice = localStorage.getItem("batsu-voice");
   if (PERSONA_CYCLE.includes(savedVoice)) state.voicePersona = savedVoice;
   const savedTheme = localStorage.getItem("batsu-theme");
-  if (PREMIUM_UNLOCKED && THEME_CYCLE.includes(savedTheme)) state.theme = savedTheme;
+  if (isPremiumUnlocked() && THEME_CYCLE.includes(savedTheme)) state.theme = savedTheme;
 } catch (e) {}
 
 // 一部のスマホは音声リストの読み込みが遅れるため、先に読み込みを促しておく
