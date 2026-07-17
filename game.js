@@ -130,6 +130,8 @@ const UI = {
     msgNeedAll: "3人以上を登録してください",
     coupleTeaser: "2人きりで遊ぶなら「1対1モード」がおすすめ！ 有料版のコンテンツです。",
     packTeaser: (packName) => `「${packName}」は有料版のコンテンツです。`,
+    spiceLabel: "🌶️ お色気レベル",
+    spiceLocked: "レベル3以上は有料版で解放されます。",
     modalTitle: "✨ 有料版のご案内 ✨",
     modalPrice: "買い切り 480円（現在準備中です。お楽しみに！）",
     modalClose: "とじる",
@@ -266,6 +268,8 @@ const UI = {
     msgNeedAll: "Add at least 3 players",
     coupleTeaser: "Just the two of you? Try Couple Mode — part of the premium version!",
     packTeaser: (packName) => `"${packName}" is part of the premium version.`,
+    spiceLabel: "🌶️ Spice Level",
+    spiceLocked: "Level 3 and up are unlocked in the premium version.",
     modalTitle: "✨ Premium Version ✨",
     modalPrice: "One-time purchase $3.99 (coming soon!)",
     modalClose: "Close",
@@ -402,6 +406,8 @@ const UI = {
     msgNeedAll: "請登記至少3人",
     coupleTeaser: "只有兩個人嗎？「兩人模式」最適合你們！這是付費版的內容。",
     packTeaser: (packName) => `「${packName}」是付費版的內容。`,
+    spiceLabel: "🌶️ 辣度等級",
+    spiceLocked: "等級3以上須付費版才能解鎖。",
     modalTitle: "✨ 付費版介紹 ✨",
     modalPrice: "買斷制 NT$90（目前準備中，敬請期待！）",
     modalClose: "關閉",
@@ -538,6 +544,8 @@ const UI = {
     msgNeedAll: "3명 이상 등록해주세요",
     coupleTeaser: "단둘이라면 「커플 모드」 추천! 프리미엄 콘텐츠입니다.",
     packTeaser: (packName) => `「${packName}」은 프리미엄 콘텐츠입니다.`,
+    spiceLabel: "🌶️ 매콤 레벨",
+    spiceLocked: "레벨 3부터는 프리미엄 버전에서 해제됩니다.",
     modalTitle: "✨ 프리미엄 안내 ✨",
     modalPrice: "일회성 결제 ₩3,900（현재 준비중입니다. 기대해주세요！）",
     modalClose: "닫기",
@@ -674,6 +682,8 @@ const UI = {
     msgNeedAll: "Agrega al menos 3 jugadores",
     coupleTeaser: "¿Solo ustedes dos? ¡Prueba el Modo Pareja! Es contenido premium.",
     packTeaser: (packName) => `"${packName}" es contenido de la versión premium.`,
+    spiceLabel: "🌶️ Nivel de Picante",
+    spiceLocked: "El nivel 3 en adelante se desbloquea en la versión premium.",
     modalTitle: "✨ Versión Premium ✨",
     modalPrice: "Pago único €3.49 / MX$29 (¡próximamente!)",
     modalClose: "Cerrar",
@@ -810,6 +820,8 @@ const UI = {
     msgNeedAll: "Adicione pelo menos 3 jogadores",
     coupleTeaser: "Só vocês dois? Experimente o Modo Casal! É um conteúdo premium.",
     packTeaser: (packName) => `"${packName}" é conteúdo da versão premium.`,
+    spiceLabel: "🌶️ Nível de Picância",
+    spiceLocked: "O nível 3 em diante é desbloqueado na versão premium.",
     modalTitle: "✨ Versão Premium ✨",
     modalPrice: "Pagamento único R$9,90 (em breve!)",
     modalClose: "Fechar",
@@ -944,6 +956,7 @@ function applyLanguage() {
   document.getElementById("btn-back-title").textContent = u.backTitle;
   document.getElementById("btn-back-setup").textContent = u.backSetup;
 
+  document.getElementById("t-spice-label").textContent = u.spiceLabel;
   document.getElementById("btn-spin").textContent = u.spinBtn;
   document.getElementById("btn-speak").textContent = u.speak;
   document.getElementById("btn-pass").textContent = u.pass;
@@ -1232,6 +1245,31 @@ document.getElementById("agegate-yes").addEventListener("click", () => {
 });
 document.getElementById("agegate-no").addEventListener("click", () => {
   modalAgeGate.classList.add("hidden");
+});
+
+/* ---------------- 🌶️ お色気レベルスライダー（有料機能：レベル3以上） ---------------- */
+const spiceSlider = document.getElementById("spice-slider");
+const spiceValueEl = document.getElementById("spice-value");
+const SPICE_TO_PACK = { 1: "standard", 2: "standard", 3: "romance", 4: "adult", 5: "adult" };
+const FREE_SPICE_LEVEL = 2;
+
+function applySpiceLevel(level) {
+  spiceValueEl.textContent = `Lv.${level}`;
+  state.pack = SPICE_TO_PACK[level] || "standard";
+  btnRomance.classList.toggle("active-pack", state.pack === "romance");
+  btnAdult.classList.toggle("active-pack", state.pack === "adult");
+}
+
+spiceSlider.addEventListener("input", () => {
+  const level = Number(spiceSlider.value);
+  if (level > FREE_SPICE_LEVEL && !isPremiumUnlocked()) {
+    spiceSlider.value = FREE_SPICE_LEVEL;
+    showPremiumModal(t("spiceLocked"));
+    applySpiceLevel(FREE_SPICE_LEVEL);
+    return;
+  }
+  applySpiceLevel(level);
+  showToast(`🌶️ Lv.${level}`);
 });
 
 /* ---------------- 🏆 実績バッジ ---------------- */
@@ -1612,19 +1650,24 @@ document.getElementById("btn-game-start").addEventListener("click", () => {
   if (state.mode === "mf") {
     const total = state.men.length + state.women.length;
     if (total === 2 && state.men.length === 1 && state.women.length === 1) {
-      showPremiumModal(t("coupleTeaser"));
-      return;
-    }
-    if (state.men.length < 1 || state.women.length < 1 || total < 3) {
+      if (!isPremiumUnlocked()) {
+        showPremiumModal(t("coupleTeaser"));
+        return;
+      }
+      // 有料版：既に恋愛/大人向けパックを選んでいなければ、1対1モード専用のお題を既定にする
+      if (state.pack === "standard") state.pack = "couple";
+    } else if (state.men.length < 1 || state.women.length < 1 || total < 3) {
       setupMessage.textContent = t("msgNeedMf");
       return;
     }
   } else {
     if (state.everyone.length === 2) {
-      showPremiumModal(t("coupleTeaser"));
-      return;
-    }
-    if (state.everyone.length < 3) {
+      if (!isPremiumUnlocked()) {
+        showPremiumModal(t("coupleTeaser"));
+        return;
+      }
+      state.pack = "couple";
+    } else if (state.everyone.length < 3) {
       setupMessage.textContent = t("msgNeedAll");
       return;
     }
@@ -2111,6 +2154,12 @@ applyLanguage();
 updateVoiceButton();
 applyTheme();
 renderChips();
+
+// 💎 プレミアム解放中は、背景・ボタン演出を大人っぽく豪華にする
+if (isPremiumUnlocked()) {
+  document.body.classList.add("premium-active");
+  document.getElementById("premium-badge").classList.remove("hidden");
+}
 
 // Stripeの決済リンクから戻ってきて、たった今プレミアムが解放された場合だけお祝いを出す
 if (typeof Billing !== "undefined" && Billing.wasJustUnlocked()) {

@@ -50,6 +50,42 @@ body {
   transition: background 0.4s;
 }
 
+/* 💎 プレミアム解放中：背景・ボタンを大人っぽく豪華に演出する */
+body.premium-active {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 45, 149, 0.16) 0%, transparent 42%),
+    radial-gradient(circle at 88% 88%, rgba(143, 75, 255, 0.18) 0%, transparent 48%),
+    radial-gradient(circle at 50% 55%, rgba(255, 209, 0, 0.06) 0%, transparent 60%),
+    var(--c-bg-3);
+}
+body.premium-active .btn-primary {
+  box-shadow:
+    0 0 20px color-mix(in srgb, var(--c-accent-a) 70%, transparent),
+    0 0 45px color-mix(in srgb, var(--c-accent-b) 50%, transparent),
+    0 0 70px rgba(255, 215, 0, 0.18);
+}
+body.premium-active .logo {
+  animation: premiumShimmer 3.2s ease-in-out infinite;
+}
+@keyframes premiumShimmer {
+  0%, 100% { filter: brightness(1) saturate(1); }
+  50% { filter: brightness(1.18) saturate(1.25); }
+}
+.premium-badge {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 15;
+  font-size: 11px;
+  font-weight: bold;
+  color: #241206;
+  background: linear-gradient(135deg, #ffe14b, #ff8f2d);
+  padding: 5px 12px;
+  border-radius: 999px;
+  box-shadow: 0 0 14px rgba(255, 183, 45, 0.6);
+  letter-spacing: 0.5px;
+}
+
 .screen {
   max-width: 480px;
   margin: 0 auto;
@@ -445,6 +481,31 @@ body {
 }
 
 /* ---------- ゲーム画面 ---------- */
+/* 🌶️ お色気レベルスライダー */
+.spice-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.spice-row label {
+  font-size: 12px;
+  color: #b3a5dd;
+  letter-spacing: 1px;
+}
+.spice-row input[type="range"] {
+  width: 140px;
+  accent-color: var(--c-accent-a);
+}
+.spice-value {
+  font-size: 13px;
+  font-weight: bold;
+  color: #ffd76f;
+  min-width: 36px;
+}
+
 #wheel-area { position: relative; }
 
 #wheel {

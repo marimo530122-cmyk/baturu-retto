@@ -89,6 +89,7 @@
     <button id="btn-share-x-app" class="btn-float" title="Share on X">𝕏</button>
   </div>
   <div id="toast" class="toast hidden"></div>
+  <div id="premium-badge" class="premium-badge hidden">💎 PREMIUM</div>
 
   <!-- ============ 画面1：タイトル ============ -->
   <section id="screen-title" class="screen">
@@ -165,6 +166,12 @@
   <section id="screen-game" class="screen hidden">
     <p id="online-host-badge" class="online-room-badge hidden"></p>
     <h2 id="game-status" class="screen-title neon-pink">🎯 罰ゲームをやる人は…！？</h2>
+
+    <div class="spice-row">
+      <label for="spice-slider" id="t-spice-label">🌶️ お色気レベル</label>
+      <input type="range" id="spice-slider" min="1" max="5" value="2" step="1" />
+      <span id="spice-value" class="spice-value">Lv.2</span>
+    </div>
 
     <div id="wheel-area">
       <button id="btn-rig" class="btn-float btn-rig" title="Host only">🃏</button>
