@@ -687,6 +687,118 @@ const ODAI_DATA = {
       "declarar a todo pulmón que mañana también será el mejor día de sus vidas",
     ],
   },
+
+  /* =======================================================
+     ベトナム語版（直訳ではなく、karaoke・"1-2-3 dzô"（乾杯の
+     掛け声）・bia hơiなど現地の飲み会文化に合わせて再構成。
+     situationsは次のactionに自然接続する形で統一。
+     ======================================================= */
+  vi: {
+    situations: [
+      "Như một lễ tân khách sạn 5 sao siêu sang, với giọng nói ngọt ngào nhất",
+      "Như một tay chơi thập niên 50, đầy chất ngầu",
+      "Với nụ cười ngây thơ trong sáng của một em bé",
+      "Như một tỷ phú ba nghìn tỷ trong ngân hàng, nhìn mọi người từ trên xuống",
+      "Như một MC bán hàng trên TV, bán bằng cả mạng sống",
+      "Như một hiệp sĩ thời trung cổ, với giọng điệu trang nghiêm nhất",
+      "Như người dẫn chương trình công viên giải trí hào hứng nhất thế giới",
+      "Như một robot sắp hết pin, giật giật giữa câu nói",
+      "Như một DJ radio nửa đêm, giọng trầm thì thầm",
+      "Như một CEO trong buổi họp báo xin lỗi, cực kỳ nghiêm túc",
+      "Như một ca sĩ opera, hát từng chữ một",
+      "Như một huấn luyện viên bóng đá đầy nhiệt huyết, gần như muốn khóc",
+      "Như một ngôi sao nổi tiếng trả lời phỏng vấn, dùng toàn từ ngữ hoa mỹ",
+      "Như một ninja, thì thầm trong khi cảnh giác xung quanh",
+      "Như một quản gia (hoặc người giúp việc) hoàng gia, cực kỳ lịch sự",
+      "Như đang giải thích cho một đứa trẻ 5 tuổi, siêu nhẹ nhàng",
+      "Như một bình luận viên bóng đá, với tốc độ tối đa",
+      "Như một ca sĩ nhạc bolero, sến súa hết cỡ",
+      "Như người ba ngày chưa ngủ, ngáp liên tục",
+      "Như một ngôi sao nhạc pop gặp fan, lấp lánh niềm vui",
+      "Như một hiệu trưởng, với phần mở đầu dài dòng không cần thiết",
+      "Như một thám tử thẩm vấn nghi phạm, ghé sát vào mặt",
+      "Như một anh hùng anime, tạo dáng đầy kịch tính",
+      "Với phong cách rap nhanh nhất, thả vần liên tục",
+      "Như một thủ thư, với âm lượng nhỏ nhất có thể",
+      "Như một nhà khoa học lần đầu tiếp xúc với người ngoài hành tinh, cực kỳ thận trọng",
+      "Như một YouTuber ẩm thực nếm món ăn yêu thích, phóng đại hết cỡ",
+      "Như một sommelier nhà hàng sang trọng, thanh lịch quá mức",
+      "Như một vận động viên thể hình đang tập, gồng cơ suốt",
+      "Như một nhà tiên tri thông báo tận thế, đầy hoành tráng",
+      "Như một nhân vật anime đang cố che giấu sự ngại ngùng",
+      "Như người bị dị ứng nặng, nghẹt mũi hoàn toàn",
+      "Như một kẻ phản diện độc ác, cười lớn đầy kịch tính",
+      "Như cảnh thú tội trong phim hình sự, căng thẳng đến nghẹt thở",
+      "Như một đứa trẻ lần đầu đi mua đồ một mình, cứng người vì lo lắng",
+      "Như một người mẫu tuần lễ thời trang Paris, catwalk suốt",
+      "Với năng lượng của người vừa bốc phải quẻ xui nhất",
+      "Như một diễn viên hài độc thoại, tự thêm câu chốt hài hước",
+      "Như một phóng viên run rẩy trên sóng trực tiếp, vấp từng chữ",
+      "Như một hoàng tử đánh thức Người đẹp ngủ trong rừng, cực kỳ kịch tính",
+      "Trong khi giả vờ đọc được suy nghĩ của người khác bằng siêu năng lực",
+      "Như một xác sống, rên rỉ giữa các từ",
+      "Như cảnh tỏ tình vĩ đại nhất lịch sử điện ảnh, tay đặt lên ngực",
+      "Như một người dẫn bản tin thời tiết buổi sáng đầy tươi vui",
+      "Như một nghi lễ nhập hội bí mật, trang nghiêm đầy bí ẩn",
+      "Như người chạy hết tốc lực để kịp chuyến tàu cuối, thở không ra hơi",
+      "Như một nhạc trưởng nổi tiếng thế giới, vung chiếc đũa chỉ huy vô hình",
+      "Như một streamer đang livestream, đọc bình luận tưởng tượng",
+      "Với gương mặt của người vừa bị giẫm chân mà không được xin lỗi",
+      "Như thủ khoa đọc diễn văn tốt nghiệp, xúc động nghẹn ngào",
+    ],
+    actions: [
+      "diễn vai bồi bàn nhận order một ly trà đá",
+      "giải thích đầy nhiệt huyết vì sao đôi giày (hoặc đôi vớ) đang mang hôm nay tuyệt vời đến vậy",
+      "nhìn thẳng vào mắt người đó và khen 3 lời chân thành không được cười",
+      "thú nhận bí mật xấu hổ nhất chưa từng kể cho ai",
+      "giả vờ cuộc gọi video bị đơ và đứng yên hoàn toàn trong 15 giây",
+      "giới thiệu người đó với cả thế giới là thiên tài vĩ đại nhất thế kỷ",
+      "tổ chức một buổi tư vấn cuộc sống nghiêm túc với ly nước của mình",
+      "giải thích nguồn gốc tên của mình bằng một câu chuyện hoành tráng hoàn toàn bịa đặt",
+      "tuyên bố rằng ngày mai sẽ bay vào vũ trụ",
+      "giới thiệu kiểu tóc của ai đó như thể đó là bộ sưu tập mới của một thương hiệu xa xỉ",
+      "nhảy dây tưởng tượng hết sức trong 10 giây",
+      "miêu tả món ăn sáng nay như đang review thực đơn nhà hàng cao cấp",
+      "thì thầm một thông tin tuyệt mật mà chỉ người đó nghe được",
+      "diễn kịch câm cảnh đi vào một cánh cửa vô hình",
+      "thông báo phần trăm pin điện thoại như đang đọc tin nóng chứng khoán",
+      "phát biểu về cách bạn sẽ dùng ngày cuối cùng nếu ngày mai tận thế",
+      "định giá bàn tay thuận của ai đó như một tác phẩm nghệ thuật vô giá",
+      "kể lại ký ức tuổi thơ sớm nhất của mình",
+      "hô to một điều tốt đẹp về từng người có mặt ở đây, lần lượt",
+      "tái hiện cao trào của một buổi hòa nhạc huyền thoại bằng guitar hơi",
+      "miêu tả chiếc gối của mình êm như thế nào, như một quản lý khách sạn 5 sao",
+      "tự bịa và công bố tử vi hôm nay dành riêng cho người đó",
+      "thi nhìn nhau không cười trong 10 giây với người đó",
+      "đọc to một bức thư tình gửi cho món ăn yêu thích của mình",
+      "bắt tay đầy cảm xúc với một người vô hình",
+      "hô vang một bài cổ vũ ngẫu hứng dùng tên của người đó",
+      "hồi tưởng lại lần gặp người đó ở kiếp trước",
+      "lấy một món đồ trong túi ra và rao bán như quảng cáo trên TV",
+      "tái hiện lần cười to nhất trong đời, với đầy đủ động tác",
+      "đứng dậy khỏi ghế rồi ngồi xuống lại theo kiểu chuyển động chậm cực đoan",
+      "giải thích chiếc điện thoại của ai đó như thể là công nghệ quân sự tối mật",
+      "thuyết trình đầy nhiệt huyết về món đồ duy nhất sẽ mang theo đến hoang đảo",
+      "ru một em bé vô hình ngủ",
+      "giải thích ý tưởng thời trang đằng sau bộ trang phục hôm nay",
+      "diễn lại phản ứng khi thang máy đột ngột dừng lại",
+      "đọc một bài thơ ngắn về thức uống yêu thích của mình",
+      "bảo vệ người đó như vệ sĩ, quan sát xung quanh trong 10 giây",
+      "công bố ba lời cảnh báo từ sách hướng dẫn sử dụng của chính mình",
+      "nặn không khí thành sushi cao cấp và mời người đó",
+      "thú nhận điều xấu hổ nhất từng làm ở trường",
+      "mượn vai người bên cạnh và khóc nức nở đầy kịch tính trong 10 giây",
+      "đọc một tin nhắn gửi cho chính mình từ bản thân 10 năm sau",
+      "biến thành chó (hoặc mèo) và than phiền về chủ nhân",
+      "biểu diễn 5 giây nhảy tap ngẫu hứng",
+      "thông báo nụ cười của ai đó như một dự báo thời tiết nắng đẹp hoàn hảo",
+      "kiểm tra ví và tổ chức một cuộc họp báo cáo chi tiêu tháng này",
+      "tiết lộ bí mật gia tộc với tư cách hậu duệ ninja",
+      "nhắm mắt và cố chạm vào mũi mình ngay lần đầu, làm liên tiếp 3 lần",
+      "nghĩ ra một câu khẩu hiệu cho bữa tiệc này và công bố nó",
+      "hô thật to rằng ngày mai sẽ là ngày tuyệt vời nhất từ trước đến giờ",
+    ],
+  },
 };
 
 /* ---------------------------------------------------------
@@ -1056,6 +1168,109 @@ const COUPLE_DATA = {
 };
 
 /* ---------------------------------------------------------
+   💘 ねるとんZoomモード（有料機能・初対面マッチングパーティー用）
+   シチュエーション20種 × 行動20種 = 400通り（現在は日本語・英語のみ）
+   ※既存の恋愛パックが「交際中の2人」向けなのに対し、
+     こちらは「初対面同士のマッチングパーティー」向け。
+     褒め合い・第一印象・告白ごっこまでに統一し、
+     キス・身体接触は含めない（世界お題ガイドのルール準拠）
+   --------------------------------------------------------- */
+const NERUTON_DATA = {
+  ja: {
+    situations: [
+      "初対面のドキドキを隠しきれない参加者のように",
+      "運命の出会いを求めてこの会に参加したように",
+      "第一印象で心を撃ち抜かれた瞬間のように",
+      "恋愛番組の告白タイムに出演しているように",
+      "気になる人を前にしてつい饒舌になってしまうように",
+      "合コンのエース級の自己紹介をするように",
+      "運命の人を探す真剣な眼差しで",
+      "初対面なのに妙に馬が合う相手を見つけたように",
+      "この出会いを一生の思い出にしたいと願うように",
+      "恋のライバルに闘志を燃やすように",
+      "好みのタイプ発表会に出演するように",
+      "一目惚れした瞬間の高鳴る鼓動を隠しながら",
+      "マッチングアプリのプロフィールを読み上げるように",
+      "今夜だけの特別な出会いを噛みしめるように",
+      "気になるあの人にだけ聞こえる声で",
+      "恋のキューピッドに背中を押されているように",
+      "運命の相手診断に一喜一憂する参加者のように",
+      "初対面の緊張と期待が入り混じった表情で",
+      "この場にいる全員を虜にする勢いで",
+      "出会いに感謝する乾杯の音頭を取るように",
+    ],
+    actions: [
+      "この場で第一印象が良かった人の名前を、Zoomのチャットでこっそり送る",
+      "自分の「好きなタイプ」を3つ、具体的に発表する",
+      "気になった人の第一印象を、傷つけない範囲で発表する",
+      "自己紹介を、まるで婚活パーティーのプロフィールカード風に読み上げる",
+      "この中で一番話してみたい人を指名し、理由を1つ添える",
+      "自分の恋愛遍歴を、映画の予告編風に3行で紹介する",
+      "今の自分を売り込む「自己PRタイム」を30秒行う",
+      "理想のデートプランを、その場で即興で発表する",
+      "この会に参加した理由を、正直に打ち明ける",
+      "気になる人へのメッセージを、Zoomのチャットで一言だけこっそり送る",
+      "自分の恋愛の決め手ベスト3を発表する",
+      "この場にいる誰かの「良いところ」を3つ、名前を伏せて紹介する",
+      "今の気持ちを、恋愛ソングのタイトルで表現する",
+      "自分にとっての理想の相手像を、絵に描くように言葉で説明する",
+      "この出会いの感想を、一言で表現する",
+      "誰かに送りたい「気になっています」のサインを、身振りだけで表現する",
+      "自分の趣味・特技を、モテアピール全開でプレゼンする",
+      "今夜一番印象に残った会話を、再現してみせる",
+      "この中で「もっと話したい」と思った人の名前を、紙に書いて見せる（本人には秘密で）",
+      "出会いに乾杯する短いスピーチをする",
+    ],
+  },
+  en: {
+    situations: [
+      "Like someone barely hiding the nerves of a first meeting",
+      "Like someone who came here hoping for a fated encounter",
+      "Like the moment your heart skipped a beat at first sight",
+      "Like a contestant on a dating show's confession segment",
+      "Like getting unexpectedly chatty around someone you're curious about",
+      "Like giving an ace-level self-introduction at a mixer",
+      "With the serious look of someone searching for \"the one\"",
+      "Like discovering an oddly perfect connection with a total stranger",
+      "Like wanting to remember this meeting for the rest of your life",
+      "Like burning with rivalry over someone you like",
+      "Like a contestant at a \"my type\" reveal segment",
+      "Hiding the racing heartbeat of love at first sight",
+      "Like reading your own dating-app profile out loud",
+      "Like savoring this one special night of meeting new people",
+      "In a voice meant only for the person you're curious about",
+      "Like being pushed forward by love's own matchmaker",
+      "Like a contestant anxiously awaiting a compatibility result",
+      "With a face mixing first-meeting nerves and hope",
+      "Like trying to charm absolutely everyone in the room",
+      "Like giving a toast of gratitude for this chance encounter",
+    ],
+    actions: [
+      "secretly send the name of whoever made the best first impression, via Zoom chat",
+      "announce three specific things about your \"type\"",
+      "share one kind first impression of someone here, keeping it gentle",
+      "read your own self-introduction like a dating-party profile card",
+      "call out the one person here you'd most like to talk to, with one reason why",
+      "summarize your dating history in three lines, like a movie trailer",
+      "deliver a 30-second \"sell yourself\" pitch",
+      "improvise your dream date plan on the spot",
+      "honestly share why you came to this gathering",
+      "secretly send one message to someone you're curious about, via Zoom chat",
+      "reveal your top three dealbreakers (in a good way) for love",
+      "name three good things about someone here, without saying who",
+      "describe your current mood using the title of a love song",
+      "describe your ideal partner in vivid detail, like painting a picture with words",
+      "sum up your impression of tonight in a single word",
+      "act out (no words) a \"you caught my eye\" signal to someone",
+      "pitch your hobbies and skills with maximum charm",
+      "reenact the most memorable conversation you had tonight",
+      "write down the name of the person you'd like to talk to more (keep it secret from them)",
+      "give a short toast to new encounters",
+    ],
+  },
+};
+
+/* ---------------------------------------------------------
    お題の生成（掛け算：50 × 50 = 2500通り）
    --------------------------------------------------------- */
 
@@ -1076,7 +1291,7 @@ let lastCombinationKey = "";
  * @returns {object} displayText: 画面表示用 / speechText: 朗読用
  */
 function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
-  const PACK_DATA = { romance: ROMANCE_DATA, adult: ADULT_DATA, couple: COUPLE_DATA };
+  const PACK_DATA = { romance: ROMANCE_DATA, adult: ADULT_DATA, couple: COUPLE_DATA, nerutoon: NERUTON_DATA };
   const data =
     PACK_DATA[pack] ? PACK_DATA[pack][lang] || ODAI_DATA[lang] || ODAI_DATA.ja // 未対応言語は通常パックに戻す
       : ODAI_DATA[lang] || ODAI_DATA.ja;
@@ -1127,6 +1342,13 @@ function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
       `${action}!`;
     speechText =
       `${fromName}, seu alvo é ${toName}! ${situation}, ${action}!`;
+  } else if (lang === "vi") {
+    displayText =
+      `【${fromName}】 ➜ 【${toName}】!\n` +
+      `${situation},\n` +
+      `${action}!`;
+    speechText =
+      `${fromName}, mục tiêu của bạn là ${toName}! ${situation}, ${action}!`;
   } else {
     // 日本語：名前に「さん」を付けて「から」「へ」がどんな名前でも自然につながるようにする
     displayText =
@@ -1194,7 +1416,7 @@ function classifyVoiceGender(voice) {
 
 // 希望の言語＆性別に一番近い声を選ぶ
 function pickVoice(lang, gender) {
-  const PREFIX_MAP = { en: "en", zh: "zh", ko: "ko", es: "es", ja: "ja", pt: "pt" };
+  const PREFIX_MAP = { en: "en", zh: "zh", ko: "ko", es: "es", ja: "ja", pt: "pt", vi: "vi" };
   const prefix = PREFIX_MAP[lang] || "ja";
   const list = speechSynthesis
     .getVoices()
@@ -1223,7 +1445,7 @@ function speakOdai(speechText, lang = "ja", persona = null) {
     // 一部のAndroid/Chromeは、止めた直後にすぐ喋らせようとすると
     // 無言のまま失敗することがあるため、ごくわずかに間を空ける
     const utterance = new SpeechSynthesisUtterance(speechText);
-    const BCP47_MAP = { en: "en-US", zh: "zh-TW", ko: "ko-KR", es: "es-ES", ja: "ja-JP", pt: "pt-BR" };
+    const BCP47_MAP = { en: "en-US", zh: "zh-TW", ko: "ko-KR", es: "es-ES", ja: "ja-JP", pt: "pt-BR", vi: "vi-VN" };
     utterance.lang = BCP47_MAP[lang] || "ja-JP";
     utterance.rate = persona && persona.rate ? persona.rate : 1.0;
     utterance.pitch = persona && persona.pitch ? persona.pitch : 1.1;

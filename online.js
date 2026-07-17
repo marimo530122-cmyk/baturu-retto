@@ -43,21 +43,27 @@ const Online = (() => {
     return String(Math.floor(1000 + Math.random() * 9000)); // 4桁のコード
   }
 
-  // 部屋を作る（幹事側）。戻り値: 部屋コード（失敗時はnull）
-  function createRoom() {
+  // 部屋を作る（幹事側）。zoomUrlは任意（💘ねるとんZoomモード用）。戻り値: 部屋コード（失敗時はnull）
+  function createRoom(zoomUrl) {
     if (!ensureApp()) return null;
     roomCode = generateCode();
     role = "host";
-    db.ref("rooms/" + roomCode).set({ createdAt: Date.now() });
+    db.ref("rooms/" + roomCode).set({ createdAt: Date.now(), zoomUrl: zoomUrl || null });
     return roomCode;
   }
 
-  // 部屋に参加する（参加者側）。resultCallback(data) が結果を受け取るたびに呼ばれる
-  function joinRoom(code, resultCallback) {
+  // 部屋に参加する（参加者側）。resultCallback(data) が結果を受け取るたびに呼ばれる。
+  // zoomCallback(url) は、幹事が設定したZoom URL（無ければnull）を一度だけ受け取る
+  function joinRoom(code, resultCallback, zoomCallback) {
     if (!ensureApp()) return false;
     roomCode = code;
     role = "guest";
     onResult = resultCallback;
+    if (zoomCallback) {
+      db.ref("rooms/" + roomCode + "/zoomUrl").once("value", (snap) => {
+        zoomCallback(snap.val() || null);
+      });
+    }
     latestRef = db.ref("rooms/" + roomCode + "/latest");
     latestRef.on("value", (snap) => {
       const data = snap.val();

@@ -13,8 +13,8 @@ const KING_CHANCE = 0.10; // 10%
 const CEREMONY_INTERVAL = 10; // 10ラウンドごとに表彰式
 
 /* ---------------- 言語の切り替え順番 ---------------- */
-const LANG_CYCLE = ["ja", "en", "zh", "ko", "es", "pt"];
-const LANG_LABELS = { ja: "日", en: "EN", zh: "中", ko: "한", es: "ES", pt: "PT" };
+const LANG_CYCLE = ["ja", "en", "zh", "ko", "es", "pt", "vi"];
+const LANG_LABELS = { ja: "日", en: "EN", zh: "中", ko: "한", es: "ES", pt: "PT", vi: "VI" };
 
 // ブラウザ・OSの言語設定から、対応言語を自動判定する（初回訪問・言語未選択のときだけ使う）
 function detectBrowserLang() {
@@ -105,6 +105,7 @@ const UI = {
       romance: "💌 恋愛パック",
       online: "📡 オンラインモード",
       post: "📮 罰ゲーム投稿・共有",
+      nerutoon: "💘 ねるとんZoom",
     },
     themes: { neon: "🌃 ネオン", casino: "🎰 カジノ", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 イカサマモード",
@@ -180,6 +181,8 @@ const UI = {
     romanceOff: "🎲 通常パックに戻しました",
     adultOn: "🔞 大人向けパックに切り替えました",
     adultOff: "🎲 通常パックに戻しました",
+    nerutoonOn: "💘 ねるとんZoomモードに切り替えました",
+    nerutoonOff: "🎲 通常パックに戻しました",
     agegateTitle: "🔞 年齢確認",
     agegateDesc: "大人向けパックには、恋人・パートナー間の軽いスキンシップを含むお題があります。18歳以上の方のみお進みください。",
     agegateYes: "18歳以上です",
@@ -247,6 +250,7 @@ const UI = {
       romance: "💌 Romance Pack",
       online: "📡 Online Mode",
       post: "📮 Post & Share Dares",
+      nerutoon: "💘 Matchmaking Zoom",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Rig Mode",
@@ -322,6 +326,8 @@ const UI = {
     romanceOff: "🎲 Switched back to Standard Pack",
     adultOn: "🔞 Switched to Adults Only Pack",
     adultOff: "🎲 Switched back to Standard Pack",
+    nerutoonOn: "💘 Switched to Matchmaking Zoom Mode",
+    nerutoonOff: "🎲 Switched back to Standard Pack",
     agegateTitle: "🔞 Age Verification",
     agegateDesc: "The Adults Only pack includes challenges with light physical affection between partners. Please continue only if you are 18 or older.",
     agegateYes: "I'm 18 or older",
@@ -389,6 +395,7 @@ const UI = {
       romance: "💌 戀愛套組",
       online: "📡 線上模式",
       post: "📮 罰遊戲投稿・分享",
+      nerutoon: "💘 聯誼Zoom",
     },
     themes: { neon: "🌃 霓虹", casino: "🎰 賭場", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 作弊模式",
@@ -464,6 +471,8 @@ const UI = {
     romanceOff: "🎲 已切回標準套組",
     adultOn: "🔞 已切換為成人限定套組",
     adultOff: "🎲 已切回標準套組",
+    nerutoonOn: "💘 已切換為聯誼Zoom模式",
+    nerutoonOff: "🎲 已切回標準套組",
     agegateTitle: "🔞 年齡確認",
     agegateDesc: "成人限定套組包含伴侶間輕度親密接觸的題目。請確認您已年滿18歲再繼續。",
     agegateYes: "我已年滿18歲",
@@ -531,6 +540,7 @@ const UI = {
       romance: "💌 로맨스 팩",
       online: "📡 온라인 모드",
       post: "📮 벌칙 투고・공유",
+      nerutoon: "💘 미팅 Zoom",
     },
     themes: { neon: "🌃 네온", casino: "🎰 카지노", izakaya: "🏮 이자카야" },
     rigTitle: "🃏 조작 모드",
@@ -606,6 +616,8 @@ const UI = {
     romanceOff: "🎲 기본 팩으로 되돌렸습니다",
     adultOn: "🔞 성인 전용 팩으로 전환했습니다",
     adultOff: "🎲 기본 팩으로 되돌렸습니다",
+    nerutoonOn: "💘 미팅 Zoom 모드로 전환했습니다",
+    nerutoonOff: "🎲 기본 팩으로 되돌렸습니다",
     agegateTitle: "🔞 연령 확인",
     agegateDesc: "성인 전용 팩에는 연인·파트너 사이의 가벼운 스킨십이 포함된 미션이 있습니다. 18세 이상만 진행해주세요.",
     agegateYes: "18세 이상입니다",
@@ -673,6 +685,7 @@ const UI = {
       romance: "💌 Paquete Romántico",
       online: "📡 Modo Online",
       post: "📮 Publicar y Compartir Retos",
+      nerutoon: "💘 Zoom de Citas",
     },
     themes: { neon: "🌃 Neón", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Modo Amañado",
@@ -748,6 +761,8 @@ const UI = {
     romanceOff: "🎲 Vuelto al paquete estándar",
     adultOn: "🔞 Cambiado al Paquete Solo Adultos",
     adultOff: "🎲 Vuelto al paquete estándar",
+    nerutoonOn: "💘 Cambiado al Modo Zoom de Citas",
+    nerutoonOff: "🎲 Vuelto al paquete estándar",
     agegateTitle: "🔞 Verificación de edad",
     agegateDesc: "El paquete Solo Adultos incluye retos con contacto físico ligero entre parejas. Continúa solo si tienes 18 años o más.",
     agegateYes: "Tengo 18 años o más",
@@ -815,6 +830,7 @@ const UI = {
       romance: "💌 Pacote Romântico",
       online: "📡 Modo Online",
       post: "📮 Publicar e Compartilhar Desafios",
+      nerutoon: "💘 Zoom de Paquera",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Cassino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Modo Manipulado",
@@ -890,6 +906,8 @@ const UI = {
     romanceOff: "🎲 Voltou ao pacote padrão",
     adultOn: "🔞 Mudou para o Pacote Somente Adultos",
     adultOff: "🎲 Voltou ao pacote padrão",
+    nerutoonOn: "💘 Mudou para o Modo Zoom de Paquera",
+    nerutoonOff: "🎲 Voltou ao pacote padrão",
     agegateTitle: "🔞 Verificação de idade",
     agegateDesc: "O pacote Somente Adultos inclui desafios com contato físico leve entre parceiros. Continue apenas se tiver 18 anos ou mais.",
     agegateYes: "Tenho 18 anos ou mais",
@@ -939,6 +957,151 @@ const UI = {
     onlineGuestWaiting: (code) => `Código da sala: ${code}\nAguardando o anfitrião girar a roleta…`,
     onlineHostBadge: (code) => `📡 Sala: ${code} (compartilhe este código com os convidados)`,
     onlineLeave: "← Sair",
+  },
+  vi: {
+    langName: "Tiếng Việt",
+    sub: "Trò chơi làm bùng nổ mọi bữa tiệc",
+    logoHTML: 'Vòng Quay <span class="neon-purple">Phạt</span>',
+    tag: "2.500 thử thách × 👑 Chế độ Vua × Giọng MC",
+    free: "＼ Chơi MIỄN PHÍ ngay bây giờ! ／",
+    start: "🎰 CHƠI NGAY",
+    premiumHeading: "✨ Phiên bản Premium (sắp ra mắt)",
+    packs: {
+      adult: "🔞 Chỉ dành cho người lớn",
+      family: "👨‍👩‍👧 Gia đình",
+      couple: "💑 Chế độ Cặp đôi",
+      theme: "🎨 Giao diện Vòng quay",
+      rig: "🃏 Chế độ Gian lận",
+      romance: "💌 Gói Lãng mạn",
+      online: "📡 Chế độ Online",
+      post: "📮 Đăng & Chia sẻ Thử thách",
+      nerutoon: "💘 Zoom Ghép đôi",
+    },
+    themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Quán nhậu" },
+    rigTitle: "🃏 Chế độ Gian lận",
+    rigDesc: "Chọn người sẽ có khả năng thắng cao hơn ở lượt quay tiếp theo",
+    rigClear: "Bỏ chọn",
+    rigSet: (name) => `【${name}】 giờ đây sẽ dễ thắng hơn ở lượt quay tiếp theo!`,
+    rigOff: "Đã tắt chế độ gian lận",
+    noticeHTML: "Vui lòng uống có trách nhiệm và chỉ khi đủ tuổi theo quy định.<br>Không bao giờ ép buộc ai uống rượu hay thực hiện thử thách.",
+    setupTitle: "Thêm người chơi",
+    modeMf: "Nam vs Nữ",
+    modeAll: "Tất cả cùng chơi",
+    teamM: "♂ Đội Nam",
+    teamF: "♀ Đội Nữ",
+    teamA: "🍻 Người chơi",
+    placeholder: "Nhập tên",
+    add: "Thêm",
+    gameStart: "🎲 BẮT ĐẦU!",
+    backTitle: "← Về trang chính",
+    backSetup: "← Đổi người chơi",
+    msgDup: "Tên này đã được đăng ký rồi",
+    msgMax: "Bạn có thể đăng ký tối đa 12 người chơi",
+    msgNeedMf: "Thêm ít nhất 1 nam, 1 nữ và tổng cộng 3 người chơi",
+    msgNeedAll: "Thêm ít nhất 3 người chơi",
+    coupleTeaser: "Chỉ có hai người thôi à? Hãy thử Chế độ Cặp đôi! Đây là nội dung premium.",
+    packTeaser: (packName) => `"${packName}" là nội dung của phiên bản premium.`,
+    spiceLabel: "🌶️ Mức độ Nóng bỏng",
+    spiceLocked: "Mức 3 trở lên được mở khóa trong phiên bản premium.",
+    modalTitle: "✨ Phiên bản Premium ✨",
+    modalPrice: "Thanh toán một lần ₫39.000 (sắp ra mắt!)",
+    modalClose: "Đóng",
+    voices: {
+      random: "🎲 Giọng ngẫu nhiên (đổi mỗi lần)",
+      mc: "🎤 MC tiêu chuẩn",
+      oyaji: "👨 Giọng nam trầm ấm",
+      girl: "👧 Giọng nữ dễ thương",
+    },
+    voiceSample: {
+      mc: "Tôi sẽ đọc thử thách!",
+      oyaji: "Để tôi đọc cho.",
+      girl: "Mình đọc nhé!",
+    },
+    bgmOn: "🎷 Nhạc Jazz BẬT",
+    bgmOff: "🎷 Nhạc Jazz TẮT",
+    statusStart: "🎯 Ai sẽ nhận thử thách đây...!?",
+    spinTaunt: "😈 Sẽ là ai đây...!?",
+    spinBtn: "🎰 QUAY VÒNG QUAY!",
+    statusPicked: (name) => `Là... 【${name}】!`,
+    statusOdai: "🔥 THỬ THÁCH ĐÂY RỒI!",
+    statusKing: "👑 VUA ĐÃ XUẤT HIỆN!",
+    kingCard: (name) =>
+      `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\n\nMệnh lệnh của Vua là tuyệt đối!\nHãy tự do ra lệnh cho mọi người!`,
+    kingSpeech: (name) =>
+      `Vua là ${name}! Mệnh lệnh của Vua là tuyệt đối! Hãy tự do ra lệnh cho mọi người!`,
+    speak: "🔊 Đọc lại",
+    pass: "🔄 Bỏ qua (thử thách mới)",
+    share: "📤 Chia sẻ",
+    shareCopied: "Đã sao chép liên kết!",
+    copyShareTitle: "📋 Đã sao chép!",
+    copyShareText: (app) => `Đã sao chép văn bản chia sẻ! Khi ${app} mở ra, chỉ cần dán và đăng thôi!`,
+    copyShareOpen: (app) => `Mở ${app}`,
+    copyShareClose: "Để sau",
+    shareAppText: "🎰 Vòng Quay Phạt - trò chơi thử thách tiệc tùng đỉnh cao!",
+    shareOdaiText: (text) => text, // không thêm hashtag khi chia sẻ 1:1 (hashtag của X được thêm riêng trong shareToX())
+    shareOnX: "Chia sẻ trên 𝕏",
+    next: "🎰 LƯỢT QUAY TIẾP THEO!",
+    ceremonyTitle: (n) => `🏆 KẾT QUẢ ĐẾN LÚC NÀY! (${n} lượt)`,
+    ceremonyKing: (name, count) => `👑 Vua của đêm nay: 【${name}】 (${count} lần)`,
+    ceremonyChallenge: (name, count) => `🎯 Nhận nhiều thử thách nhất: 【${name}】 (${count} lần)`,
+    ceremonyNoKing: "👑 Chưa có Vua nào xuất hiện",
+    ceremonyContinue: "🎉 Tiếp tục",
+    bgmGenres: { jazz: "🎷 Jazz", edm: "🎧 EDM", enka: "🎤 Enka" },
+    romanceOn: "💌 Đã chuyển sang Gói Lãng mạn",
+    romanceOff: "🎲 Đã quay lại gói tiêu chuẩn",
+    adultOn: "🔞 Đã chuyển sang Gói Chỉ dành cho người lớn",
+    adultOff: "🎲 Đã quay lại gói tiêu chuẩn",
+    nerutoonOn: "💘 Đã chuyển sang Chế độ Zoom Ghép đôi",
+    nerutoonOff: "🎲 Đã quay lại gói tiêu chuẩn",
+    agegateTitle: "🔞 Xác nhận độ tuổi",
+    agegateDesc: "Gói Chỉ dành cho người lớn bao gồm các thử thách có tiếp xúc cơ thể nhẹ nhàng giữa hai người. Vui lòng chỉ tiếp tục nếu bạn từ 18 tuổi trở lên.",
+    agegateYes: "Tôi từ 18 tuổi trở lên",
+    agegateNo: "Thôi để sau",
+    upgradeBtn: "💎 Nâng cấp ngay",
+    upgradeNotConfigured: "Thanh toán chưa được thiết lập. Vui lòng quay lại sau.",
+    unlockedTitle: "✨ Đã kích hoạt Phiên bản Premium!",
+    unlockedDesc: "Cảm ơn bạn đã mua! Toàn bộ nội dung premium — Gói Chỉ dành cho người lớn, Chế độ Gian lận, giao diện vòng quay và hơn thế nữa — đã được mở khóa. Cạn ly! 🍻",
+    unlockedClose: "Bắt đầu thôi",
+    subTitle: "📮 Đăng & Chia sẻ Thử thách",
+    subDesc: "Gửi một thử thách gốc mà bạn nghĩ ra. Sau khi vượt qua kiểm duyệt tự động và xét duyệt, nó sẽ được chia sẻ với những người dùng khác (vui lòng không bao gồm thông tin cá nhân hoặc lời lẽ xúc phạm).",
+    subPlaceholder: "vd: bắt chước người nổi tiếng yêu thích của bạn",
+    subPostBtn: "Gửi",
+    subListTitle: "🌟 Thử thách từ Cộng đồng",
+    subEmpty: "Chưa có bài đăng nào. Hãy là người đầu tiên!",
+    subSpeak: "🔊 Đọc to",
+    subReport: "🚩 Báo cáo",
+    subClose: "Đóng",
+    subPostedPending: "Đã gửi! Sẽ được chia sẻ với mọi người sau khi xét duyệt.",
+    subRejectedNgWord: "Xin lỗi, nội dung này không thể đăng được (chứa nội dung không phù hợp).",
+    subRejectedEmpty: "Vui lòng nhập nội dung thử thách.",
+    subRejectedTooLong: "Vui lòng nhập trong vòng 200 ký tự.",
+    subNotConfigured: "Tính năng đăng & chia sẻ chưa được thiết lập.",
+    subReported: "Đã báo cáo. Cảm ơn bạn đã giúp đỡ.",
+    adminTitle: "🛡️ Bài đăng đang chờ duyệt",
+    adminApprove: "✅ Duyệt",
+    adminReject: "❌ Từ chối",
+    adminEmpty: "Không có bài đăng nào đang chờ duyệt.",
+    adminClose: "Đóng",
+    achTitle: "🏆 Thành tích",
+    achClose: "Đóng",
+    achUnlocked: (name) => `🏅 Đã mở khóa thành tích: ${name}!`,
+    hlTitle: "📸 Khoảnh khắc nổi bật đêm nay",
+    hlEmpty: "Chưa có khoảnh khắc nào được lưu. Chúng sẽ tự động được lưu khi một thử thách được công bố.",
+    hlClose: "Đóng",
+    onlineTitle: "📡 Chế độ Tiệc Online",
+    onlineDesc: "Chơi cùng những người ở nơi khác, ví dụ như qua cuộc gọi Zoom",
+    onlineCreateBtn: "🖥️ Tạo phòng (chủ trì)",
+    onlineJoinPlaceholder: "Mã 4 chữ số",
+    onlineJoinBtn: "Tham gia",
+    onlineClose: "Đóng",
+    onlineNotConfigured: "Chế độ online chưa được thiết lập. Vui lòng xem \"Cách thiết lập chế độ online\" trong tài liệu yêu cầu.",
+    onlineRoomCreated: (code) => `Đã tạo phòng! Chia sẻ mã "${code}" với bạn bè qua chat Zoom, v.v.`,
+    onlineInvalidCode: "Vui lòng nhập mã gồm 4 chữ số",
+    onlineJoinFailed: "Không tìm thấy phòng đó",
+    onlineGuestTitle: "📡 Đang chờ…",
+    onlineGuestWaiting: (code) => `Mã phòng: ${code}\nĐang chờ chủ trì quay vòng quay…`,
+    onlineHostBadge: (code) => `📡 Phòng: ${code} (chia sẻ mã này với người tham gia)`,
+    onlineLeave: "← Rời đi",
   },
 };
 
@@ -1239,6 +1402,7 @@ btnRomance.addEventListener("click", () => {
   state.pack = state.pack === "romance" ? "standard" : "romance";
   btnRomance.classList.toggle("active-pack", state.pack === "romance");
   btnAdult.classList.remove("active-pack");
+  btnNerutoon.classList.remove("active-pack");
   showToast(state.pack === "romance" ? t("romanceOn") : t("romanceOff"));
 });
 
@@ -1264,11 +1428,24 @@ document.getElementById("agegate-yes").addEventListener("click", () => {
   modalAgeGate.classList.add("hidden");
   state.pack = "adult";
   btnRomance.classList.remove("active-pack");
+  btnNerutoon.classList.remove("active-pack");
   btnAdult.classList.add("active-pack");
   showToast(t("adultOn"));
 });
 document.getElementById("agegate-no").addEventListener("click", () => {
   modalAgeGate.classList.add("hidden");
+});
+
+/* ---------------- 💘 ねるとんZoomモード切り替え（有料機能） ---------------- */
+const btnNerutoon = document.getElementById("pack-nerutoon");
+
+btnNerutoon.addEventListener("click", () => {
+  if (blockIfNotPremium("nerutoon")) return;
+  state.pack = state.pack === "nerutoon" ? "standard" : "nerutoon";
+  btnNerutoon.classList.toggle("active-pack", state.pack === "nerutoon");
+  btnRomance.classList.remove("active-pack");
+  btnAdult.classList.remove("active-pack");
+  showToast(state.pack === "nerutoon" ? t("nerutoonOn") : t("nerutoonOff"));
 });
 
 /* ---------------- 🌶️ お色気レベルスライダー（有料機能：レベル3以上） ---------------- */
@@ -1531,7 +1708,8 @@ document.getElementById("online-close").addEventListener("click", () => {
 
 // 部屋を作る（幹事）
 document.getElementById("online-create").addEventListener("click", () => {
-  const code = Online.createRoom();
+  const zoomUrl = document.getElementById("online-zoom-input").value.trim();
+  const code = Online.createRoom(zoomUrl);
   if (!code) {
     document.getElementById("online-message").textContent = t("onlineNotConfigured");
     return;
@@ -1554,7 +1732,14 @@ document.getElementById("online-join").addEventListener("click", () => {
     document.getElementById("online-message").textContent = t("onlineInvalidCode");
     return;
   }
-  const ok = Online.joinRoom(code, handleOnlineResult);
+  const zoomLink = document.getElementById("online-guest-zoom-link");
+  zoomLink.classList.add("hidden");
+  const ok = Online.joinRoom(code, handleOnlineResult, (zoomUrl) => {
+    if (zoomUrl) {
+      zoomLink.href = zoomUrl;
+      zoomLink.classList.remove("hidden");
+    }
+  });
   if (!ok) {
     document.getElementById("online-message").textContent = t("onlineNotConfigured");
     return;

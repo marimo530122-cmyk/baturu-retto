@@ -112,6 +112,7 @@
         <button class="btn btn-locked" data-pack="couple" id="pack-couple">💑 1対1モード <span class="lock">🔒</span></button>
         <button class="btn btn-locked" data-pack="romance" id="pack-romance">💌 恋愛パック <span class="lock">🔒</span></button>
         <button class="btn btn-locked" data-pack="online" id="pack-online">📡 オンライン <span class="lock">🔒</span></button>
+        <button class="btn btn-locked" data-pack="nerutoon" id="pack-nerutoon">💘 ねるとんZoom <span class="lock">🔒</span></button>
       </div>
 
       <p class="notice" id="t-notice">※20歳未満の飲酒は法律で禁止されています。<br>お酒やお題の無理強いはやめましょう。</p>
@@ -219,6 +220,7 @@
     <h2 class="screen-title neon-pink" id="t-online-guest-title">📡 待機中…</h2>
     <p id="online-guest-code-label" class="message"></p>
     <p id="online-guest-status" class="message"></p>
+    <a id="online-guest-zoom-link" class="btn btn-primary hidden" target="_blank" rel="noopener">🎥 Zoomに参加する</a>
     <div id="online-guest-card" class="odai-card hidden"></div>
     <button id="btn-online-leave" class="btn btn-ghost">← 退出する</button>
   </section>
@@ -305,6 +307,7 @@
     <div class="modal-box">
       <h3 class="neon-pink" id="t-online-title">📡 オンライン飲み会モード</h3>
       <p id="t-online-desc">Zoom等で画面を見せながら、離れた場所のみんなと一緒に遊べます</p>
+      <input id="online-zoom-input" type="url" class="submission-input" placeholder="ZoomのURL（任意・参加者に共有されます）" />
       <button id="online-create" class="btn btn-primary btn-big">🖥️ 部屋を作る（幹事）</button>
       <div class="input-row" style="margin-top: 14px;">
         <input id="online-code-input" type="text" maxlength="4" placeholder="4桁のコード" />
