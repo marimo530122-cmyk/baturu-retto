@@ -13,8 +13,20 @@ const KING_CHANCE = 0.10; // 10%
 const CEREMONY_INTERVAL = 10; // 10ラウンドごとに表彰式
 
 /* ---------------- 言語の切り替え順番 ---------------- */
-const LANG_CYCLE = ["ja", "en", "zh", "ko", "es"];
-const LANG_LABELS = { ja: "日", en: "EN", zh: "中", ko: "한", es: "ES" };
+const LANG_CYCLE = ["ja", "en", "zh", "ko", "es", "pt"];
+const LANG_LABELS = { ja: "日", en: "EN", zh: "中", ko: "한", es: "ES", pt: "PT" };
+
+// ブラウザ・OSの言語設定から、対応言語を自動判定する（初回訪問・言語未選択のときだけ使う）
+function detectBrowserLang() {
+  const langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
+  for (const raw of langs) {
+    const code = (raw || "").toLowerCase();
+    for (const lang of LANG_CYCLE) {
+      if (code.startsWith(lang)) return lang;
+    }
+  }
+  return "en"; // 対応外の言語圏からのアクセスは、日本語ではなく国際共通語の英語を既定にする
+}
 
 /* ---------------- 🎨 テーマの切り替え順番 ---------------- */
 const THEME_CYCLE = ["neon", "casino", "izakaya"];
@@ -149,7 +161,8 @@ const UI = {
     share: "📤 シェア",
     shareCopied: "リンクをコピーしました！",
     shareAppText: "🎰 バツルーレット - 飲み会を爆上げする罰ゲームルーレット！",
-    shareOdaiText: (text) => `${text}\n\n#バツルーレット`,
+    shareOdaiText: (text) => text, // 個人間のチャット共有はハッシュタグなし（Xシェアは別途 shareToX() で付与）
+    shareOnX: "𝕏でシェア",
     next: "🎰 次のルーレットへ！",
     ceremonyTitle: (n) => `🏆 中間結果発表！（${n}回終了）`,
     ceremonyKing: (name, count) => `👑 王様運No.1：【${name}】（${count}回）`,
@@ -284,7 +297,8 @@ const UI = {
     share: "📤 Share",
     shareCopied: "Link copied!",
     shareAppText: "🎰 Batsu Roulette - the ultimate party dare game!",
-    shareOdaiText: (text) => `${text}\n\n#BatsuRoulette`,
+    shareOdaiText: (text) => text, // no hashtags for 1:1 chat shares (X sharing adds hashtags separately via shareToX())
+    shareOnX: "Share on 𝕏",
     next: "🎰 NEXT SPIN!",
     ceremonyTitle: (n) => `🏆 RESULTS SO FAR! (${n} rounds)`,
     ceremonyKing: (name, count) => `👑 King of the Night: 【${name}】 (${count}x)`,
@@ -419,7 +433,8 @@ const UI = {
     share: "📤 分享",
     shareCopied: "已複製連結！",
     shareAppText: "🎰 罰遊戲輪盤 - 讓聚會爆棚的懲罰遊戲轉盤！",
-    shareOdaiText: (text) => `${text}\n\n#罰遊戲輪盤`,
+    shareOdaiText: (text) => text, // 一對一聊天分享不附加標籤（X分享另由shareToX()附加）
+    shareOnX: "在𝕏分享",
     next: "🎰 下一輪！",
     ceremonyTitle: (n) => `🏆 目前戰績發表！（已進行${n}輪）`,
     ceremonyKing: (name, count) => `👑 國王運第一名：【${name}】（${count}次）`,
@@ -554,7 +569,8 @@ const UI = {
     share: "📤 공유",
     shareCopied: "링크가 복사되었습니다!",
     shareAppText: "🎰 벌칙 룰렛 - 회식을 뜨겁게 달구는 벌칙 게임!",
-    shareOdaiText: (text) => `${text}\n\n#벌칙룰렛`,
+    shareOdaiText: (text) => text, // 1:1 채팅 공유는 해시태그 없음（X 공유는 shareToX()에서 별도로 추가）
+    shareOnX: "𝕏에 공유하기",
     next: "🎰 다음 룰렛으로！",
     ceremonyTitle: (n) => `🏆 중간 결과 발표！（${n}회 종료）`,
     ceremonyKing: (name, count) => `👑 왕 운 1위：【${name}】（${count}회）`,
@@ -689,7 +705,8 @@ const UI = {
     share: "📤 Compartir",
     shareCopied: "¡Enlace copiado!",
     shareAppText: "🎰 Batsu Roulette - ¡el juego de retos definitivo para fiestas!",
-    shareOdaiText: (text) => `${text}\n\n#BatsuRoulette`,
+    shareOdaiText: (text) => text, // sin hashtags para chats 1:1 (los hashtags de X se añaden en shareToX())
+    shareOnX: "Compartir en 𝕏",
     next: "🎰 ¡SIGUIENTE!",
     ceremonyTitle: (n) => `🏆 ¡RESULTADOS HASTA AHORA! (${n} rondas)`,
     ceremonyKing: (name, count) => `👑 Rey de la noche: 【${name}】 (${count}x)`,
@@ -751,6 +768,142 @@ const UI = {
     onlineHostBadge: (code) => `📡 Sala: ${code} (comparte este código con los invitados)`,
     onlineLeave: "← Salir",
   },
+  pt: {
+    langName: "Português",
+    sub: "O jogo que agita qualquer festa",
+    logoHTML: 'Batsu <span class="neon-purple">Roleta</span>',
+    tag: "2.500 desafios × 👑 Modo Rei × Voz de apresentador",
+    free: "＼ Jogue GRÁTIS agora mesmo! ／",
+    start: "🎰 JOGAR",
+    premiumHeading: "✨ Versão Premium (em breve)",
+    packs: {
+      adult: "🔞 Somente Adultos",
+      family: "👨‍👩‍👧 Família",
+      couple: "💑 Modo Casal",
+      theme: "🎨 Temas da Roleta",
+      rig: "🃏 Modo Manipulado",
+      romance: "💌 Pacote Romântico",
+      online: "📡 Modo Online",
+      post: "📮 Publicar e Compartilhar Desafios",
+    },
+    themes: { neon: "🌃 Neon", casino: "🎰 Cassino", izakaya: "🏮 Izakaya" },
+    rigTitle: "🃏 Modo Manipulado",
+    rigDesc: "Escolha quem terá mais chance de ganhar a próxima rodada",
+    rigClear: "Remover",
+    rigSet: (name) => `Agora 【${name}】 tem mais chance de ganhar a próxima rodada!`,
+    rigOff: "Modo manipulado desativado",
+    noticeHTML: "Beba com responsabilidade e somente se tiver idade legal.<br>Nunca obrigue ninguém a beber ou fazer um desafio.",
+    setupTitle: "Adicionar Jogadores",
+    modeMf: "Meninos vs Meninas",
+    modeAll: "Todos juntos",
+    teamM: "♂ Time Meninos",
+    teamF: "♀ Time Meninas",
+    teamA: "🍻 Jogadores",
+    placeholder: "Digite um nome",
+    add: "Adicionar",
+    gameStart: "🎲 COMEÇAR!",
+    backTitle: "← Voltar ao início",
+    backSetup: "← Trocar jogadores",
+    msgDup: "Esse nome já foi cadastrado",
+    msgMax: "Você pode cadastrar até 12 jogadores",
+    msgNeedMf: "Adicione pelo menos 1 menino, 1 menina e 3 jogadores no total",
+    msgNeedAll: "Adicione pelo menos 3 jogadores",
+    coupleTeaser: "Só vocês dois? Experimente o Modo Casal! É um conteúdo premium.",
+    packTeaser: (packName) => `"${packName}" é conteúdo da versão premium.`,
+    modalTitle: "✨ Versão Premium ✨",
+    modalPrice: "Pagamento único R$9,90 (em breve!)",
+    modalClose: "Fechar",
+    voices: {
+      random: "🎲 Voz surpresa (muda toda vez)",
+      mc: "🎤 Apresentador padrão",
+      oyaji: "👨 Voz grave e séria",
+      girl: "👧 Voz de menina fofa",
+    },
+    voiceSample: {
+      mc: "Eu vou ler os desafios!",
+      oyaji: "Eu leio para vocês.",
+      girl: "Eu leio, vamos lá!",
+    },
+    bgmOn: "🎷 Trilha jazz LIGADA",
+    bgmOff: "🎷 Trilha jazz DESLIGADA",
+    statusStart: "🎯 Quem vai encarar o desafio...!?",
+    spinTaunt: "😈 Quem será...!?",
+    spinBtn: "🎰 GIRAR A ROLETA!",
+    statusPicked: (name) => `É... 【${name}】!`,
+    statusOdai: "🔥 AQUI ESTÁ O DESAFIO!",
+    statusKing: "👑 TODOS DIANTE DO REI!",
+    kingCard: (name) =>
+      `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\n\nA ordem do Rei é absoluta!\nInvente o desafio que quiser!`,
+    kingSpeech: (name) =>
+      `O Rei é ${name}! A ordem do Rei é absoluta! Invente o desafio que quiser!`,
+    speak: "🔊 Ler novamente",
+    pass: "🔄 Pular (novo desafio)",
+    share: "📤 Compartilhar",
+    shareCopied: "Link copiado!",
+    shareAppText: "🎰 Batsu Roulette - o jogo de desafios definitivo para festas!",
+    shareOdaiText: (text) => text, // sem hashtags em chats 1:1 (hashtags do X são adicionadas em shareToX())
+    shareOnX: "Compartilhar no 𝕏",
+    next: "🎰 PRÓXIMA RODADA!",
+    ceremonyTitle: (n) => `🏆 RESULTADOS ATÉ AGORA! (${n} rodadas)`,
+    ceremonyKing: (name, count) => `👑 Rei da noite: 【${name}】 (${count}x)`,
+    ceremonyChallenge: (name, count) => `🎯 Mais desafios: 【${name}】 (${count}x)`,
+    ceremonyNoKing: "👑 Ainda nenhum Rei apareceu",
+    ceremonyContinue: "🎉 Continuar",
+    bgmGenres: { jazz: "🎷 Jazz", edm: "🎧 EDM", enka: "🎤 Enka" },
+    romanceOn: "💌 Mudou para o Pacote Romântico",
+    romanceOff: "🎲 Voltou ao pacote padrão",
+    adultOn: "🔞 Mudou para o Pacote Somente Adultos",
+    adultOff: "🎲 Voltou ao pacote padrão",
+    agegateTitle: "🔞 Verificação de idade",
+    agegateDesc: "O pacote Somente Adultos inclui desafios com contato físico leve entre parceiros. Continue apenas se tiver 18 anos ou mais.",
+    agegateYes: "Tenho 18 anos ou mais",
+    agegateNo: "Melhor não",
+    upgradeBtn: "💎 Atualizar agora",
+    upgradeNotConfigured: "Os pagamentos ainda não foram configurados. Volte a tentar em breve.",
+    unlockedTitle: "✨ Versão Premium Ativada!",
+    unlockedDesc: "Obrigado pela compra! Todo o conteúdo premium — Pacote Somente Adultos, Modo Manipulado, temas da roleta e mais — já está desbloqueado. Saúde! 🍻",
+    unlockedClose: "Vamos lá",
+    subTitle: "📮 Publicar e Compartilhar Desafios",
+    subDesc: "Envie um desafio original que você inventou. Após passar pela triagem automática e revisão, será compartilhado com outros usuários (não inclua informações pessoais nem ofensas).",
+    subPlaceholder: "ex: imitar seu famoso favorito",
+    subPostBtn: "Enviar",
+    subListTitle: "🌟 Desafios da Comunidade",
+    subEmpty: "Ainda não há envios. Seja o primeiro!",
+    subSpeak: "🔊 Ler em voz alta",
+    subReport: "🚩 Denunciar",
+    subClose: "Fechar",
+    subPostedPending: "Enviado! Será compartilhado com todos após a revisão.",
+    subRejectedNgWord: "Desculpe, isso não pode ser publicado (contém conteúdo inadequado).",
+    subRejectedEmpty: "Por favor, escreva um desafio.",
+    subRejectedTooLong: "Por favor, use no máximo 200 caracteres.",
+    subNotConfigured: "A função de publicar e compartilhar ainda não está configurada.",
+    subReported: "Denunciado. Obrigado por ajudar.",
+    adminTitle: "🛡️ Envios Pendentes",
+    adminApprove: "✅ Aprovar",
+    adminReject: "❌ Rejeitar",
+    adminEmpty: "Não há envios aguardando revisão.",
+    adminClose: "Fechar",
+    achTitle: "🏆 Conquistas",
+    achClose: "Fechar",
+    achUnlocked: (name) => `🏅 Conquista desbloqueada: ${name}!`,
+    hlTitle: "📸 Melhores momentos da noite",
+    hlEmpty: "Ainda não há momentos salvos. Eles são salvos automaticamente quando um desafio é revelado.",
+    hlClose: "Fechar",
+    onlineTitle: "📡 Modo Festa Online",
+    onlineDesc: "Jogue junto com pessoas em outros lugares, por exemplo em uma chamada de Zoom",
+    onlineCreateBtn: "🖥️ Criar sala (anfitrião)",
+    onlineJoinPlaceholder: "Código de 4 dígitos",
+    onlineJoinBtn: "Entrar",
+    onlineClose: "Fechar",
+    onlineNotConfigured: "O modo online ainda não está configurado. Consulte \"Configuração do modo online\" no documento de requisitos.",
+    onlineRoomCreated: (code) => `Sala criada! Compartilhe o código "${code}" com seus amigos pelo chat do Zoom, etc.`,
+    onlineInvalidCode: "Por favor, digite um código de 4 dígitos",
+    onlineJoinFailed: "Não foi possível encontrar essa sala",
+    onlineGuestTitle: "📡 Aguardando…",
+    onlineGuestWaiting: (code) => `Código da sala: ${code}\nAguardando o anfitrião girar a roleta…`,
+    onlineHostBadge: (code) => `📡 Sala: ${code} (compartilhe este código com os convidados)`,
+    onlineLeave: "← Sair",
+  },
 };
 
 function t(key) {
@@ -795,6 +948,7 @@ function applyLanguage() {
   document.getElementById("btn-speak").textContent = u.speak;
   document.getElementById("btn-pass").textContent = u.pass;
   document.getElementById("btn-share").textContent = u.share;
+  document.getElementById("btn-share-x").textContent = u.shareOnX;
   document.getElementById("btn-next").textContent = u.next;
   document.getElementById("btn-ceremony-continue").textContent = u.ceremonyContinue;
 
@@ -1829,6 +1983,19 @@ btnPass.addEventListener("click", () => {
 const GAME_URL = "https://marimo530122-cmyk.github.io/baturu-retto/";
 let lastHighlightDataUrl = null; // 直前のお題ハイライト画像（TikTok/Instagram向けの画像共有用）
 
+// 🐦 世界向けハッシュタグ（X等の公開SNSシェア専用。個人間チャットには付けない）
+// ※「#DirtyDare」案は「不快感を与えない」基準に沿うよう「#NaughtyDare」（茶目っ気のある響き）に調整した
+const WORLD_HASHTAGS = "#BatsuRoulette #AdultPartyGame #SpicyRoulette #NaughtyDare #SafeFun";
+
+// X（旧Twitter）専用シェア：投稿画面をタブで開く（Web Intent）。ハッシュタグはここでのみ付与する
+function shareToX(text) {
+  const fullText = `${text}\n\n${WORLD_HASHTAGS}`;
+  const intentUrl =
+    "https://twitter.com/intent/tweet?text=" + encodeURIComponent(fullText) +
+    "&url=" + encodeURIComponent(GAME_URL);
+  window.open(intentUrl, "_blank", "noopener,width=550,height=420");
+}
+
 // dataURL(PNG) を共有用のFileに変換する
 async function dataUrlToFile(dataUrl, filename) {
   const res = await fetch(dataUrl);
@@ -1869,10 +2036,17 @@ async function shareContent(text, dataUrl) {
 document.getElementById("btn-share-app").addEventListener("click", () => {
   shareContent(t("shareAppText"));
 });
+document.getElementById("btn-share-x-app").addEventListener("click", () => {
+  shareToX(t("shareAppText"));
+});
 
 document.getElementById("btn-share").addEventListener("click", () => {
   if (!odaiCard.textContent) return;
   shareContent(t("shareOdaiText")(odaiCard.textContent), lastHighlightDataUrl);
+});
+document.getElementById("btn-share-x").addEventListener("click", () => {
+  if (!odaiCard.textContent) return;
+  shareToX(odaiCard.textContent);
 });
 
 // 次のルーレットへ（10ラウンドごとに表彰式を挟む）
@@ -1919,7 +2093,11 @@ document.getElementById("btn-ceremony-continue").addEventListener("click", () =>
 // 前回選んだ言語・声・テーマ（有料機能）を覚えておく
 try {
   const savedLang = localStorage.getItem("batsu-lang");
-  if (LANG_CYCLE.includes(savedLang)) state.lang = savedLang;
+  if (LANG_CYCLE.includes(savedLang)) {
+    state.lang = savedLang; // 前回選んだ言語を優先
+  } else {
+    state.lang = detectBrowserLang(); // 初回訪問：ブラウザの言語設定から自動判定
+  }
   const savedVoice = localStorage.getItem("batsu-voice");
   if (PERSONA_CYCLE.includes(savedVoice)) state.voicePersona = savedVoice;
   const savedTheme = localStorage.getItem("batsu-theme");

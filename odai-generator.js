@@ -238,6 +238,119 @@ const ODAI_DATA = {
   },
 
   /* =======================================================
+     ポルトガル語版（ブラジル向け。直訳ではなく churrasco・
+     novela・futebol・carnavalなど現地の飲み会文化に
+     合わせて再構成。situationsは次のactionに自然接続する形、
+     actionsは動詞の原形で統一。
+     ======================================================= */
+  pt: {
+    situations: [
+      "Como um concierge de hotel cinco estrelas, com a voz mais suave possível",
+      "Como um roqueiro dos anos 50 cheio de atitude",
+      "Com o sorriso puro e inocente de um bebê",
+      "Como um bilionário de três trilhões no banco, olhando todos de cima",
+      "Como um apresentador de televendas vendendo com a vida",
+      "Como um cavaleiro medieval, no tom mais solene possível",
+      "Como o locutor mais animado de um parque de diversões",
+      "Como um robô com a bateria acabando, travando no meio da frase",
+      "Como um DJ de rádio da madrugada, sussurrando em voz grave",
+      "Como um CEO em coletiva de imprensa pedindo desculpas, super sério",
+      "Como um cantor de ópera, cantando cada palavra",
+      "Como um técnico de futebol apaixonado, quase chorando",
+      "Como uma celebridade em entrevista, soltando palavras difíceis",
+      "Como um ninja, sussurrando enquanto observa os arredores",
+      "Como um mordomo (ou governanta) real, com extrema educação",
+      "Como se estivesse explicando para uma criança de cinco anos, bem gentil",
+      "Como um narrador de futebol, na velocidade máxima",
+      "Como um cantor de sertanejo, com o maior sofrência possível",
+      "Como alguém que não dorme há três dias, bocejando sem parar",
+      "Como um ídolo pop conhecendo os fãs, brilhando de alegria",
+      "Como um diretor de escola, com uma introdução longa e desnecessária",
+      "Como um detetive interrogando um suspeito, bem de perto",
+      "Como um herói de anime, fazendo uma pose dramática",
+      "No estilo rap mais rápido possível, soltando rimas",
+      "Como um bibliotecário, no volume mais baixo possível",
+      "Como um cientista fazendo primeiro contato com alienígenas, com muito cuidado",
+      "Como um youtuber de comida provando o prato favorito, todo exagerado",
+      "Como um sommelier de restaurante chique, com elegância exagerada",
+      "Como um fisiculturista no meio do treino, todo tempo malhando",
+      "Como um profeta anunciando o fim do mundo, de forma épica",
+      "Como um personagem de novela escondendo a vergonha",
+      "Como alguém com uma alergia terrível, com o nariz completamente entupido",
+      "Como um vilão maligno, soltando risadas dramáticas",
+      "Como a cena de confissão de uma novela das nove, no limite emocional",
+      "Como uma criança no primeiro mandado sozinha, paralisada de nervoso",
+      "Como um modelo de passarela em Paris, desfilando o tempo todo",
+      "Com a energia de quem acabou de tirar o pior horóscopo do dia",
+      "Como um comediante de stand-up, criando suas próprias piadas",
+      "Como um repórter nervoso ao vivo na TV, tropeçando em cada palavra",
+      "Como um príncipe acordando a Bela Adormecida, super teatral",
+      "Fingindo ler a mente da outra pessoa com poderes psíquicos",
+      "Como um zumbi, gemendo entre as palavras",
+      "Como a maior cena de declaração de amor da história do cinema, com a mão no peito",
+      "Como um apresentador de previsão do tempo animado de manhã",
+      "Como um ritual secreto de iniciação, misteriosamente solene",
+      "Como alguém correndo para pegar o último ônibus, completamente sem fôlego",
+      "Como um maestro mundialmente famoso, regendo com uma batuta invisível",
+      "Como um narrador de futebol gritando o gol do título",
+      "Com a cara de quem pisaram no seu pé e nem pediram desculpa",
+      "Como o orador da formatura, tomado pela emoção",
+    ],
+    actions: [
+      "fazer o papel de garçom anotando um pedido de chá gelado",
+      "explicar com paixão por que o tênis (ou meia) que está usando hoje é incrível",
+      "olhar nos olhos da pessoa e fazer três elogios sinceros sem rir",
+      "confessar o segredo mais vergonhoso que nunca contou a ninguém",
+      "fingir que a chamada de vídeo travou e ficar completamente parado por 15 segundos",
+      "apresentar a pessoa ao mundo como o maior gênio do século",
+      "ter uma conversa séria de conselhos com o próprio copo",
+      "explicar a origem do seu nome com uma história épica totalmente inventada",
+      "anunciar que vai viajar para o espaço amanhã",
+      "apresentar o penteado de alguém como se fosse lançamento de grife",
+      "pular corda no ar por 10 segundos com toda a força",
+      "descrever o que comeu hoje de manhã como se fosse uma resenha de restaurante chique",
+      "sussurrar uma informação supersecreta que só aquela pessoa pode ouvir",
+      "fazer mímica de esbarrar numa porta invisível",
+      "anunciar a porcentagem da bateria do celular como se fosse notícia urgente da bolsa",
+      "fazer um discurso de como passaria o último dia se o mundo acabasse amanhã",
+      "avaliar a mão dominante de alguém como se fosse uma obra de arte rara",
+      "compartilhar sua primeira lembrança de infância",
+      "gritar uma coisa boa sobre cada pessoa presente, uma por uma",
+      "recriar o clímax de um show lendário tocando violão no ar",
+      "descrever o quanto seu travesseiro é confortável, como gerente de hotel cinco estrelas",
+      "inventar e anunciar o horóscopo de hoje só para aquela pessoa",
+      "encarar alguém sem rir por 10 segundos seguidos",
+      "ler em voz alta uma carta de amor para sua comida favorita",
+      "dar um aperto de mão apaixonado em uma pessoa invisível",
+      "gritar uma torcida improvisada usando o nome da pessoa",
+      "relembrar a vez que conheceu essa pessoa numa vida passada",
+      "tirar um item da bolsa e vender como em um comercial de TV",
+      "reencenar a vez que mais riu na vida, com gestos completos",
+      "levantar da cadeira e sentar de novo em câmera lenta extrema",
+      "explicar o celular de alguém como se fosse tecnologia militar secreta",
+      "defender apaixonadamente o único item que levaria para uma ilha deserta",
+      "embalar um bebê invisível para dormir",
+      "explicar o conceito de moda por trás da roupa de hoje",
+      "atuar a reação de um elevador que parou de repente",
+      "recitar um poema curto sobre sua bebida favorita",
+      "proteger alguém como segurança, vigiando a área por 10 segundos",
+      "anunciar três avisos de segurança do próprio manual de instruções",
+      "moldar o ar em formato de sushi premium e servir para a pessoa",
+      "confessar a coisa mais vergonhosa que já fez na escola",
+      "encostar no ombro de quem está ao lado e chorar dramaticamente por 10 segundos",
+      "ler uma mensagem para si mesmo, enviada pelo seu eu do futuro, 10 anos depois",
+      "virar um cachorro (ou gato) e reclamar do dono",
+      "fazer cinco segundos de sapateado improvisado",
+      "anunciar o sorriso de alguém como um meteorologista anunciando sol perfeito",
+      "checar a carteira e fazer uma reunião de prestação de contas do mês",
+      "revelar o segredo da família como descendente de ninjas",
+      "fechar os olhos e tentar tocar o próprio nariz de primeira, três vezes seguidas",
+      "criar um bordão para essa festa e anunciá-lo",
+      "declarar bem alto que amanhã será o melhor dia de todos",
+    ],
+  },
+
+  /* =======================================================
      繁體中文版（台灣・香港，直訳ではなく夜市・KTV・カンフー
      映画・占い師など現地の飲み会文化に合わせて再構成）
      ※「面子」文化への配慮として、恥をかかせすぎない
@@ -864,6 +977,13 @@ function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
       `${action}!`;
     speechText =
       `${fromName}, tu objetivo es ${toName}! ${situation}, ${action}!`;
+  } else if (lang === "pt") {
+    displayText =
+      `【${fromName}】 ➜ 【${toName}】!\n` +
+      `${situation},\n` +
+      `${action}!`;
+    speechText =
+      `${fromName}, seu alvo é ${toName}! ${situation}, ${action}!`;
   } else {
     // 日本語：名前に「さん」を付けて「から」「へ」がどんな名前でも自然につながるようにする
     displayText =
@@ -931,7 +1051,7 @@ function classifyVoiceGender(voice) {
 
 // 希望の言語＆性別に一番近い声を選ぶ
 function pickVoice(lang, gender) {
-  const PREFIX_MAP = { en: "en", zh: "zh", ko: "ko", es: "es", ja: "ja" };
+  const PREFIX_MAP = { en: "en", zh: "zh", ko: "ko", es: "es", ja: "ja", pt: "pt" };
   const prefix = PREFIX_MAP[lang] || "ja";
   const list = speechSynthesis
     .getVoices()
@@ -960,7 +1080,7 @@ function speakOdai(speechText, lang = "ja", persona = null) {
     // 一部のAndroid/Chromeは、止めた直後にすぐ喋らせようとすると
     // 無言のまま失敗することがあるため、ごくわずかに間を空ける
     const utterance = new SpeechSynthesisUtterance(speechText);
-    const BCP47_MAP = { en: "en-US", zh: "zh-TW", ko: "ko-KR", es: "es-ES", ja: "ja-JP" };
+    const BCP47_MAP = { en: "en-US", zh: "zh-TW", ko: "ko-KR", es: "es-ES", ja: "ja-JP", pt: "pt-BR" };
     utterance.lang = BCP47_MAP[lang] || "ja-JP";
     utterance.rate = persona && persona.rate ? persona.rate : 1.0;
     utterance.pitch = persona && persona.pitch ? persona.pitch : 1.1;
