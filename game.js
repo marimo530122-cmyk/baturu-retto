@@ -162,7 +162,10 @@ const UI = {
     pass: "🔄 パス（お題を変える）",
     share: "📤 シェア",
     shareCopied: "リンクをコピーしました！",
-    shareCopiedOpenApp: (app) => `コピーしました！${app}を開いたら貼り付けてください`,
+    copyShareTitle: "📋 コピーしました！",
+    copyShareText: (app) => `シェア文章をコピーしました！${app}が開いたらそのまま貼り付けて投稿してね！`,
+    copyShareOpen: (app) => `${app}を開く`,
+    copyShareClose: "あとで",
     shareAppText: "🎰 バツルーレット - 飲み会を爆上げする罰ゲームルーレット！",
     shareOdaiText: (text) => text, // 個人間のチャット共有はハッシュタグなし（Xシェアは別途 shareToX() で付与）
     shareOnX: "𝕏でシェア",
@@ -301,7 +304,10 @@ const UI = {
     pass: "🔄 Pass (new challenge)",
     share: "📤 Share",
     shareCopied: "Link copied!",
-    shareCopiedOpenApp: (app) => `Copied! Paste it once ${app} opens`,
+    copyShareTitle: "📋 Copied!",
+    copyShareText: (app) => `Your share text is copied! Once ${app} opens, just paste it and post!`,
+    copyShareOpen: (app) => `Open ${app}`,
+    copyShareClose: "Later",
     shareAppText: "🎰 Batsu Roulette - the ultimate party dare game!",
     shareOdaiText: (text) => text, // no hashtags for 1:1 chat shares (X sharing adds hashtags separately via shareToX())
     shareOnX: "Share on 𝕏",
@@ -440,7 +446,10 @@ const UI = {
     pass: "🔄 跳過（換一題）",
     share: "📤 分享",
     shareCopied: "已複製連結！",
-    shareCopiedOpenApp: (app) => `已複製！打開${app}後請貼上`,
+    copyShareTitle: "📋 已複製！",
+    copyShareText: (app) => `分享文字已複製！打開${app}後直接貼上發佈吧！`,
+    copyShareOpen: (app) => `開啟${app}`,
+    copyShareClose: "稍後",
     shareAppText: "🎰 罰遊戲輪盤 - 讓聚會爆棚的懲罰遊戲轉盤！",
     shareOdaiText: (text) => text, // 一對一聊天分享不附加標籤（X分享另由shareToX()附加）
     shareOnX: "在𝕏分享",
@@ -579,7 +588,10 @@ const UI = {
     pass: "🔄 패스（다른 벌칙으로）",
     share: "📤 공유",
     shareCopied: "링크가 복사되었습니다!",
-    shareCopiedOpenApp: (app) => `복사했습니다! ${app}을(를) 연 후 붙여넣어 주세요`,
+    copyShareTitle: "📋 복사했습니다!",
+    copyShareText: (app) => `공유 문구를 복사했어요! ${app}이(가) 열리면 그대로 붙여넣고 게시해 주세요!`,
+    copyShareOpen: (app) => `${app} 열기`,
+    copyShareClose: "나중에",
     shareAppText: "🎰 벌칙 룰렛 - 회식을 뜨겁게 달구는 벌칙 게임!",
     shareOdaiText: (text) => text, // 1:1 채팅 공유는 해시태그 없음（X 공유는 shareToX()에서 별도로 추가）
     shareOnX: "𝕏에 공유하기",
@@ -718,7 +730,10 @@ const UI = {
     pass: "🔄 Pasar (nuevo reto)",
     share: "📤 Compartir",
     shareCopied: "¡Enlace copiado!",
-    shareCopiedOpenApp: (app) => `¡Copiado! Pégalo cuando se abra ${app}`,
+    copyShareTitle: "📋 ¡Copiado!",
+    copyShareText: (app) => `¡Tu texto para compartir fue copiado! En cuanto se abra ${app}, solo pégalo y publícalo!`,
+    copyShareOpen: (app) => `Abrir ${app}`,
+    copyShareClose: "Después",
     shareAppText: "🎰 Batsu Roulette - ¡el juego de retos definitivo para fiestas!",
     shareOdaiText: (text) => text, // sin hashtags para chats 1:1 (los hashtags de X se añaden en shareToX())
     shareOnX: "Compartir en 𝕏",
@@ -857,7 +872,10 @@ const UI = {
     pass: "🔄 Pular (novo desafio)",
     share: "📤 Compartilhar",
     shareCopied: "Link copiado!",
-    shareCopiedOpenApp: (app) => `Copiado! Cole assim que o ${app} abrir`,
+    copyShareTitle: "📋 Copiado!",
+    copyShareText: (app) => `Seu texto para compartilhar foi copiado! Assim que o ${app} abrir, é só colar e publicar!`,
+    copyShareOpen: (app) => `Abrir ${app}`,
+    copyShareClose: "Depois",
     shareAppText: "🎰 Batsu Roulette - o jogo de desafios definitivo para festas!",
     shareOdaiText: (text) => text, // sem hashtags em chats 1:1 (hashtags do X são adicionadas em shareToX())
     shareOnX: "Compartilhar no 𝕏",
@@ -2070,16 +2088,36 @@ function shareToTelegram(text) {
   window.open(url, "_blank", "noopener");
 }
 
-// Instagram / WeChat 共通：本文をコピーしてからアプリを開く（公開SNS扱いのInstagramのみハッシュタグを付与）
+// Instagram / WeChat 共通：本文をコピー →「アプリを開く」ボタンで確認してもらってから起動する
+// （コピーと同時にアプリへ切り替わると、コピー完了に気づけないまま貼り付けそこねるため、
+//   ユーザーの確認を挟んでからアプリを開く2段階の流れにしている）
+const modalCopyShare = document.getElementById("modal-copy-share");
+let pendingShareAppUrl = null;
+
 async function shareViaCopyAndOpen(text, appUrl, appLabel) {
   try {
     await navigator.clipboard.writeText(`${text}\n${GAME_URL}`);
-    showToast(t("shareCopiedOpenApp")(appLabel));
   } catch (e) {
-    showToast(GAME_URL);
+    showToast(GAME_URL); // クリップボードが使えない端末では、リンクを表示するだけに留める
+    return;
   }
-  window.open(appUrl, "_blank", "noopener");
+  pendingShareAppUrl = appUrl;
+  document.getElementById("t-copyshare-title").textContent = t("copyShareTitle");
+  document.getElementById("copyshare-text").textContent = t("copyShareText")(appLabel);
+  document.getElementById("copyshare-open").textContent = t("copyShareOpen")(appLabel);
+  document.getElementById("copyshare-close").textContent = t("copyShareClose");
+  modalCopyShare.classList.remove("hidden");
 }
+
+document.getElementById("copyshare-open").addEventListener("click", () => {
+  modalCopyShare.classList.add("hidden");
+  if (pendingShareAppUrl) window.open(pendingShareAppUrl, "_blank", "noopener");
+  pendingShareAppUrl = null;
+});
+document.getElementById("copyshare-close").addEventListener("click", () => {
+  modalCopyShare.classList.add("hidden");
+  pendingShareAppUrl = null;
+});
 
 function shareToInstagram(text) {
   const fullText = `${text}\n\n${WORLD_HASHTAGS}`; // Instagramは公開SNS扱いなのでハッシュタグを付与
