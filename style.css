@@ -129,7 +129,9 @@ body.premium-active .logo {
 .screen {
   max-width: 480px;
   margin: 0 auto;
-  padding: 28px 18px 40px;
+  /* 左上の丸アイコン群(.floating-controls、position:fixed)は高さ分の余白が
+     自動確保されないため、実際の高さ(--toolbar-h)を全画面共通で確保する */
+  padding: max(28px, calc(var(--toolbar-h, 60px) + 24px)) 18px 40px;
   text-align: center;
   min-height: 100vh;
   position: relative;
@@ -169,10 +171,9 @@ body.premium-active .logo {
 }
 
 /* ---------- タイトル画面 ---------- */
-/* 左上の丸アイコン群(.floating-controls)は position:fixed で高さ分の余白が
-   自動確保されないため、実際の高さを --toolbar-h として計測しJSで設定する
-   (アイコンの数が増えて折り返し行数が変わっても、タイトル文字と重ならないように) */
-.title-wrap { padding-top: max(9vh, calc(var(--toolbar-h, 60px) + 24px)); }
+/* ツールバーぶんの余白は .screen 側で全画面共通に確保済み。ここでは見た目の
+   ゆとりとして少し追加するだけでよい */
+.title-wrap { padding-top: 24px; }
 
 .title-sub {
   font-size: 15px;

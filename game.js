@@ -108,6 +108,7 @@ const UI = {
       nerutoon: "💘 ねるとんZoom",
       party: "🎉 法人/パーティー",
       noalcohol: "🥤 ノンアル版",
+      solo: "🍶 ひとり飲み",
     },
     themes: { neon: "🌃 ネオン", casino: "🎰 カジノ", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 イカサマモード",
@@ -200,6 +201,8 @@ const UI = {
     nerutoonOff: "🎲 通常パックに戻しました",
     noalcoholOn: "🥤 ノンアル版に切り替えました",
     noalcoholOff: "🎲 通常パックに戻しました",
+    soloOn: "🍶 ひとり飲みモードに切り替えました",
+    soloOff: "🎲 通常パックに戻しました",
     recModeOn: "🎬 RECモードON（撮影用の見た目に切り替えました）",
     recModeOff: "🎬 RECモードOFF",
     viralTitle: "🚀 バイラル投稿キット",
@@ -283,6 +286,7 @@ const UI = {
       nerutoon: "💘 Matchmaking Zoom",
       noalcohol: "🥤 Non-Alcohol Pack",
       party: "🎉 Corporate/Party",
+      solo: "🍶 Solo Drinking",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Rig Mode",
@@ -362,6 +366,8 @@ const UI = {
     nerutoonOff: "🎲 Switched back to Standard Pack",
     noalcoholOn: "🥤 Switched to Non-Alcohol Pack",
     noalcoholOff: "🎲 Switched back to Standard Pack",
+    soloOn: "🍶 Switched to Solo Drinking Mode",
+    soloOff: "🎲 Switched back to Standard Pack",
     recModeOn: "🎬 REC Mode ON (switched to filming-friendly view)",
     recModeOff: "🎬 REC Mode OFF",
     viralTitle: "🚀 Viral Post Kit",
@@ -445,6 +451,7 @@ const UI = {
       nerutoon: "💘 聯誼Zoom",
       noalcohol: "🥤 無酒精版",
       party: "🎉 公司/派對",
+      solo: "🍶 獨自小酌",
     },
     themes: { neon: "🌃 霓虹", casino: "🎰 賭場", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 作弊模式",
@@ -524,6 +531,8 @@ const UI = {
     nerutoonOff: "🎲 已切回標準套組",
     noalcoholOn: "🥤 已切換為無酒精版",
     noalcoholOff: "🎲 已切回標準套組",
+    soloOn: "🍶 已切換為獨自小酌模式",
+    soloOff: "🎲 已切回標準套組",
     recModeOn: "🎬 拍攝模式已開啟（切換為適合拍攝的畫面）",
     recModeOff: "🎬 拍攝模式已關閉",
     viralTitle: "🚀 爆紅投稿套件",
@@ -607,6 +616,7 @@ const UI = {
       nerutoon: "💘 미팅 Zoom",
       noalcohol: "🥤 논알코올 팩",
       party: "🎉 회사/파티",
+      solo: "🍶 혼술",
     },
     themes: { neon: "🌃 네온", casino: "🎰 카지노", izakaya: "🏮 이자카야" },
     rigTitle: "🃏 조작 모드",
@@ -686,6 +696,8 @@ const UI = {
     nerutoonOff: "🎲 기본 팩으로 되돌렸습니다",
     noalcoholOn: "🥤 논알코올 팩으로 전환했습니다",
     noalcoholOff: "🎲 기본 팩으로 되돌렸습니다",
+    soloOn: "🍶 혼술 모드로 전환했습니다",
+    soloOff: "🎲 기본 팩으로 되돌렸습니다",
     recModeOn: "🎬 REC 모드 ON (촬영용 화면으로 전환했습니다)",
     recModeOff: "🎬 REC 모드 OFF",
     viralTitle: "🚀 바이럴 게시 키트",
@@ -769,6 +781,7 @@ const UI = {
       nerutoon: "💘 Zoom de Citas",
       noalcohol: "🥤 Paquete Sin Alcohol",
       party: "🎉 Corporativo/Fiesta",
+      solo: "🍶 Beber Solo",
     },
     themes: { neon: "🌃 Neón", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Modo Amañado",
@@ -848,6 +861,8 @@ const UI = {
     nerutoonOff: "🎲 Vuelto al paquete estándar",
     noalcoholOn: "🥤 Cambiado al Paquete Sin Alcohol",
     noalcoholOff: "🎲 Vuelto al paquete estándar",
+    soloOn: "🍶 Cambiado al Modo Beber Solo",
+    soloOff: "🎲 Vuelto al paquete estándar",
     recModeOn: "🎬 Modo REC activado (vista optimizada para grabar)",
     recModeOff: "🎬 Modo REC desactivado",
     viralTitle: "🚀 Kit de Publicación Viral",
@@ -931,6 +946,7 @@ const UI = {
       nerutoon: "💘 Zoom de Paquera",
       noalcohol: "🥤 Pacote Sem Álcool",
       party: "🎉 Corporativo/Festa",
+      solo: "🍶 Bebendo Sozinho",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Cassino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Modo Manipulado",
@@ -1010,6 +1026,8 @@ const UI = {
     nerutoonOff: "🎲 Voltou ao pacote padrão",
     noalcoholOn: "🥤 Mudou para o Pacote Sem Álcool",
     noalcoholOff: "🎲 Voltou ao pacote padrão",
+    soloOn: "🍶 Mudou para o Modo Bebendo Sozinho",
+    soloOff: "🎲 Voltou ao pacote padrão",
     recModeOn: "🎬 Modo REC ativado (visual otimizado para gravação)",
     recModeOff: "🎬 Modo REC desativado",
     viralTitle: "🚀 Kit de Postagem Viral",
@@ -1093,6 +1111,7 @@ const UI = {
       nerutoon: "💘 Zoom Ghép đôi",
       noalcohol: "🥤 Gói Không Cồn",
       party: "🎉 Công ty/Tiệc",
+      solo: "🍶 Uống Một Mình",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Quán nhậu" },
     rigTitle: "🃏 Chế độ Gian lận",
@@ -1172,6 +1191,8 @@ const UI = {
     nerutoonOff: "🎲 Đã quay lại gói tiêu chuẩn",
     noalcoholOn: "🥤 Đã chuyển sang Gói Không Cồn",
     noalcoholOff: "🎲 Đã quay lại gói tiêu chuẩn",
+    soloOn: "🍶 Đã chuyển sang Chế độ Uống Một Mình",
+    soloOff: "🎲 Đã quay lại gói tiêu chuẩn",
     recModeOn: "🎬 Đã bật Chế độ Quay phim (chuyển sang giao diện tối ưu cho quay video)",
     recModeOff: "🎬 Đã tắt Chế độ Quay phim",
     viralTitle: "🚀 Bộ Công Cụ Đăng Bài Viral",
@@ -1255,6 +1276,7 @@ const UI = {
       nerutoon: "💘 Speed-Dating Zoom",
       noalcohol: "🥤 Alkoholfreies Paket",
       party: "🎉 Firmen-/Partypaket",
+      solo: "🍶 Alleine trinken",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Schummel-Modus",
@@ -1334,6 +1356,8 @@ const UI = {
     nerutoonOff: "🎲 Zurück zum Standard-Paket",
     noalcoholOn: "🥤 Zum alkoholfreien Paket gewechselt",
     noalcoholOff: "🎲 Zurück zum Standard-Paket",
+    soloOn: "🍶 Zum Modus „Alleine trinken“ gewechselt",
+    soloOff: "🎲 Zurück zum Standard-Paket",
     recModeOn: "🎬 REC-Modus AN (filmfreundliche Ansicht aktiviert)",
     recModeOff: "🎬 REC-Modus AUS",
     viralTitle: "🚀 Viral-Post-Kit",
@@ -1417,6 +1441,7 @@ const UI = {
       nerutoon: "💘 Matchmaking Zoom",
       noalcohol: "🥤 Non-Alcohol Pack",
       party: "🎉 Corporate/Party",
+      solo: "🍶 Solo Inuman",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Rig Mode",
@@ -1496,6 +1521,8 @@ const UI = {
     nerutoonOff: "🎲 Bumalik sa Standard Pack",
     noalcoholOn: "🥤 Napalitan sa Non-Alcohol Pack",
     noalcoholOff: "🎲 Bumalik sa Standard Pack",
+    soloOn: "🍶 Napalitan sa Solo Inuman Mode",
+    soloOff: "🎲 Bumalik sa Standard Pack",
     recModeOn: "🎬 REC Mode ON (napalitan sa view na okay para sa paggawa ng video)",
     recModeOff: "🎬 REC Mode OFF",
     viralTitle: "🚀 Viral Post Kit",
@@ -1585,6 +1612,7 @@ function applyLanguage() {
   document.getElementById("pack-romance").innerHTML = `${u.packs.romance} <span class="lock">🔒</span>`;
   document.getElementById("pack-online").innerHTML = `${u.packs.online} <span class="lock">🔒</span>`;
   document.getElementById("pack-noalcohol").textContent = u.packs.noalcohol;
+  document.getElementById("pack-solo").innerHTML = `${u.packs.solo} <span class="lock">🔒</span>`;
   document.getElementById("t-notice").innerHTML = u.noticeHTML;
   document.getElementById("t-viral-footer").textContent = u.viralFooter;
 
@@ -1918,7 +1946,22 @@ btnNoAlcohol.addEventListener("click", () => {
   btnRomance.classList.remove("active-pack");
   btnAdult.classList.remove("active-pack");
   btnNerutoon.classList.remove("active-pack");
+  document.getElementById("pack-solo").classList.remove("active-pack");
   showToast(state.pack === "noalcohol" ? t("noalcoholOn") : t("noalcoholOff"));
+});
+
+/* ---------------- 🍶 ひとり飲みモード（無料・プレミアム判定なし） ---------------- */
+const btnSolo = document.getElementById("pack-solo");
+
+btnSolo.addEventListener("click", () => {
+  if (blockIfNotPremium("solo")) return;
+  state.pack = state.pack === "solo" ? "standard" : "solo";
+  btnSolo.classList.toggle("active-pack", state.pack === "solo");
+  btnRomance.classList.remove("active-pack");
+  btnAdult.classList.remove("active-pack");
+  btnNerutoon.classList.remove("active-pack");
+  btnNoAlcohol.classList.remove("active-pack");
+  showToast(state.pack === "solo" ? t("soloOn") : t("soloOff"));
 });
 
 /* ---------------- 🌶️ お色気レベルスライダー（有料機能：レベル3以上） ---------------- */
@@ -2343,7 +2386,13 @@ document.getElementById("btn-game-start").addEventListener("click", () => {
       return;
     }
   } else {
-    if (state.everyone.length === 2) {
+    if (state.everyone.length === 1) {
+      // 🍶ひとり飲みモード：1人だけの登録は「ソロパック」選択中のみ許可(無料)
+      if (state.pack !== "solo") {
+        setupMessage.textContent = t("msgNeedAll");
+        return;
+      }
+    } else if (state.everyone.length === 2) {
       if (!isPremiumUnlocked()) {
         showPremiumModal(t("coupleTeaser"));
         return;
@@ -2555,6 +2604,8 @@ function pickPartner(winner) {
     state.mode === "mf"
       ? list.filter((p) => p.team !== winner.team)
       : list.filter((p) => p.name !== winner.name);
+  // 🍶ひとり飲みモードなど、他に誰もいない場合は本人を相手にする(自分向けのお題になる)
+  if (candidates.length === 0) return winner;
   return candidates[Math.floor(Math.random() * candidates.length)];
 }
 

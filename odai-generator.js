@@ -1541,6 +1541,118 @@ const NOALCOHOL_DATA = {
 };
 
 /* ---------------------------------------------------------
+   🍶 ひとり飲みモード（無料・インバウンド観光客のバーひとり飲み向け）
+   ---------------------------------------------------------
+   グループでの罰ゲームではなく、バーで一人で飲んでいる人が
+   店員さんや隣の席の人と自然に交流できるお題。20×25=500通り。
+   現在は日英のみ。
+   --------------------------------------------------------- */
+const SOLO_DATA = {
+  ja: {
+    situations: [
+      "一人飲みを楽しむ達人として",
+      "今夜はこのお店の主役になったつもりで",
+      "初めて来たお店を全力で楽しむ気持ちで",
+      "今日出会う人には全員フレンドリーにいく所存で",
+      "旅の思い出をひとつ増やす気持ちで",
+      "このバーの雰囲気にすっかり惚れ込んだ様子で",
+      "今夜はいつもより一歩踏み出す勇気を出して",
+      "隣の席との距離をそっと縮めながら",
+      "店員さんとも今夜だけの友達になるつもりで",
+      "この一杯をとことん味わい尽くす覚悟で",
+      "知らない街で新しい出会いを探す冒険者として",
+      "今夜の主役はカウンター越しの会話だと思いながら",
+      "せっかくの一人時間を最大限に活用する気持ちで",
+      "グラス片手に、堂々とした立ち振る舞いで",
+      "この店のことをもっと知りたいという好奇心で",
+      "今夜だけの特別な思い出を作るつもりで",
+      "誰かと乾杯することを目標に掲げながら",
+      "お店の常連になったかのような余裕で",
+      "一期一会の出会いを大切にする気持ちで",
+      "このグラスが空になる前に、何か新しいことに挑戦する気持ちで",
+    ],
+    actions: [
+      "隣の人に「乾杯」して、一言自己紹介する",
+      "隣の人に、今日このお店に来た理由を聞いてみる",
+      "隣の人と一緒に「乾杯ポーズ」で写真を撮ってもらう",
+      "隣の人に、好きな音楽のジャンルを聞いてみる",
+      "店員さんにおすすめのカクテルを聞いて、それを注文する",
+      "店員さんに、この街のおすすめスポットを1つ聞く",
+      "店員さんと乾杯ポーズで写真を撮らせてもらう",
+      "一番人気のメニューを聞いて、次はそれを頼んでみる",
+      "自分の国のおもしろい豆知識を1つ、隣の人か店員さんに教える",
+      "「乾杯」を3つの言語で言ってみる",
+      "日本語（またはその国の言語）を1つ、その場で教えてもらう",
+      "店員さんにこのお店の一番の思い出を聞いてみる",
+      "隣の人におすすめの旅先を聞いてみる",
+      "今日撮った一番のお気に入り写真を店員さんに見せる",
+      "このお店で一番好きなポイントを店員さんに伝える",
+      "隣の人に、今どこから来たか聞いてみる",
+      "店員さんに「今日のラッキーカラー」を占ってもらう(冗談で)",
+      "隣の人と好きな映画の話をしてみる",
+      "店員さんにこの店で一番人気のおつまみを聞いて注文する",
+      "隣の人に、乾杯の合図でグラスを合わせてもらう(エアで)",
+      "お店の中で一番気に入った内装や小物を1つ見つけて店員さんに伝える",
+      "隣の人におすすめの日本食を教えてもらう",
+      "店員さんに、この後どこに行くのがおすすめか聞いてみる",
+      "今夜の出会いに感謝して、心の中で乾杯する",
+      "隣の人と「今日一番良かったこと」を教え合う",
+    ],
+  },
+  en: {
+    situations: [
+      "As a master of enjoying solo drinking",
+      "Feeling like tonight's main character at this bar",
+      "Ready to fully enjoy a bar you're visiting for the first time",
+      "Determined to be friendly to everyone you meet tonight",
+      "Looking to add one more memory to your trip",
+      "Completely charmed by the vibe of this bar",
+      "Finding a little extra courage to step outside your comfort zone tonight",
+      "Quietly closing the distance with the seat next to you",
+      "Planning to make a one-night friend out of the staff too",
+      "Determined to savor this drink to the fullest",
+      "As an adventurer seeking new encounters in an unfamiliar city",
+      "Believing tonight's main event is the conversation across the counter",
+      "Making the most of this precious solo time",
+      "Standing tall and confident, drink in hand",
+      "Curious to learn more about this place",
+      "Set on making a special memory just for tonight",
+      "With the goal of toasting with someone tonight",
+      "With the ease of someone who's already a regular here",
+      "Cherishing this once-in-a-lifetime encounter",
+      "Determined to try something new before this glass is empty",
+    ],
+    actions: [
+      "say \"cheers\" to the person next to you and introduce yourself",
+      "ask the person next to you why they came to this bar today",
+      "ask someone to take a \"cheers\" photo of you and your neighbor",
+      "ask the person next to you what music genre they like",
+      "ask the bartender for a recommendation and order it",
+      "ask the staff for one spot they'd recommend in this city",
+      "take a cheers photo with the bartender",
+      "ask what the most popular item is and order that next",
+      "share one fun fact about your home country with your neighbor or the staff",
+      "say \"cheers\" in three different languages",
+      "ask someone to teach you one word in Japanese (or their language)",
+      "ask the staff for their favorite memory from working here",
+      "ask the person next to you for a travel recommendation",
+      "show the staff your favorite photo from today",
+      "tell the staff what you like best about this bar",
+      "ask the person next to you where they're from",
+      "jokingly ask the staff to guess your \"lucky color\" for today",
+      "talk about a favorite movie with the person next to you",
+      "ask the staff for their most popular snack and order it",
+      "do an air toast with the person next to you",
+      "find your favorite piece of decor in the bar and tell the staff about it",
+      "ask the person next to you to recommend a Japanese dish",
+      "ask the staff where they'd recommend going next tonight",
+      "silently toast to tonight's encounters in your head",
+      "swap \"the best thing that happened today\" stories with your neighbor",
+    ],
+  },
+};
+
+/* ---------------------------------------------------------
    🍺 スポンサータイアップ枠（協賛ブランドの広告お題）
    ---------------------------------------------------------
    実際にスポンサー企業と契約が決まったら、brandName を
@@ -1598,7 +1710,7 @@ let lastCombinationKey = "";
  * @returns {object} displayText: 画面表示用 / speechText: 朗読用
  */
 function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
-  const PACK_DATA = { romance: ROMANCE_DATA, adult: ADULT_DATA, couple: COUPLE_DATA, nerutoon: NERUTON_DATA, party: PARTY_DATA, noalcohol: NOALCOHOL_DATA };
+  const PACK_DATA = { romance: ROMANCE_DATA, adult: ADULT_DATA, couple: COUPLE_DATA, nerutoon: NERUTON_DATA, party: PARTY_DATA, noalcohol: NOALCOHOL_DATA, solo: SOLO_DATA };
   const data =
     PACK_DATA[pack] ? PACK_DATA[pack][lang] || ODAI_DATA[lang] || ODAI_DATA.ja // 未対応言語は通常パックに戻す
       : ODAI_DATA[lang] || ODAI_DATA.ja;
@@ -1615,6 +1727,25 @@ function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
   action = maybeInjectSponsorAction(action, lang);
 
   let displayText, speechText;
+
+  if (pack === "solo") {
+    // 🍶ひとり飲みモードは相手がいないので「から〜へ」を出さず、本人名だけ表示する
+    if (lang === "ja") {
+      displayText = `【${fromName}】\n${situation}、\n${action}！`;
+      speechText = `${fromName}さん！${situation}、${action}！`;
+    } else if (lang === "de") {
+      displayText = `【${fromName}】\n${situation},\n${action}!`;
+      speechText = `${fromName}! ${situation}, ${action}!`;
+    } else if (lang === "tl") {
+      displayText = `【${fromName}】\n${situation},\n${action}!`;
+      speechText = `${fromName}! ${situation}, ${action}!`;
+    } else {
+      // en/zh/ko/es/pt/vi はSOLO_DATA未対応のため通常英語表記でフォールバック
+      displayText = `【${fromName}】\n${situation},\n${action}!`;
+      speechText = `${fromName}! ${situation}, ${action}!`;
+    }
+    return { displayText, speechText: toSpeechSafe(speechText), situation, action };
+  }
 
   if (lang === "en") {
     displayText =

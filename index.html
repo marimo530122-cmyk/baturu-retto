@@ -29,7 +29,7 @@
   <meta name="twitter:description" content="飲み会を爆上げする罰ゲームルーレット。罰ゲーム2,500通り × 👑王様モード × 司会者ボイスで、スマホ1台あればすぐ遊べます。" />
   <meta name="twitter:image" content="https://marimo530122-cmyk.github.io/baturu-retto/og-image.jpg" />
 
-  <link rel="stylesheet" href="style.css?v=10" />
+  <link rel="stylesheet" href="style.css?v=14" />
 </head>
 <body>
 
@@ -121,6 +121,7 @@
         <button class="btn btn-locked" data-pack="online" id="pack-online">📡 オンライン <span class="lock">🔒</span></button>
         <button class="btn btn-locked" data-pack="nerutoon" id="pack-nerutoon">💘 ねるとんZoom <span class="lock">🔒</span></button>
         <button class="btn btn-locked" data-pack="party" id="pack-party">🎉 法人/パーティー <span class="lock">🔒</span></button>
+        <button class="btn btn-locked" data-pack="solo" id="pack-solo">🍶 ひとり飲み <span class="lock">🔒</span></button>
       </div>
 
       <p class="notice" id="t-notice">※20歳未満の飲酒は法律で禁止されています。<br>お酒やお題の無理強いはやめましょう。</p>
@@ -395,26 +396,26 @@
   <!-- Firebase（📡オンラインモード用。firebase-config.js が未設定でも他の機能には影響しません） -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-  <script src="firebase-config.js?v=10"></script>
-  <script src="online.js?v=10"></script>
+  <script src="firebase-config.js?v=14"></script>
+  <script src="online.js?v=14"></script>
 
   <!-- 📮 罰ゲーム投稿・共有（同じくFirebaseを使用。moderation.jsが自動審査を担当） -->
-  <script src="moderation.js?v=10"></script>
-  <script src="submissions.js?v=10"></script>
+  <script src="moderation.js?v=14"></script>
+  <script src="submissions.js?v=14"></script>
 
   <!-- 🔗 お友達紹介・アフィリエイト（Firebase設定済みなら招待者側の特典も自動反映） -->
-  <script src="referral.js?v=10"></script>
+  <script src="referral.js?v=14"></script>
 
   <!-- 💎 プレミアム課金（Stripe決済リンク用。billing-config.js が未設定でも他の機能には影響しません） -->
-  <script src="billing-config.js?v=10"></script>
-  <script src="billing.js?v=10"></script>
+  <script src="billing-config.js?v=14"></script>
+  <script src="billing.js?v=14"></script>
 
-  <script src="bgm.js?v=10"></script>
-  <script src="sfx.js?v=10"></script>
-  <script src="confetti.js?v=10"></script>
-  <script src="achievements.js?v=10"></script>
-  <script src="highlights.js?v=10"></script>
-  <script src="odai-generator.js?v=10"></script>
-  <script src="game.js?v=10"></script>
+  <script src="bgm.js?v=14"></script>
+  <script src="sfx.js?v=14"></script>
+  <script src="confetti.js?v=14"></script>
+  <script src="achievements.js?v=14"></script>
+  <script src="highlights.js?v=14"></script>
+  <script src="odai-generator.js?v=14"></script>
+  <script src="game.js?v=14"></script>
 </body>
 </html>
