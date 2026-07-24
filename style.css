@@ -169,7 +169,10 @@ body.premium-active .logo {
 }
 
 /* ---------- タイトル画面 ---------- */
-.title-wrap { padding-top: 9vh; }
+/* 左上の丸アイコン群(.floating-controls)は position:fixed で高さ分の余白が
+   自動確保されないため、実際の高さを --toolbar-h として計測しJSで設定する
+   (アイコンの数が増えて折り返し行数が変わっても、タイトル文字と重ならないように) */
+.title-wrap { padding-top: max(9vh, calc(var(--toolbar-h, 60px) + 24px)); }
 
 .title-sub {
   font-size: 15px;
@@ -410,6 +413,19 @@ body.premium-active .logo {
   border-color: #ffe14b;
   color: #ffe14b;
   box-shadow: 0 0 10px rgba(255, 225, 75, 0.5);
+}
+
+/* ノンアルコール版パック(無料)トグル */
+.btn-free {
+  background: var(--c-panel);
+  border: 1px solid var(--c-accent-a);
+  color: #fff;
+  font-size: 13px;
+  padding: 10px 12px;
+}
+.btn-free.active-pack {
+  background: linear-gradient(135deg, var(--c-accent-a), var(--c-accent-b));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--c-accent-a) 55%, transparent);
 }
 
 .notice {

@@ -1271,6 +1271,313 @@ const NERUTON_DATA = {
 };
 
 /* ---------------------------------------------------------
+   🎉 法人・パーティープラン（結婚式二次会・会社の飲み会向け）
+   --------------------------------------------------------- */
+const PARTY_DATA = {
+  ja: {
+    situations: [
+      "会場全体を巻き込む主役級の盛り上げ役として",
+      "新郎新婦（または主賓）への感謝を噛みしめながら",
+      "宴会部長に任命されたかのような貫禄で",
+      "今日だけは社長・上司にも物おじせずに",
+      "同期・同僚への愛をこれでもかと伝えるように",
+      "乾杯の音頭を任された緊張感を抱えながら",
+      "この会のMVPを決める審査員のような目で",
+      "普段は言えない感謝を、この場を借りて伝えるように",
+      "二次会のテンションを一段階アゲるように",
+      "自己紹介タイムのトリを飾るように",
+      "チームの結束をさらに固めるように",
+      "今夜限りの余興スターとして",
+      "会場の笑いを一身に背負う覚悟で",
+      "上司から「いいぞ」と褒められることを期待して",
+      "この会を一生の思い出にする勢いで",
+    ],
+    actions: [
+      "この会の「主役」に向けて、30秒スピーチをする",
+      "隣の人の良いところを3つ、全力でほめる",
+      "自分の「今年頑張ったこと」を胸を張って発表する",
+      "会社（または職場）の好きなところを1つ紹介する",
+      "この場にいる誰かにビール（お酒）を注ぎに行く",
+      "余興として、持ちネタを1つ披露する",
+      "今日の主役（新郎新婦や主賓）へのメッセージを一言添える",
+      "「乾杯！」の音頭を、いつもより3割増しのテンションで取る",
+      "同僚・同期への感謝を、具体的なエピソードとともに伝える",
+      "この1年で一番嬉しかったことを発表する",
+      "隣の席の人と、握手して自己紹介し直す",
+      "会場全体に向けて、大きな声で挨拶をする",
+      "上司（または年長者）に、今日の感謝を伝える",
+      "余興ソングのサビだけ、その場で歌う",
+      "この会のテーマソングを1曲、勝手に決めて紹介する",
+    ],
+  },
+  en: {
+    situations: [
+      "As the star performer who gets the whole room going",
+      "While savoring your gratitude toward the guest(s) of honor",
+      "With the dignity of someone appointed \"party captain\"",
+      "Feeling bold enough to speak up to the boss, just for tonight",
+      "Determined to spell out your love for your coworkers",
+      "Carrying the nervous weight of being asked to give the toast",
+      "With the judging eyes of someone crowning tonight's MVP",
+      "Using this moment to say a thank-you you never usually say",
+      "Ready to kick the after-party energy up a notch",
+      "Closing out the self-introduction round in style",
+      "Determined to bring the team even closer together",
+      "As tonight's one-night-only entertainment star",
+      "Carrying the whole room's laughter on your shoulders",
+      "Hoping for a \"nice one!\" from the boss",
+      "With the energy of making this a night to remember",
+    ],
+    actions: [
+      "give a 30-second speech directed at tonight's guest of honor",
+      "praise three good things about the person next to you, wholeheartedly",
+      "proudly announce your proudest achievement of the year",
+      "share one thing you genuinely like about your workplace",
+      "go pour a drink for someone in the room",
+      "perform one party trick or bit as entertainment",
+      "add a short message for today's guest(s) of honor",
+      "lead a toast with 30% more energy than usual",
+      "thank a coworker with a specific story about them",
+      "share the happiest moment of your year",
+      "shake hands with your neighbor and reintroduce yourself",
+      "greet the whole room loudly and clearly",
+      "thank your boss (or a senior colleague) for tonight",
+      "sing just the chorus of a party anthem, right now",
+      "declare a \"theme song\" for this gathering and explain why",
+    ],
+  },
+};
+
+/* ---------------------------------------------------------
+   🥤 ノンアルコール版パック（無料・お酒を前提にしない罰ゲーム）
+   ---------------------------------------------------------
+   イスラム圏など飲酒文化のない/少ない地域や、お酒を飲まない人が
+   いる飲み会でも遊べるように、お酒に関する言及を一切含まない
+   バージョン。世界お題ガイドの禁止6か条は他パック同様に適用。
+   現在は日英のみ（他言語は generateOdai() 側で通常パックに
+   自動フォールバックされる）。
+   --------------------------------------------------------- */
+const NOALCOHOL_DATA = {
+  ja: {
+    situations: [
+      "誰よりも元気にジュースで乾杯しながら",
+      "今夜のノンアルMVPとして",
+      "水分補給担当という自覚を持って",
+      "オレンジジュースを片手に、堂々と",
+      "この場を盛り上げる司会者気分で",
+      "みんなの笑いを取りに行く覚悟で",
+      "スイーツ担当を任されたテンションで",
+      "誰よりも声を張り上げて",
+      "友達を笑わせる使命を背負って",
+      "この会の記録係になったつもりで",
+      "今日一番の元気印として",
+      "写真映え担当の意気込みで",
+      "みんなの心をつかむ勢いで",
+      "この瞬間を一生の思い出にする気持ちで",
+      "誰よりも楽しむ主役として",
+    ],
+    actions: [
+      "好きな飲み物のCMのようなキメ台詞を叫ぶ",
+      "この場にいる誰かの物まねを1つする",
+      "自分の好きな食べ物について30秒語る",
+      "最近あった面白い話を1つ披露する",
+      "隣の人と一緒に決めポーズで写真を撮る",
+      "今日の気分を絵文字3つだけで表現する",
+      "好きな曲のサビだけ口ずさむ",
+      "自己紹介を変な声でやり直す",
+      "この中の誰かを全力でほめる",
+      "その場でしりとりを3ターン続ける",
+      "利き手じゃない手で、3人とエアハイタッチして回る",
+      "好きな映画やドラマの名シーンを再現する",
+      "この会のテーマソングを勝手に決めて発表する",
+      "3秒間、無言で最高の変顔をキープする",
+      "この瞬間の気持ちを一言で叫ぶ",
+    ],
+  },
+  en: {
+    situations: [
+      "Toasting with juice more enthusiastically than anyone else",
+      "As tonight's proud non-alcoholic MVP",
+      "Taking your role as official hydration captain seriously",
+      "Holding an orange juice like it's the finest cocktail in the room",
+      "With the energy of tonight's self-appointed host",
+      "Ready to get the biggest laugh of the night",
+      "With the confidence of the designated dessert captain",
+      "Projecting your voice louder than anyone else",
+      "On a mission to make your friends laugh",
+      "Acting as tonight's unofficial photographer",
+      "As the most energetic person here tonight",
+      "With main-character energy for the group photo",
+      "Determined to win everyone's heart in the next 10 seconds",
+      "Treating this moment like a core memory in the making",
+      "As the star of tonight, no alcohol required",
+    ],
+    actions: [
+      "deliver a dramatic commercial-style catchphrase for your favorite drink",
+      "do a quick impression of someone in this group",
+      "talk about your favorite food for 30 seconds straight",
+      "share one funny thing that happened to you recently",
+      "strike a pose with the person next to you for a photo",
+      "describe your mood today using only 3 emojis, out loud",
+      "hum just the chorus of your favorite song",
+      "reintroduce yourself in a completely different voice",
+      "give someone in the group an over-the-top compliment",
+      "keep a word-chain game going for 3 rounds",
+      "go around for an air high-five with your non-dominant hand",
+      "recreate a famous movie or drama scene, solo",
+      "declare a theme song for tonight and explain your reasoning",
+      "hold the silliest face you can for 3 full seconds",
+      "shout how you're feeling right now in one word",
+    ],
+  },
+  de: {
+    situations: [
+      "Mit Saft in der Hand, enthusiastischer als alle anderen",
+      "Als stolzester alkoholfreier MVP des Abends",
+      "In deiner Rolle als offizieller Hydration-Captain",
+      "Mit einem Orangensaft in der Hand, als wäre es der edelste Cocktail im Raum",
+      "Mit der Energie des selbsternannten Gastgebers",
+      "Bereit, die größten Lacher des Abends zu ernten",
+      "Mit dem Selbstbewusstsein des designierten Dessert-Captains",
+      "Lauter als alle anderen",
+      "Mit der Mission, deine Freunde zum Lachen zu bringen",
+      "Als inoffizieller Fotograf des Abends",
+      "Als energiegeladenste Person hier heute Abend",
+      "Mit Hauptdarsteller-Energie fürs Gruppenfoto",
+      "Entschlossen, in den nächsten 10 Sekunden alle Herzen zu gewinnen",
+      "Als würde dieser Moment eine unvergessliche Erinnerung werden",
+      "Als Star des Abends, ganz ohne Alkohol",
+    ],
+    actions: [
+      "einen dramatischen Werbespruch für dein Lieblingsgetränk aufsagen",
+      "eine kurze Imitation von jemandem aus dieser Gruppe machen",
+      "30 Sekunden am Stück über dein Lieblingsessen reden",
+      "eine lustige Sache erzählen, die dir kürzlich passiert ist",
+      "mit der Person neben dir für ein Foto posieren",
+      "deine heutige Stimmung laut mit nur 3 Emojis beschreiben",
+      "nur den Refrain deines Lieblingssongs summen",
+      "dich mit einer komplett anderen Stimme neu vorstellen",
+      "jemandem in der Gruppe ein übertriebenes Kompliment machen",
+      "eine Wortkette 3 Runden lang am Laufen halten",
+      "mit deiner schwächeren Hand reihum ein Luft-High-Five geben",
+      "eine berühmte Film- oder Serienszene alleine nachspielen",
+      "ein Motto für den heutigen Abend verkünden und es begründen",
+      "3 volle Sekunden lang die albernste Grimasse halten",
+      "in einem Wort herausrufen, wie du dich gerade fühlst",
+    ],
+  },
+  tl: {
+    situations: [
+      "Habang nagto-toast gamit ang juice, mas masigla pa sa lahat",
+      "Bilang pinaka-proud na non-alcoholic MVP ngayong gabi",
+      "Seryosong ginagampanan ang tungkulin bilang official hydration captain",
+      "Hawak ang orange juice na parang pinaka-mamahaling cocktail sa buong lugar",
+      "May energy ng self-appointed host ngayong gabi",
+      "Handa nang kumuha ng pinakamalaking tawa ngayong gabi",
+      "May kumpiyansa ng itinalagang dessert captain",
+      "Mas malakas ang boses kaysa sa lahat",
+      "May misyon na patawanin ang mga kaibigan",
+      "Gumaganap bilang unofficial photographer ngayong gabi",
+      "Bilang pinaka-masiglang tao dito ngayong gabi",
+      "May main-character energy para sa group photo",
+      "Determinadong manalo sa puso ng lahat sa susunod na 10 segundo",
+      "Parang ang sandaling ito ay magiging core memory",
+      "Bilang bida ngayong gabi, hindi na kailangan ng alak",
+    ],
+    actions: [
+      "magbigay ng dramatic commercial-style catchphrase para sa paborito mong inumin",
+      "gumawa ng mabilisang impression ng isa sa grupo",
+      "mag-usap tungkol sa paborito mong pagkain nang 30 segundo diretso",
+      "magkwento ng isang nakakatawang nangyari sa iyo kamakailan",
+      "mag-pose kasama ang katabi mo para sa litrato",
+      "ilarawan ang mood mo ngayon gamit lang ang 3 emoji, nang malakas",
+      "kantahin lang ang chorus ng paborito mong kanta",
+      "ipakilala ulit ang sarili gamit ang ibang tono ng boses",
+      "magbigay ng sobrang papuri sa isa sa grupo",
+      "magpatuloy ng word-chain game nang 3 rounds",
+      "mag-air high-five sa 3 tao gamit ang hindi mo dominanteng kamay",
+      "gayahin ang sikat na eksena mula sa pelikula o drama, mag-isa",
+      "magdeklara ng theme song para ngayong gabi at ipaliwanag kung bakit",
+      "panatilihin ang pinaka-katawa-tawang mukha sa loob ng 3 segundo",
+      "isigaw sa isang salita lang kung ano ang nararamdaman mo ngayon",
+    ],
+  },
+  vi: {
+    situations: [
+      "Nâng ly nước ép nhiệt tình hơn ai hết",
+      "Là MVP không cồn tự hào nhất tối nay",
+      "Nghiêm túc đảm nhận vai trò đội trưởng cấp nước chính thức",
+      "Cầm ly nước cam như thể đó là cocktail sang trọng nhất phòng",
+      "Với năng lượng của người dẫn chương trình tự phong tối nay",
+      "Sẵn sàng giành tiếng cười lớn nhất đêm nay",
+      "Với sự tự tin của đội trưởng phụ trách món tráng miệng",
+      "Nói to hơn bất kỳ ai khác",
+      "Với sứ mệnh làm bạn bè cười",
+      "Đóng vai nhiếp ảnh gia không chính thức tối nay",
+      "Là người tràn đầy năng lượng nhất ở đây tối nay",
+      "Với khí chất nhân vật chính khi chụp ảnh nhóm",
+      "Quyết tâm chinh phục trái tim mọi người trong 10 giây tới",
+      "Coi khoảnh khắc này như một kỷ niệm đáng nhớ",
+      "Là ngôi sao của tối nay, không cần rượu bia",
+    ],
+    actions: [
+      "hô vang một câu khẩu hiệu quảng cáo kịch tính cho món đồ uống yêu thích",
+      "bắt chước nhanh một người trong nhóm",
+      "nói về món ăn yêu thích của bạn trong 30 giây liên tục",
+      "kể một chuyện vui vừa xảy ra với bạn gần đây",
+      "tạo dáng chụp ảnh cùng người bên cạnh",
+      "diễn tả tâm trạng hôm nay chỉ bằng 3 emoji, nói to lên",
+      "ngân nga điệp khúc bài hát yêu thích",
+      "giới thiệu lại bản thân bằng một giọng nói hoàn toàn khác",
+      "khen ngợi một người trong nhóm một cách cường điệu",
+      "chơi trò nối từ liên tục trong 3 lượt",
+      "đi vòng quanh high-five trên không bằng tay không thuận",
+      "tái hiện một cảnh phim hoặc phim truyền hình nổi tiếng, một mình",
+      "tuyên bố bài hát chủ đề cho tối nay và giải thích lý do",
+      "giữ khuôn mặt hài hước nhất có thể trong 3 giây",
+      "hét lên cảm giác hiện tại của bạn chỉ bằng một từ",
+    ],
+  },
+};
+
+/* ---------------------------------------------------------
+   🍺 スポンサータイアップ枠（協賛ブランドの広告お題）
+   ---------------------------------------------------------
+   実際にスポンサー企業と契約が決まったら、brandName を
+   入力して enabled を true にしてください。未契約の間
+   （brandName が空、または enabled が false）は完全に
+   無効で、通常のお題だけが出ます。
+   --------------------------------------------------------- */
+const SPONSOR_CONFIG = {
+  enabled: false, // 契約が決まったら true にする
+  brandName: "", // 例: "○○ビール"
+  frequency: 0.1, // お題全体のうち何割をスポンサー枠にするか（0.1 = 10%）
+  templates: {
+    ja: [
+      "{brand}で乾杯して、一気に飲み干す",
+      "{brand}を片手に、感謝の気持ちを叫ぶ",
+      "{brand}のCM風ポーズを決めながら、ひとことPRする",
+      "{brand}への愛を、3秒スピーチで語る",
+    ],
+    en: [
+      "toast with {brand} and drink it all in one go",
+      "hold up a {brand} and shout your thanks",
+      "strike a {brand} commercial pose and give a one-line pitch",
+      "declare your love for {brand} in a 3-second speech",
+    ],
+  },
+};
+
+// スポンサー枠が有効なら、一定確率でアクションをブランド入りの文言に差し替える
+function maybeInjectSponsorAction(action, lang) {
+  if (!SPONSOR_CONFIG.enabled || !SPONSOR_CONFIG.brandName) return action;
+  if (Math.random() >= SPONSOR_CONFIG.frequency) return action;
+  const templates = SPONSOR_CONFIG.templates[lang] || SPONSOR_CONFIG.templates.ja;
+  const template = pickRandom(templates);
+  return template.split("{brand}").join(SPONSOR_CONFIG.brandName);
+}
+
+/* ---------------------------------------------------------
    お題の生成（掛け算：50 × 50 = 2500通り）
    --------------------------------------------------------- */
 
@@ -1287,11 +1594,11 @@ let lastCombinationKey = "";
  * @param {string} fromName - お題を実行する人の名前
  * @param {string} toName   - お題の相手の名前
  * @param {string} lang     - "ja" / "en" / "zh" / "ko" / "es"
- * @param {string} pack     - "standard"（通常）または "romance"（💌恋愛パック）または "adult"（🔞大人向けパック・いずれも現在は日英のみ）
+ * @param {string} pack     - "standard"（通常）または "romance"（💌恋愛パック）または "adult"（🔞大人向けパック）または "party"（🎉法人・パーティープラン）または "noalcohol"（🥤ノンアルコール版・無料、いずれも現在は日英のみ）
  * @returns {object} displayText: 画面表示用 / speechText: 朗読用
  */
 function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
-  const PACK_DATA = { romance: ROMANCE_DATA, adult: ADULT_DATA, couple: COUPLE_DATA, nerutoon: NERUTON_DATA };
+  const PACK_DATA = { romance: ROMANCE_DATA, adult: ADULT_DATA, couple: COUPLE_DATA, nerutoon: NERUTON_DATA, party: PARTY_DATA, noalcohol: NOALCOHOL_DATA };
   const data =
     PACK_DATA[pack] ? PACK_DATA[pack][lang] || ODAI_DATA[lang] || ODAI_DATA.ja // 未対応言語は通常パックに戻す
       : ODAI_DATA[lang] || ODAI_DATA.ja;
@@ -1304,6 +1611,8 @@ function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
     key = situation + "|" + action;
   } while (key === lastCombinationKey);
   lastCombinationKey = key;
+
+  action = maybeInjectSponsorAction(action, lang);
 
   let displayText, speechText;
 
@@ -1349,6 +1658,20 @@ function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
       `${action}!`;
     speechText =
       `${fromName}, mục tiêu của bạn là ${toName}! ${situation}, ${action}!`;
+  } else if (lang === "de") {
+    displayText =
+      `【${fromName}】 ➜ 【${toName}】!\n` +
+      `${situation},\n` +
+      `${action}!`;
+    speechText =
+      `${fromName}, dein Ziel ist ${toName}! ${situation}, ${action}!`;
+  } else if (lang === "tl") {
+    displayText =
+      `【${fromName}】 ➜ 【${toName}】!\n` +
+      `${situation},\n` +
+      `${action}!`;
+    speechText =
+      `${fromName}, ang target mo ay si ${toName}! ${situation}, ${action}!`;
   } else {
     // 日本語：名前に「さん」を付けて「から」「へ」がどんな名前でも自然につながるようにする
     displayText =
