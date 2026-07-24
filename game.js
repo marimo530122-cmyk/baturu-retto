@@ -2697,12 +2697,33 @@ function showOdai(from, to) {
   state.currentSpeech = odai.speechText;
 
   gameStatus.textContent = t("statusOdai");
-  odaiCard.textContent = odai.displayText;
   odaiCard.classList.remove("king-card");
   btnPass.classList.remove("hidden");
   wheelArea.classList.add("hidden");
   odaiArea.classList.remove("hidden");
 
+  // 🎰 本命の前に、ダミー候補を2つポポポンと高速表示してから確定させる演出
+  const decoys = [
+    generateOdai(from.name, to.name, state.lang, state.pack).displayText,
+    generateOdai(from.name, to.name, state.lang, state.pack).displayText,
+  ];
+  const sequence = [...decoys, odai.displayText];
+  let step = 0;
+  const popInterval = setInterval(() => {
+    odaiCard.textContent = sequence[step];
+    odaiCard.classList.remove("odai-pop");
+    void odaiCard.offsetWidth; // リフローさせてアニメーションを再生させる
+    odaiCard.classList.add("odai-pop");
+    step++;
+    if (step >= sequence.length) {
+      clearInterval(popInterval);
+      finishOdaiReveal(odai);
+    }
+  }, 260);
+}
+
+// 「お題確定」の瞬間だけ発生させたい演出・処理(紙吹雪・効果音・ハイライト保存・読み上げ)
+function finishOdaiReveal(odai) {
   const accentA = cachedThemeColors.a;
   const accentB = cachedThemeColors.b;
   celebrate([accentA, accentB, "#ffffff"], 80);
