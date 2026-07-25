@@ -181,11 +181,12 @@ const UI = {
       `👑 王様、誕生！！\n\n王様は【${name}】！\n\n王様の命令は絶対！\nみんなへのお題を自由に出そう！`,
     kingSpeech: (name) =>
       `王様は、${name}さん！王様の命令は、絶対！好きなお題を出してください！`,
-    statusJudge: "🧑‍⚖️ 審査員、動く…！",
-    judgeCard: (name, penalty) =>
-      `🧑‍⚖️ 審査員が「アウト！」と叫んだ！\n\n【${name}】への追加の罰は…\n\n${penalty}！`,
-    judgeSpeech: (name, penalty) =>
-      `審査員が、アウトと叫びました！${name}さんへの追加の罰は、${penalty}です！`,
+    statusJudge: (name) => `🧑‍⚖️【${name}】に審査員の目が…！`,
+    judgeCard: (judgeName, targetName, penalty) =>
+      `🧑‍⚖️ 審査員は【${judgeName}】！\n\n「アウト！」と【${targetName}】を指名！\n\n追加の罰は…\n\n${penalty}！`,
+    judgeSpeech: (judgeName, targetName, penalty) =>
+      `審査員は、${judgeName}さん！アウト、${targetName}さんを指名！追加の罰は、${penalty}です！`,
+    judgeAnon: "覆面審査員",
     speak: "🔊 もう一度読み上げ",
     pass: "🔄 パス（お題を変える）",
     share: "📤 シェア",
@@ -351,11 +352,12 @@ const UI = {
       `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\n\nThe King's command is absolute!\nMake up any challenge you want!`,
     kingSpeech: (name) =>
       `The King is ${name}! The King's command is absolute! Make up any challenge you want!`,
-    statusJudge: "🧑‍⚖️ The judge is watching…!",
-    judgeCard: (name, penalty) =>
-      `🧑‍⚖️ The judge just shouted "OUT!"\n\nAn extra penalty for 【${name}】...\n\n${penalty}!`,
-    judgeSpeech: (name, penalty) =>
-      `The judge just shouted out! An extra penalty for ${name} is... ${penalty}!`,
+    statusJudge: (name) => `🧑‍⚖️ The judge has 【${name}】 in their sights…!`,
+    judgeCard: (judgeName, targetName, penalty) =>
+      `🧑‍⚖️ Today's judge is 【${judgeName}】!\n\nThey shouted "OUT!" and pointed at 【${targetName}】!\n\nThe extra penalty is...\n\n${penalty}!`,
+    judgeSpeech: (judgeName, targetName, penalty) =>
+      `The judge is ${judgeName}! They shouted out and pointed at ${targetName}! The extra penalty is... ${penalty}!`,
+    judgeAnon: "the Mystery Judge",
     speak: "🔊 Read it again",
     pass: "🔄 Pass (new challenge)",
     share: "📤 Share",
@@ -521,11 +523,12 @@ const UI = {
       `👑 國王誕生！！\n\n國王是【${name}】！\n\n國王的命令是絕對的！\n盡情對大家出題吧！`,
     kingSpeech: (name) =>
       `國王是，${name}！國王的命令是絕對的！請自由對大家出題！`,
-    statusJudge: "🧑‍⚖️ 評審出動中…！",
-    judgeCard: (name, penalty) =>
-      `🧑‍⚖️ 評審大喊「出局！」！\n\n給【${name}】的追加懲罰是…\n\n${penalty}！`,
-    judgeSpeech: (name, penalty) =>
-      `評審大喊出局！給${name}的追加懲罰是，${penalty}！`,
+    statusJudge: (name) => `🧑‍⚖️ 評審盯上了【${name}】…！`,
+    judgeCard: (judgeName, targetName, penalty) =>
+      `🧑‍⚖️ 今天的評審是【${judgeName}】！\n\n大喊「出局！」並指向【${targetName}】！\n\n追加懲罰是…\n\n${penalty}！`,
+    judgeSpeech: (judgeName, targetName, penalty) =>
+      `評審是，${judgeName}！大喊出局，指向${targetName}！追加懲罰是，${penalty}！`,
+    judgeAnon: "神秘評審",
     speak: "🔊 再唸一次",
     pass: "🔄 跳過（換一題）",
     share: "📤 分享",
@@ -691,11 +694,12 @@ const UI = {
       `👑 왕 탄생！！\n\n왕은【${name}】!\n\n왕의 명령은 절대적！\n모두에게 자유롭게 명령을 내려보세요！`,
     kingSpeech: (name) =>
       `왕은, ${name}! 왕의 명령은 절대적! 자유롭게 명령을 내려주세요!`,
-    statusJudge: "🧑‍⚖️ 심사위원 등장…！",
-    judgeCard: (name, penalty) =>
-      `🧑‍⚖️ 심사위원이 "아웃！"을 외쳤다！\n\n【${name}】에게 추가 벌칙은…\n\n${penalty}！`,
-    judgeSpeech: (name, penalty) =>
-      `심사위원이 아웃을 외쳤습니다! ${name}님에게 추가 벌칙은, ${penalty}입니다!`,
+    statusJudge: (name) => `🧑‍⚖️ 심사위원이【${name}】님을 주목…！`,
+    judgeCard: (judgeName, targetName, penalty) =>
+      `🧑‍⚖️ 오늘의 심사위원은【${judgeName}】！\n\n"아웃！"을 외치며【${targetName}】님을 지목！\n\n추가 벌칙은…\n\n${penalty}！`,
+    judgeSpeech: (judgeName, targetName, penalty) =>
+      `심사위원은, ${judgeName}님! 아웃을 외치며 ${targetName}님을 지목! 추가 벌칙은, ${penalty}입니다!`,
+    judgeAnon: "미스터리 심사위원",
     speak: "🔊 다시 듣기",
     pass: "🔄 패스（다른 벌칙으로）",
     share: "📤 공유",
@@ -861,11 +865,12 @@ const UI = {
       `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n\n¡La orden del Rey es absoluta!\n¡Inventa el reto que quieras!`,
     kingSpeech: (name) =>
       `¡El Rey es ${name}! ¡La orden del Rey es absoluta! ¡Inventa el reto que quieras!`,
-    statusJudge: "🧑‍⚖️ ¡El juez está atento…!",
-    judgeCard: (name, penalty) =>
-      `🧑‍⚖️ ¡El juez gritó "FUERA!"!\n\nUn castigo extra para 【${name}】...\n\n¡${penalty}!`,
-    judgeSpeech: (name, penalty) =>
-      `¡El juez gritó fuera! Un castigo extra para ${name} es... ¡${penalty}!`,
+    statusJudge: (name) => `🧑‍⚖️ ¡El juez tiene la mirada en 【${name}】…!`,
+    judgeCard: (judgeName, targetName, penalty) =>
+      `🧑‍⚖️ ¡El juez de hoy es 【${judgeName}】!\n\n¡Gritó "FUERA!" y señaló a 【${targetName}】!\n\nEl castigo extra es...\n\n¡${penalty}!`,
+    judgeSpeech: (judgeName, targetName, penalty) =>
+      `¡El juez es ${judgeName}! ¡Gritó fuera y señaló a ${targetName}! El castigo extra es... ¡${penalty}!`,
+    judgeAnon: "el Juez Misterioso",
     speak: "🔊 Leer de nuevo",
     pass: "🔄 Pasar (nuevo reto)",
     share: "📤 Compartir",
@@ -1031,11 +1036,12 @@ const UI = {
       `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\n\nA ordem do Rei é absoluta!\nInvente o desafio que quiser!`,
     kingSpeech: (name) =>
       `O Rei é ${name}! A ordem do Rei é absoluta! Invente o desafio que quiser!`,
-    statusJudge: "🧑‍⚖️ O juiz está de olho…!",
-    judgeCard: (name, penalty) =>
-      `🧑‍⚖️ O juiz gritou "FORA!"!\n\nUma penalidade extra para 【${name}】...\n\n${penalty}!`,
-    judgeSpeech: (name, penalty) =>
-      `O juiz gritou fora! Uma penalidade extra para ${name} é... ${penalty}!`,
+    statusJudge: (name) => `🧑‍⚖️ O juiz está de olho em 【${name}】…!`,
+    judgeCard: (judgeName, targetName, penalty) =>
+      `🧑‍⚖️ O juiz de hoje é 【${judgeName}】!\n\nGritou "FORA!" e apontou para 【${targetName}】!\n\nA penalidade extra é...\n\n${penalty}!`,
+    judgeSpeech: (judgeName, targetName, penalty) =>
+      `O juiz é ${judgeName}! Gritou fora e apontou para ${targetName}! A penalidade extra é... ${penalty}!`,
+    judgeAnon: "o Juiz Misterioso",
     speak: "🔊 Ler novamente",
     pass: "🔄 Pular (novo desafio)",
     share: "📤 Compartilhar",
@@ -1201,11 +1207,12 @@ const UI = {
       `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\n\nMệnh lệnh của Vua là tuyệt đối!\nHãy tự do ra lệnh cho mọi người!`,
     kingSpeech: (name) =>
       `Vua là ${name}! Mệnh lệnh của Vua là tuyệt đối! Hãy tự do ra lệnh cho mọi người!`,
-    statusJudge: "🧑‍⚖️ Giám khảo đang theo dõi…!",
-    judgeCard: (name, penalty) =>
-      `🧑‍⚖️ Giám khảo vừa hét "OUT!"!\n\nHình phạt bổ sung cho 【${name}】...\n\n${penalty}!`,
-    judgeSpeech: (name, penalty) =>
-      `Giám khảo vừa hét out! Hình phạt bổ sung cho ${name} là... ${penalty}!`,
+    statusJudge: (name) => `🧑‍⚖️ Giám khảo đang để mắt đến 【${name}】…!`,
+    judgeCard: (judgeName, targetName, penalty) =>
+      `🧑‍⚖️ Giám khảo hôm nay là 【${judgeName}】!\n\nHét "OUT!" và chỉ vào 【${targetName}】!\n\nHình phạt bổ sung là...\n\n${penalty}!`,
+    judgeSpeech: (judgeName, targetName, penalty) =>
+      `Giám khảo là ${judgeName}! Hét out và chỉ vào ${targetName}! Hình phạt bổ sung là... ${penalty}!`,
+    judgeAnon: "Giám Khảo Bí Ẩn",
     speak: "🔊 Đọc lại",
     pass: "🔄 Bỏ qua (thử thách mới)",
     share: "📤 Chia sẻ",
@@ -1371,11 +1378,12 @@ const UI = {
       `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\n\nDer Befehl des Königs ist absolut!\nDenk dir jede beliebige Aufgabe aus!`,
     kingSpeech: (name) =>
       `Der König ist ${name}! Der Befehl des Königs ist absolut! Denk dir jede beliebige Aufgabe aus!`,
-    statusJudge: "🧑‍⚖️ Der Richter beobachtet…!",
-    judgeCard: (name, penalty) =>
-      `🧑‍⚖️ Der Richter hat "RAUS!" gerufen!\n\nEine Extra-Strafe für 【${name}】...\n\n${penalty}!`,
-    judgeSpeech: (name, penalty) =>
-      `Der Richter hat raus gerufen! Eine Extra-Strafe für ${name} ist... ${penalty}!`,
+    statusJudge: (name) => `🧑‍⚖️ Der Richter hat 【${name}】 im Visier…!`,
+    judgeCard: (judgeName, targetName, penalty) =>
+      `🧑‍⚖️ Der heutige Richter ist 【${judgeName}】!\n\nEr rief "RAUS!" und zeigte auf 【${targetName}】!\n\nDie Extra-Strafe ist...\n\n${penalty}!`,
+    judgeSpeech: (judgeName, targetName, penalty) =>
+      `Der Richter ist ${judgeName}! Er rief raus und zeigte auf ${targetName}! Die Extra-Strafe ist... ${penalty}!`,
+    judgeAnon: "der Geheimrichter",
     speak: "🔊 Nochmal vorlesen",
     pass: "🔄 Passen (neue Aufgabe)",
     share: "📤 Teilen",
@@ -1541,11 +1549,12 @@ const UI = {
       `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\n\nAbsolute ang utos ng Hari!\nGumawa ng kahit anong hamon!`,
     kingSpeech: (name) =>
       `Ang Hari ay si ${name}! Absolute ang utos ng Hari! Gumawa ng kahit anong hamon!`,
-    statusJudge: "🧑‍⚖️ Nagbabantay ang huwes…!",
-    judgeCard: (name, penalty) =>
-      `🧑‍⚖️ Sumigaw ang huwes ng "OUT!"!\n\nDagdag na parusa para kay 【${name}】...\n\n${penalty}!`,
-    judgeSpeech: (name, penalty) =>
-      `Sumigaw ang huwes ng out! Dagdag na parusa para kay ${name} ay... ${penalty}!`,
+    statusJudge: (name) => `🧑‍⚖️ Nakatutok ang huwes kay 【${name}】…!`,
+    judgeCard: (judgeName, targetName, penalty) =>
+      `🧑‍⚖️ Ang huwes ngayon ay si 【${judgeName}】!\n\nSumigaw ng "OUT!" at itinuro si 【${targetName}】!\n\nAng dagdag na parusa ay...\n\n${penalty}!`,
+    judgeSpeech: (judgeName, targetName, penalty) =>
+      `Ang huwes ay si ${judgeName}! Sumigaw ng out at itinuro si ${targetName}! Ang dagdag na parusa ay... ${penalty}!`,
+    judgeAnon: "ang Misteryosong Huwes",
     speak: "🔊 Ulitin ang pagbasa",
     pass: "🔄 Pass (bagong hamon)",
     share: "📤 I-share",
@@ -2725,8 +2734,8 @@ btnSpin.addEventListener("click", () => {
       gameStatus.textContent = t("statusKing");
       setTimeout(() => showKing(winner), 700);
     } else if (judgeRound) {
-      gameStatus.textContent = t("statusJudge");
-      setTimeout(() => showJudge(winner), 700);
+      gameStatus.textContent = t("statusJudge")(winner.name);
+      setTimeout(() => showJudge(winner), 900);
     } else {
       gameStatus.textContent = t("statusPicked")(winner.name);
       const partner = pickPartner(winner);
@@ -2827,11 +2836,18 @@ function showJudge(target) {
   // パスで再抽選できるように、本人を自分自身とのペアとして保持しておく
   state.currentPair = { from: target, to: target };
 
-  const penalty = pickJudgePenalty(state.lang);
-  state.currentSpeech = t("judgeSpeech")(target.name, penalty);
+  // 🧑‍⚖️ 審査員役を、本人以外の参加者からランダムに指名する（他に誰もいなければ覆面審査員）
+  const others = participants().filter((p) => p.name !== target.name);
+  const judgeName = others.length > 0
+    ? others[Math.floor(Math.random() * others.length)].name
+    : t("judgeAnon");
 
-  gameStatus.textContent = t("statusJudge");
-  odaiCard.textContent = t("judgeCard")(target.name, penalty);
+  const penalty = pickJudgePenalty(state.lang);
+  const displayText = t("judgeCard")(judgeName, target.name, penalty);
+  state.currentSpeech = t("judgeSpeech")(judgeName, target.name, penalty);
+
+  gameStatus.textContent = t("statusJudge")(target.name);
+  odaiCard.textContent = displayText;
   odaiCard.classList.remove("king-card");
   odaiCard.classList.add("judge-card");
   btnPass.classList.remove("hidden"); // 審査員ハプニングでも、パスは必ず押せる
@@ -2841,9 +2857,9 @@ function showJudge(target) {
   celebrate(["#ff4d4d", "#ffb52d", "#ffffff"], [80, 40, 80, 40, 160]);
   SFX.reveal();
 
-  lastHighlightDataUrl = Highlights.capture(t("judgeCard")(target.name, penalty), "#ff4d4d", document.getElementById("t-logo").textContent);
+  lastHighlightDataUrl = Highlights.capture(displayText, "#ff4d4d", document.getElementById("t-logo").textContent);
   if (state.onlineRole === "host") {
-    Online.broadcast({ type: "odai", displayText: t("judgeCard")(target.name, penalty), speechText: state.currentSpeech, lang: state.lang });
+    Online.broadcast({ type: "odai", displayText, speechText: state.currentSpeech, lang: state.lang });
   }
 
   speakOdai(state.currentSpeech, state.lang, resolveVoice());
