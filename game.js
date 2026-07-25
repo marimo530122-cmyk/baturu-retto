@@ -183,9 +183,9 @@ const UI = {
       `王様は、${name}さん！王様の命令は、絶対！好きなお題を出してください！`,
     statusJudge: (name) => `🧑‍⚖️【${name}】に審査員の目が…！`,
     judgeCard: (judgeName, targetName, penalty) =>
-      `🧑‍⚖️ 審査員は【${judgeName}】！\n\n「アウト！」と【${targetName}】を指名！\n\n追加の罰は…\n\n${penalty}！`,
+      `🧑‍⚖️ 審査員【${judgeName}】「【${targetName}】、アウト！」\n\n${penalty}！`,
     judgeSpeech: (judgeName, targetName, penalty) =>
-      `審査員は、${judgeName}さん！アウト、${targetName}さんを指名！追加の罰は、${penalty}です！`,
+      `審査員は${judgeName}さん！${targetName}さん、アウト！${penalty}です！`,
     judgeAnon: "覆面審査員",
     speak: "🔊 もう一度読み上げ",
     pass: "🔄 パス（お題を変える）",
@@ -354,9 +354,9 @@ const UI = {
       `The King is ${name}! The King's command is absolute! Make up any challenge you want!`,
     statusJudge: (name) => `🧑‍⚖️ The judge has 【${name}】 in their sights…!`,
     judgeCard: (judgeName, targetName, penalty) =>
-      `🧑‍⚖️ Today's judge is 【${judgeName}】!\n\nThey shouted "OUT!" and pointed at 【${targetName}】!\n\nThe extra penalty is...\n\n${penalty}!`,
+      `🧑‍⚖️ Judge 【${judgeName}】: "【${targetName}】, you're OUT!"\n\n${penalty}!`,
     judgeSpeech: (judgeName, targetName, penalty) =>
-      `The judge is ${judgeName}! They shouted out and pointed at ${targetName}! The extra penalty is... ${penalty}!`,
+      `Judge ${judgeName} says: ${targetName}, you're out! ${penalty}!`,
     judgeAnon: "the Mystery Judge",
     speak: "🔊 Read it again",
     pass: "🔄 Pass (new challenge)",
@@ -525,9 +525,9 @@ const UI = {
       `國王是，${name}！國王的命令是絕對的！請自由對大家出題！`,
     statusJudge: (name) => `🧑‍⚖️ 評審盯上了【${name}】…！`,
     judgeCard: (judgeName, targetName, penalty) =>
-      `🧑‍⚖️ 今天的評審是【${judgeName}】！\n\n大喊「出局！」並指向【${targetName}】！\n\n追加懲罰是…\n\n${penalty}！`,
+      `🧑‍⚖️ 評審【${judgeName}】：「【${targetName}】，出局！」\n\n${penalty}！`,
     judgeSpeech: (judgeName, targetName, penalty) =>
-      `評審是，${judgeName}！大喊出局，指向${targetName}！追加懲罰是，${penalty}！`,
+      `評審${judgeName}說：${targetName}，出局！${penalty}！`,
     judgeAnon: "神秘評審",
     speak: "🔊 再唸一次",
     pass: "🔄 跳過（換一題）",
@@ -696,9 +696,9 @@ const UI = {
       `왕은, ${name}! 왕의 명령은 절대적! 자유롭게 명령을 내려주세요!`,
     statusJudge: (name) => `🧑‍⚖️ 심사위원이【${name}】님을 주목…！`,
     judgeCard: (judgeName, targetName, penalty) =>
-      `🧑‍⚖️ 오늘의 심사위원은【${judgeName}】！\n\n"아웃！"을 외치며【${targetName}】님을 지목！\n\n추가 벌칙은…\n\n${penalty}！`,
+      `🧑‍⚖️ 심사위원【${judgeName}】: "【${targetName}】, 아웃!"\n\n${penalty}！`,
     judgeSpeech: (judgeName, targetName, penalty) =>
-      `심사위원은, ${judgeName}님! 아웃을 외치며 ${targetName}님을 지목! 추가 벌칙은, ${penalty}입니다!`,
+      `심사위원 ${judgeName}님이 말했습니다: ${targetName}님, 아웃! ${penalty}!`,
     judgeAnon: "미스터리 심사위원",
     speak: "🔊 다시 듣기",
     pass: "🔄 패스（다른 벌칙으로）",
@@ -867,9 +867,9 @@ const UI = {
       `¡El Rey es ${name}! ¡La orden del Rey es absoluta! ¡Inventa el reto que quieras!`,
     statusJudge: (name) => `🧑‍⚖️ ¡El juez tiene la mirada en 【${name}】…!`,
     judgeCard: (judgeName, targetName, penalty) =>
-      `🧑‍⚖️ ¡El juez de hoy es 【${judgeName}】!\n\n¡Gritó "FUERA!" y señaló a 【${targetName}】!\n\nEl castigo extra es...\n\n¡${penalty}!`,
+      `🧑‍⚖️ El juez 【${judgeName}】: "¡【${targetName}】, estás FUERA!"\n\n¡${penalty}!`,
     judgeSpeech: (judgeName, targetName, penalty) =>
-      `¡El juez es ${judgeName}! ¡Gritó fuera y señaló a ${targetName}! El castigo extra es... ¡${penalty}!`,
+      `El juez ${judgeName} dice: ¡${targetName}, estás fuera! ¡${penalty}!`,
     judgeAnon: "el Juez Misterioso",
     speak: "🔊 Leer de nuevo",
     pass: "🔄 Pasar (nuevo reto)",
@@ -1038,9 +1038,9 @@ const UI = {
       `O Rei é ${name}! A ordem do Rei é absoluta! Invente o desafio que quiser!`,
     statusJudge: (name) => `🧑‍⚖️ O juiz está de olho em 【${name}】…!`,
     judgeCard: (judgeName, targetName, penalty) =>
-      `🧑‍⚖️ O juiz de hoje é 【${judgeName}】!\n\nGritou "FORA!" e apontou para 【${targetName}】!\n\nA penalidade extra é...\n\n${penalty}!`,
+      `🧑‍⚖️ O juiz 【${judgeName}】: "【${targetName}】, você está FORA!"\n\n${penalty}!`,
     judgeSpeech: (judgeName, targetName, penalty) =>
-      `O juiz é ${judgeName}! Gritou fora e apontou para ${targetName}! A penalidade extra é... ${penalty}!`,
+      `O juiz ${judgeName} diz: ${targetName}, você está fora! ${penalty}!`,
     judgeAnon: "o Juiz Misterioso",
     speak: "🔊 Ler novamente",
     pass: "🔄 Pular (novo desafio)",
@@ -1209,9 +1209,9 @@ const UI = {
       `Vua là ${name}! Mệnh lệnh của Vua là tuyệt đối! Hãy tự do ra lệnh cho mọi người!`,
     statusJudge: (name) => `🧑‍⚖️ Giám khảo đang để mắt đến 【${name}】…!`,
     judgeCard: (judgeName, targetName, penalty) =>
-      `🧑‍⚖️ Giám khảo hôm nay là 【${judgeName}】!\n\nHét "OUT!" và chỉ vào 【${targetName}】!\n\nHình phạt bổ sung là...\n\n${penalty}!`,
+      `🧑‍⚖️ Giám khảo 【${judgeName}】: "【${targetName}】, OUT!"\n\n${penalty}!`,
     judgeSpeech: (judgeName, targetName, penalty) =>
-      `Giám khảo là ${judgeName}! Hét out và chỉ vào ${targetName}! Hình phạt bổ sung là... ${penalty}!`,
+      `Giám khảo ${judgeName} nói: ${targetName}, out! ${penalty}!`,
     judgeAnon: "Giám Khảo Bí Ẩn",
     speak: "🔊 Đọc lại",
     pass: "🔄 Bỏ qua (thử thách mới)",
@@ -1380,9 +1380,9 @@ const UI = {
       `Der König ist ${name}! Der Befehl des Königs ist absolut! Denk dir jede beliebige Aufgabe aus!`,
     statusJudge: (name) => `🧑‍⚖️ Der Richter hat 【${name}】 im Visier…!`,
     judgeCard: (judgeName, targetName, penalty) =>
-      `🧑‍⚖️ Der heutige Richter ist 【${judgeName}】!\n\nEr rief "RAUS!" und zeigte auf 【${targetName}】!\n\nDie Extra-Strafe ist...\n\n${penalty}!`,
+      `🧑‍⚖️ Richter 【${judgeName}】: "【${targetName}】, du bist RAUS!"\n\n${penalty}!`,
     judgeSpeech: (judgeName, targetName, penalty) =>
-      `Der Richter ist ${judgeName}! Er rief raus und zeigte auf ${targetName}! Die Extra-Strafe ist... ${penalty}!`,
+      `Richter ${judgeName} sagt: ${targetName}, du bist raus! ${penalty}!`,
     judgeAnon: "der Geheimrichter",
     speak: "🔊 Nochmal vorlesen",
     pass: "🔄 Passen (neue Aufgabe)",
@@ -1551,9 +1551,9 @@ const UI = {
       `Ang Hari ay si ${name}! Absolute ang utos ng Hari! Gumawa ng kahit anong hamon!`,
     statusJudge: (name) => `🧑‍⚖️ Nakatutok ang huwes kay 【${name}】…!`,
     judgeCard: (judgeName, targetName, penalty) =>
-      `🧑‍⚖️ Ang huwes ngayon ay si 【${judgeName}】!\n\nSumigaw ng "OUT!" at itinuro si 【${targetName}】!\n\nAng dagdag na parusa ay...\n\n${penalty}!`,
+      `🧑‍⚖️ Huwes 【${judgeName}】: "【${targetName}】, OUT ka!"\n\n${penalty}!`,
     judgeSpeech: (judgeName, targetName, penalty) =>
-      `Ang huwes ay si ${judgeName}! Sumigaw ng out at itinuro si ${targetName}! Ang dagdag na parusa ay... ${penalty}!`,
+      `Sabi ni Huwes ${judgeName}: ${targetName}, out ka! ${penalty}!`,
     judgeAnon: "ang Misteryosong Huwes",
     speak: "🔊 Ulitin ang pagbasa",
     pass: "🔄 Pass (bagong hamon)",
