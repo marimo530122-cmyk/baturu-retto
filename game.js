@@ -9,6 +9,12 @@
 /* ---------------- 王様モードの発動確率 ---------------- */
 const KING_CHANCE = 0.10; // 10%
 
+/* ---------------- 🧑‍⚖️ 審査員ハプニングモードの発動確率 ---------------- */
+// 王様モードでない回のうち、この確率で審査員が「アウト！」を宣告する。
+// 罰の中身は必ず安全なリスト(odai-generator.jsのJUDGE_PENALTIES)から選ぶ。
+// 身体接触・外見いじりは含めない。パスも常に押せる。
+const JUDGE_CHANCE = 0.35; // 35%
+
 /* ---------------- 表彰式の間隔 ---------------- */
 const CEREMONY_INTERVAL = 10; // 10ラウンドごとに表彰式
 
@@ -175,6 +181,11 @@ const UI = {
       `👑 王様、誕生！！\n\n王様は【${name}】！\n\n王様の命令は絶対！\nみんなへのお題を自由に出そう！`,
     kingSpeech: (name) =>
       `王様は、${name}さん！王様の命令は、絶対！好きなお題を出してください！`,
+    statusJudge: "🧑‍⚖️ 審査員、動く…！",
+    judgeCard: (name, penalty) =>
+      `🧑‍⚖️ 審査員が「アウト！」と叫んだ！\n\n【${name}】への追加の罰は…\n\n${penalty}！`,
+    judgeSpeech: (name, penalty) =>
+      `審査員が、アウトと叫びました！${name}さんへの追加の罰は、${penalty}です！`,
     speak: "🔊 もう一度読み上げ",
     pass: "🔄 パス（お題を変える）",
     share: "📤 シェア",
@@ -340,6 +351,11 @@ const UI = {
       `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\n\nThe King's command is absolute!\nMake up any challenge you want!`,
     kingSpeech: (name) =>
       `The King is ${name}! The King's command is absolute! Make up any challenge you want!`,
+    statusJudge: "🧑‍⚖️ The judge is watching…!",
+    judgeCard: (name, penalty) =>
+      `🧑‍⚖️ The judge just shouted "OUT!"\n\nAn extra penalty for 【${name}】...\n\n${penalty}!`,
+    judgeSpeech: (name, penalty) =>
+      `The judge just shouted out! An extra penalty for ${name} is... ${penalty}!`,
     speak: "🔊 Read it again",
     pass: "🔄 Pass (new challenge)",
     share: "📤 Share",
@@ -505,6 +521,11 @@ const UI = {
       `👑 國王誕生！！\n\n國王是【${name}】！\n\n國王的命令是絕對的！\n盡情對大家出題吧！`,
     kingSpeech: (name) =>
       `國王是，${name}！國王的命令是絕對的！請自由對大家出題！`,
+    statusJudge: "🧑‍⚖️ 評審出動中…！",
+    judgeCard: (name, penalty) =>
+      `🧑‍⚖️ 評審大喊「出局！」！\n\n給【${name}】的追加懲罰是…\n\n${penalty}！`,
+    judgeSpeech: (name, penalty) =>
+      `評審大喊出局！給${name}的追加懲罰是，${penalty}！`,
     speak: "🔊 再唸一次",
     pass: "🔄 跳過（換一題）",
     share: "📤 分享",
@@ -670,6 +691,11 @@ const UI = {
       `👑 왕 탄생！！\n\n왕은【${name}】!\n\n왕의 명령은 절대적！\n모두에게 자유롭게 명령을 내려보세요！`,
     kingSpeech: (name) =>
       `왕은, ${name}! 왕의 명령은 절대적! 자유롭게 명령을 내려주세요!`,
+    statusJudge: "🧑‍⚖️ 심사위원 등장…！",
+    judgeCard: (name, penalty) =>
+      `🧑‍⚖️ 심사위원이 "아웃！"을 외쳤다！\n\n【${name}】에게 추가 벌칙은…\n\n${penalty}！`,
+    judgeSpeech: (name, penalty) =>
+      `심사위원이 아웃을 외쳤습니다! ${name}님에게 추가 벌칙은, ${penalty}입니다!`,
     speak: "🔊 다시 듣기",
     pass: "🔄 패스（다른 벌칙으로）",
     share: "📤 공유",
@@ -835,6 +861,11 @@ const UI = {
       `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n\n¡La orden del Rey es absoluta!\n¡Inventa el reto que quieras!`,
     kingSpeech: (name) =>
       `¡El Rey es ${name}! ¡La orden del Rey es absoluta! ¡Inventa el reto que quieras!`,
+    statusJudge: "🧑‍⚖️ ¡El juez está atento…!",
+    judgeCard: (name, penalty) =>
+      `🧑‍⚖️ ¡El juez gritó "FUERA!"!\n\nUn castigo extra para 【${name}】...\n\n¡${penalty}!`,
+    judgeSpeech: (name, penalty) =>
+      `¡El juez gritó fuera! Un castigo extra para ${name} es... ¡${penalty}!`,
     speak: "🔊 Leer de nuevo",
     pass: "🔄 Pasar (nuevo reto)",
     share: "📤 Compartir",
@@ -1000,6 +1031,11 @@ const UI = {
       `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\n\nA ordem do Rei é absoluta!\nInvente o desafio que quiser!`,
     kingSpeech: (name) =>
       `O Rei é ${name}! A ordem do Rei é absoluta! Invente o desafio que quiser!`,
+    statusJudge: "🧑‍⚖️ O juiz está de olho…!",
+    judgeCard: (name, penalty) =>
+      `🧑‍⚖️ O juiz gritou "FORA!"!\n\nUma penalidade extra para 【${name}】...\n\n${penalty}!`,
+    judgeSpeech: (name, penalty) =>
+      `O juiz gritou fora! Uma penalidade extra para ${name} é... ${penalty}!`,
     speak: "🔊 Ler novamente",
     pass: "🔄 Pular (novo desafio)",
     share: "📤 Compartilhar",
@@ -1165,6 +1201,11 @@ const UI = {
       `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\n\nMệnh lệnh của Vua là tuyệt đối!\nHãy tự do ra lệnh cho mọi người!`,
     kingSpeech: (name) =>
       `Vua là ${name}! Mệnh lệnh của Vua là tuyệt đối! Hãy tự do ra lệnh cho mọi người!`,
+    statusJudge: "🧑‍⚖️ Giám khảo đang theo dõi…!",
+    judgeCard: (name, penalty) =>
+      `🧑‍⚖️ Giám khảo vừa hét "OUT!"!\n\nHình phạt bổ sung cho 【${name}】...\n\n${penalty}!`,
+    judgeSpeech: (name, penalty) =>
+      `Giám khảo vừa hét out! Hình phạt bổ sung cho ${name} là... ${penalty}!`,
     speak: "🔊 Đọc lại",
     pass: "🔄 Bỏ qua (thử thách mới)",
     share: "📤 Chia sẻ",
@@ -1330,6 +1371,11 @@ const UI = {
       `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\n\nDer Befehl des Königs ist absolut!\nDenk dir jede beliebige Aufgabe aus!`,
     kingSpeech: (name) =>
       `Der König ist ${name}! Der Befehl des Königs ist absolut! Denk dir jede beliebige Aufgabe aus!`,
+    statusJudge: "🧑‍⚖️ Der Richter beobachtet…!",
+    judgeCard: (name, penalty) =>
+      `🧑‍⚖️ Der Richter hat "RAUS!" gerufen!\n\nEine Extra-Strafe für 【${name}】...\n\n${penalty}!`,
+    judgeSpeech: (name, penalty) =>
+      `Der Richter hat raus gerufen! Eine Extra-Strafe für ${name} ist... ${penalty}!`,
     speak: "🔊 Nochmal vorlesen",
     pass: "🔄 Passen (neue Aufgabe)",
     share: "📤 Teilen",
@@ -1495,6 +1541,11 @@ const UI = {
       `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\n\nAbsolute ang utos ng Hari!\nGumawa ng kahit anong hamon!`,
     kingSpeech: (name) =>
       `Ang Hari ay si ${name}! Absolute ang utos ng Hari! Gumawa ng kahit anong hamon!`,
+    statusJudge: "🧑‍⚖️ Nagbabantay ang huwes…!",
+    judgeCard: (name, penalty) =>
+      `🧑‍⚖️ Sumigaw ang huwes ng "OUT!"!\n\nDagdag na parusa para kay 【${name}】...\n\n${penalty}!`,
+    judgeSpeech: (name, penalty) =>
+      `Sumigaw ang huwes ng out! Dagdag na parusa para kay ${name} ay... ${penalty}!`,
     speak: "🔊 Ulitin ang pagbasa",
     pass: "🔄 Pass (bagong hamon)",
     share: "📤 I-share",
@@ -2650,8 +2701,9 @@ btnSpin.addEventListener("click", () => {
   gameStatus.classList.add("taunt-pulse");
   SFX.spinStart();
 
-  // このスピンが王様モードになるかどうか、先に運命を決めておく
+  // このスピンが王様モード／審査員ハプニングになるかどうか、先に運命を決めておく
   const kingRound = Math.random() < KING_CHANCE;
+  const judgeRound = !kingRound && Math.random() < JUDGE_CHANCE;
 
   spinWheel((winner, idx) => {
     // 🃏 イカサマの仕込みは1回のスピンだけで自動的に解除する
@@ -2672,6 +2724,9 @@ btnSpin.addEventListener("click", () => {
     if (kingRound) {
       gameStatus.textContent = t("statusKing");
       setTimeout(() => showKing(winner), 700);
+    } else if (judgeRound) {
+      gameStatus.textContent = t("statusJudge");
+      setTimeout(() => showJudge(winner), 700);
     } else {
       gameStatus.textContent = t("statusPicked")(winner.name);
       const partner = pickPartner(winner);
@@ -2691,6 +2746,8 @@ function celebrate(colors, vibrationPattern) {
 // お題の発表（生成 → 表示 → 朗読）
 function showOdai(from, to) {
   state.isKing = false;
+  state.isJudge = false;
+  odaiCard.classList.remove("judge-card");
   state.currentPair = { from, to };
 
   const odai = generateOdai(from.name, to.name, state.lang, state.pack);
@@ -2740,11 +2797,13 @@ function finishOdaiReveal(odai) {
 // 👑 王様モード！
 function showKing(king) {
   state.isKing = true;
+  state.isJudge = false;
   state.currentPair = null;
   state.currentSpeech = t("kingSpeech")(king.name);
 
   gameStatus.textContent = t("statusKing");
   odaiCard.textContent = t("kingCard")(king.name);
+  odaiCard.classList.remove("judge-card");
   odaiCard.classList.add("king-card");
   btnPass.classList.add("hidden"); // 王様の命令にパスはない！
   wheelArea.classList.add("hidden");
@@ -2761,18 +2820,51 @@ function showKing(king) {
   speakOdai(state.currentSpeech, state.lang, resolveVoice());
 }
 
+// 🧑‍⚖️ 審査員ハプニング！(罰の中身は必ずJUDGE_PENALTIESの安全なリストから選ぶ)
+function showJudge(target) {
+  state.isKing = false;
+  state.isJudge = true;
+  // パスで再抽選できるように、本人を自分自身とのペアとして保持しておく
+  state.currentPair = { from: target, to: target };
+
+  const penalty = pickJudgePenalty(state.lang);
+  state.currentSpeech = t("judgeSpeech")(target.name, penalty);
+
+  gameStatus.textContent = t("statusJudge");
+  odaiCard.textContent = t("judgeCard")(target.name, penalty);
+  odaiCard.classList.remove("king-card");
+  odaiCard.classList.add("judge-card");
+  btnPass.classList.remove("hidden"); // 審査員ハプニングでも、パスは必ず押せる
+  wheelArea.classList.add("hidden");
+  odaiArea.classList.remove("hidden");
+
+  celebrate(["#ff4d4d", "#ffb52d", "#ffffff"], [80, 40, 80, 40, 160]);
+  SFX.reveal();
+
+  lastHighlightDataUrl = Highlights.capture(t("judgeCard")(target.name, penalty), "#ff4d4d", document.getElementById("t-logo").textContent);
+  if (state.onlineRole === "host") {
+    Online.broadcast({ type: "odai", displayText: t("judgeCard")(target.name, penalty), speechText: state.currentSpeech, lang: state.lang });
+  }
+
+  speakOdai(state.currentSpeech, state.lang, resolveVoice());
+}
+
 // もう一度読み上げ（さっきと同じ声で）
 document.getElementById("btn-speak").addEventListener("click", () => {
   if (state.currentSpeech) speakOdai(state.currentSpeech, state.lang, state.currentVoice);
 });
 
-// パス（同じ2人のまま、お題だけ変える）
+// パス（同じ2人のまま、お題だけ変える／審査員ハプニングなら罰だけ変える）
 btnPass.addEventListener("click", () => {
   if (!state.currentPair) return;
   odaiCard.style.animation = "none";
   void odaiCard.offsetWidth;
   odaiCard.style.animation = "";
-  showOdai(state.currentPair.from, state.currentPair.to);
+  if (state.isJudge) {
+    showJudge(state.currentPair.from);
+  } else {
+    showOdai(state.currentPair.from, state.currentPair.to);
+  }
   Achievements.bump("totalPasses");
 });
 

@@ -635,6 +635,12 @@ body.premium-active .logo {
   box-shadow: 0 0 22px rgba(255, 225, 75, 0.6), inset 0 0 28px rgba(255, 180, 45, 0.15);
 }
 
+/* 🧑‍⚖️ 審査員ハプニングのカード（赤く光る警告テイスト） */
+.odai-card.judge-card {
+  border-color: #ff4d4d;
+  box-shadow: 0 0 22px rgba(255, 77, 77, 0.6), inset 0 0 28px rgba(255, 77, 77, 0.15);
+}
+
 .odai-buttons {
   display: flex;
   gap: 8px;

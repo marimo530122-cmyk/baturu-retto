@@ -1653,6 +1653,66 @@ const SOLO_DATA = {
 };
 
 /* ---------------------------------------------------------
+   🧑‍⚖️ 審査員ハプニングモード
+   ---------------------------------------------------------
+   審査員が「アウト！」と宣告するランダムイベント。追加の罰は
+   審査員が自由に考えるのではなく、必ずこの安全なリストから選ぶ
+   （身体接触なし・外見いじりなし・パスも常に可能）。
+   --------------------------------------------------------- */
+const JUDGE_PENALTIES = {
+  ja: [
+    "30秒間、無言で全力の変顔をキープする",
+    "その場でオリジナルポーズを決めて「決め台詞」を叫ぶ",
+    "次の一杯を、利き手じゃない手で飲む",
+    "自己紹介を、映画予告編風のナレーションでやり直す",
+    "隣の人のいいところを3つ、全力で褒めちぎる",
+    "その場で即興の一発ギャグを披露する",
+    "好きな芸能人のモノマネを10秒間する",
+    "「今日一番恥ずかしかったこと」を発表する",
+    "次の3分間、ずっと敬語で喋る",
+    "相撲の仕切りポーズを30秒間キープする",
+    "「ありがとう」を知ってる外国語で3つ叫ぶ",
+    "次のお題が出るまで、アイドルのポーズを決め続ける",
+    "十八番の歌を1フレーズだけアカペラで歌う",
+    "その場でラップ風に自己紹介する",
+    "「今日の反省点」を大喜利風に発表する",
+    "乾杯の音頭を3回言い直してから次の一杯を飲む",
+    "その場でスクワットを5回、実況しながらやる",
+    "次に喋る時は、語尾に「〜ナリ」をつける(1分間)",
+    "自分の必殺技名を考えて、決めポーズ付きで発表する",
+    "この中の誰かに、心からの拍手を10秒間送る",
+  ],
+  en: [
+    "hold the silliest face you can for 30 seconds, in total silence",
+    "strike an original pose and shout a dramatic catchphrase",
+    "drink your next sip with your non-dominant hand",
+    "redo your self-introduction like a movie trailer narrator",
+    "praise three good things about the person next to you, full volume",
+    "perform an improvised joke on the spot",
+    "do a 10-second impression of a celebrity you like",
+    "share the most embarrassing thing that happened to you today",
+    "speak in an exaggeratedly formal voice for the next 3 minutes",
+    "hold a dramatic sumo-wrestler stance for 30 seconds",
+    "shout \"thank you\" in three different languages",
+    "strike an idol pose and hold it until the next challenge",
+    "sing one line of your go-to karaoke song, a cappella",
+    "reintroduce yourself in rap style",
+    "share \"today's biggest regret\" like a comedy punchline",
+    "redo the toast three times before taking your next sip",
+    "do 5 squats while giving live commentary on yourself",
+    "end every sentence with \"...for real\" for the next minute",
+    "invent a name for your signature finishing move and strike the pose",
+    "give someone in the group a heartfelt 10-second round of applause",
+  ],
+};
+
+// 審査員の罰をランダムに1つ選ぶ(言語が未対応なら日本語にフォールバック)
+function pickJudgePenalty(lang) {
+  const list = JUDGE_PENALTIES[lang] || JUDGE_PENALTIES.ja;
+  return pickRandom(list);
+}
+
+/* ---------------------------------------------------------
    🍺 スポンサータイアップ枠（協賛ブランドの広告お題）
    ---------------------------------------------------------
    実際にスポンサー企業と契約が決まったら、brandName を
