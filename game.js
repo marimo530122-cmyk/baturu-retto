@@ -235,6 +235,7 @@ const UI = {
     kinggameDisclaimerDesc: "人権を無視した誹謗中傷、過度な暴飲暴食の強要、身体に危害が及ぶような「痛いこと」は絶対に禁止です。王様であっても節度を守り、全員が笑顔になれる範囲で命令してください。トラブルや怪我について、当アプリは一切の責任を負いません。楽しく安全に遊びましょう！",
     kinggameDisclaimerAgree: "同意して始める",
     kinggameDisclaimerCancel: "やめておく",
+    kinggameNotice: "👑 王様ゲームモードは、罰の内容をその場の人が即興で考える仕組みです。文化や習慣の違いに配慮し、日本人向けとしています。海外からお越しの方は、タップをご遠慮ください。",
     recModeOn: "🎬 RECモードON（撮影用の見た目に切り替えました）",
     recModeOff: "🎬 RECモードOFF",
     viralTitle: "🚀 バイラル投稿キット",
@@ -415,6 +416,7 @@ const UI = {
     kinggameDisclaimerDesc: "Harassment that disrespects human dignity, forcing excessive eating or drinking, and anything that could physically hurt someone are strictly forbidden. Even the King must show restraint — only give commands that keep everyone smiling. This app takes no responsibility for any trouble or injury. Play safe and have fun!",
     kinggameDisclaimerAgree: "Agree & Start",
     kinggameDisclaimerCancel: "Never mind",
+    kinggameNotice: "👑 In King Game Mode, the \"King\" makes up punishments on the spot. Since this depends on shared cultural context, it's designed for Japanese-speaking guests only. If you're visiting from abroad, please don't tap this button. Thank you!",
     recModeOn: "🎬 REC Mode ON (switched to filming-friendly view)",
     recModeOff: "🎬 REC Mode OFF",
     viralTitle: "🚀 Viral Post Kit",
@@ -595,6 +597,7 @@ const UI = {
     kinggameDisclaimerDesc: "嚴禁不尊重人格的辱罵、強迫過度飲食、以及任何可能對身體造成傷害的「痛」的懲罰。即使是國王也請保持分寸，命令內容須讓大家都能笑著接受。若發生糾紛或受傷，本應用概不負責。請開心且安全地遊玩！",
     kinggameDisclaimerAgree: "同意並開始",
     kinggameDisclaimerCancel: "先不要",
+    kinggameNotice: "👑 國王遊戲模式是由在場的人臨場發揮懲罰內容。考慮到文化與習慣的差異，此模式僅供日本人使用。如果您是海外訪客，請不要點擊此按鈕，謝謝！",
     recModeOn: "🎬 拍攝模式已開啟（切換為適合拍攝的畫面）",
     recModeOff: "🎬 拍攝模式已關閉",
     viralTitle: "🚀 爆紅投稿套件",
@@ -775,6 +778,7 @@ const UI = {
     kinggameDisclaimerDesc: "인격을 무시하는 비방, 과도한 음주·음식 강요, 신체에 위해가 되는 「아픈 것」은 절대 금지입니다. 왕이라도 절도를 지키고, 모두가 웃을 수 있는 범위에서 명령해주세요. 문제나 부상에 대해 본 앱은 일체 책임지지 않습니다. 즐겁고 안전하게 즐기세요!",
     kinggameDisclaimerAgree: "동의하고 시작하기",
     kinggameDisclaimerCancel: "그만두기",
+    kinggameNotice: "👑 왕게임 모드는 그 자리에 있는 사람이 벌칙 내용을 즉흥적으로 정하는 방식입니다. 문화와 관습의 차이를 고려하여 일본인 전용으로 제공하고 있습니다. 해외에서 오신 분은 이 버튼을 누르지 말아 주세요. 감사합니다!",
     recModeOn: "🎬 REC 모드 ON (촬영용 화면으로 전환했습니다)",
     recModeOff: "🎬 REC 모드 OFF",
     viralTitle: "🚀 바이럴 게시 키트",
@@ -955,6 +959,7 @@ const UI = {
     kinggameDisclaimerDesc: "Están terminantemente prohibidos los insultos que falten al respeto humano, obligar a comer o beber en exceso, y cualquier cosa que pueda causar daño físico. Incluso el Rey debe mantener la moderación: da órdenes que hagan sonreír a todos. Esta app no se responsabiliza por problemas o lesiones. ¡Diviértanse de forma segura!",
     kinggameDisclaimerAgree: "Aceptar y Empezar",
     kinggameDisclaimerCancel: "Mejor no",
+    kinggameNotice: "👑 En el Modo Juego del Rey, el \"Rey\" inventa castigos en el momento. Como esto depende del contexto cultural compartido, está diseñado solo para invitados de habla japonesa. Si vienes del extranjero, por favor no toques este botón. ¡Gracias!",
     recModeOn: "🎬 Modo REC activado (vista optimizada para grabar)",
     recModeOff: "🎬 Modo REC desactivado",
     viralTitle: "🚀 Kit de Publicación Viral",
@@ -1135,6 +1140,7 @@ const UI = {
     kinggameDisclaimerDesc: "É totalmente proibido humilhar alguém, forçar bebida ou comida em excesso, ou qualquer coisa que possa machucar fisicamente. Mesmo o Rei deve manter a moderação — dê ordens que deixem todos sorrindo. Este aplicativo não se responsabiliza por problemas ou ferimentos. Divirta-se com segurança!",
     kinggameDisclaimerAgree: "Concordar e Começar",
     kinggameDisclaimerCancel: "Deixa pra lá",
+    kinggameNotice: "👑 No Modo Jogo do Rei, o \"Rei\" inventa castigos na hora. Como isso depende do contexto cultural compartilhado, foi criado apenas para convidados que falam japonês. Se você é visitante do exterior, por favor não toque neste botão. Obrigado!",
     recModeOn: "🎬 Modo REC ativado (visual otimizado para gravação)",
     recModeOff: "🎬 Modo REC desativado",
     viralTitle: "🚀 Kit de Postagem Viral",
@@ -1315,6 +1321,7 @@ const UI = {
     kinggameDisclaimerDesc: "Nghiêm cấm tuyệt đối việc lăng mạ xúc phạm nhân phẩm, ép ăn uống quá mức, hoặc bất cứ điều gì gây tổn hại đến cơ thể. Dù là Vua cũng phải giữ chừng mực, chỉ ra lệnh trong phạm vi khiến mọi người đều vui vẻ. Ứng dụng này không chịu trách nhiệm về bất kỳ rắc rối hay chấn thương nào. Hãy chơi vui vẻ và an toàn!",
     kinggameDisclaimerAgree: "Đồng ý & Bắt đầu",
     kinggameDisclaimerCancel: "Thôi để sau",
+    kinggameNotice: "👑 Trong Chế độ Trò chơi Vua, \"Vua\" sẽ tự nghĩ ra hình phạt ngay tại chỗ. Vì điều này phụ thuộc vào bối cảnh văn hóa chung, chế độ này chỉ dành cho khách nói tiếng Nhật. Nếu bạn đến từ nước ngoài, vui lòng không nhấn vào nút này. Xin cảm ơn!",
     recModeOn: "🎬 Đã bật Chế độ Quay phim (chuyển sang giao diện tối ưu cho quay video)",
     recModeOff: "🎬 Đã tắt Chế độ Quay phim",
     viralTitle: "🚀 Bộ Công Cụ Đăng Bài Viral",
@@ -1495,6 +1502,7 @@ const UI = {
     kinggameDisclaimerDesc: "Beleidigungen, die die Menschenwürde missachten, das Erzwingen von übermäßigem Essen oder Trinken sowie alles, was körperlichen Schaden verursachen könnte, sind strengstens verboten. Auch der König muss Maß halten — gib nur Befehle, bei denen alle lächeln können. Diese App übernimmt keine Verantwortung für Ärger oder Verletzungen. Spielt sicher und habt Spaß!",
     kinggameDisclaimerAgree: "Zustimmen & Starten",
     kinggameDisclaimerCancel: "Lieber nicht",
+    kinggameNotice: "👑 Im König-Spiel-Modus denkt sich der \"König\" die Strafen spontan aus. Da dies von einem gemeinsamen kulturellen Kontext abhängt, ist dieser Modus nur für japanischsprachige Gäste gedacht. Wenn Sie aus dem Ausland zu Besuch sind, tippen Sie bitte nicht auf diese Schaltfläche. Danke!",
     recModeOn: "🎬 REC-Modus AN (filmfreundliche Ansicht aktiviert)",
     recModeOff: "🎬 REC-Modus AUS",
     viralTitle: "🚀 Viral-Post-Kit",
@@ -1675,6 +1683,7 @@ const UI = {
     kinggameDisclaimerDesc: "Mahigpit na ipinagbabawal ang panlalait na hindi gumagalang sa dignidad ng tao, sapilitang labis na pag-inom o pagkain, at anumang maaaring makasakit sa katawan. Kahit ang Hari ay dapat magpakita ng kontrol — mag-utos lang ng bagay na magpapangiti sa lahat. Ang app na ito ay walang pananagutan sa anumang gulo o injury. Mag-enjoy nang ligtas!",
     kinggameDisclaimerAgree: "Sumang-ayon at Simulan",
     kinggameDisclaimerCancel: "Huwag na lang",
+    kinggameNotice: "👑 Sa King Game Mode, ang \"Hari\" ay gumagawa ng parusa nang biglaan. Dahil nakadepende ito sa magkatulad na kultural na konteksto, para lang ito sa mga Japanese-speaking na bisita. Kung galing ka sa ibang bansa, mangyaring huwag pindutin ang button na ito. Salamat!",
     recModeOn: "🎬 REC Mode ON (napalitan sa view na okay para sa paggawa ng video)",
     recModeOff: "🎬 REC Mode OFF",
     viralTitle: "🚀 Viral Post Kit",
@@ -1772,6 +1781,9 @@ function applyLanguage() {
   // 同じリンクのままボタン自体を隠し、安全な通常パックだけを見せる。
   const kingGameAllowed = state.lang === "ja";
   document.getElementById("pack-kinggame").classList.toggle("hidden", !kingGameAllowed);
+  // 日本語が読めないゲストにスマホを渡す場面(1台のスマホを回して遊ぶスタイルのため)を
+  // 想定し、ボタンの直下にも英語混じりで「日本語話者向け」の注意書きを表示しておく。
+  document.getElementById("t-kinggame-notice").classList.toggle("hidden", !kingGameAllowed);
   if (!kingGameAllowed && state.pack === "kinggame") {
     state.pack = "standard";
     document.getElementById("pack-kinggame").classList.remove("active-pack");

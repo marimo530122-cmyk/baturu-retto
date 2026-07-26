@@ -436,6 +436,14 @@ body.premium-active .logo {
   color: #8d7fb5;
 }
 
+.kinggame-notice {
+  margin: 6px auto 0;
+  max-width: 320px;
+  font-size: 10.5px;
+  line-height: 1.7;
+  color: #8d7fb5;
+}
+
 /* ---------- メンバー登録画面 ---------- */
 .screen-title {
   font-size: 24px;
