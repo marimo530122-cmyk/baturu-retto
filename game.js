@@ -126,7 +126,7 @@ const UI = {
       party: "🎉 法人/パーティー",
       noalcohol: "🥤 ノンアル版",
       solo: "🍶 ひとり飲み",
-      kinggame: "👑 王様ゲームモード",
+      kinggame: "👑 王様ゲームモード（日本人向け）",
     },
     themes: { neon: "🌃 ネオン", casino: "🎰 カジノ", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 イカサマモード",
