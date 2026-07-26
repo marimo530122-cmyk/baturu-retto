@@ -1648,6 +1648,8 @@ const SOLO_DATA = {
       "ask the staff where they'd recommend going next tonight",
       "silently toast to tonight's encounters in your head",
       "swap \"the best thing that happened today\" stories with your neighbor",
+      "using gestures only, no words, describe your country's most delicious local food to the person next to you",
+      "teach the person next to you a fun dance move or pose that's trending back home",
     ],
   },
 };
