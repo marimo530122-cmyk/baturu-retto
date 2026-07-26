@@ -110,6 +110,7 @@
 
       <div class="free-pack-row">
         <button class="btn btn-free" data-pack="noalcohol" id="pack-noalcohol">🥤 ノンアル版（無料）</button>
+        <button class="btn btn-free" data-pack="kinggame" id="pack-kinggame">👑 王様ゲームモード（無料）</button>
       </div>
 
       <p class="premium-heading" id="t-premium-heading">✨ 有料版（じゅんび中）</p>
@@ -180,6 +181,7 @@
   <!-- ============ 画面3：ゲーム本体 ============ -->
   <section id="screen-game" class="screen hidden">
     <p id="online-host-badge" class="online-room-badge hidden"></p>
+    <p id="active-pack-badge" class="online-room-badge hidden"></p>
     <h2 id="game-status" class="screen-title neon-pink">🎯 罰ゲームをやる人は…！？</h2>
 
     <div class="spice-row">
@@ -317,6 +319,16 @@
       <p id="t-agegate-desc">大人向けパックには、恋人・パートナー間の軽いスキンシップを含むお題があります。18歳以上の方のみお進みください。</p>
       <button id="agegate-yes" class="btn btn-primary">18歳以上です</button>
       <button id="agegate-no" class="btn btn-ghost">やめておく</button>
+    </div>
+  </div>
+
+  <!-- ============ 👑 王様ゲームモード：初回起動の注意事項モーダル ============ -->
+  <div id="modal-kinggame-disclaimer" class="modal hidden">
+    <div class="modal-box">
+      <h3 class="neon-pink" id="t-kinggame-disclaimer-title">👑 王様の絶対ルール／注意事項</h3>
+      <p id="t-kinggame-disclaimer-desc">人権を無視した誹謗中傷、過度な暴飲暴食の強要、身体に危害が及ぶような「痛いこと」は絶対に禁止です。王様であっても節度を守り、全員が笑顔になれる範囲で命令してください。トラブルや怪我について、当アプリは一切の責任を負いません。楽しく安全に遊びましょう！</p>
+      <button id="kinggame-disclaimer-agree" class="btn btn-primary">同意して始める</button>
+      <button id="kinggame-disclaimer-cancel" class="btn btn-ghost">やめておく</button>
     </div>
   </div>
 

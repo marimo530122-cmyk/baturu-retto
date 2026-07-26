@@ -1,13 +1,19 @@
 /* =========================================================
    バツルーレット - ゲーム本体
    ・ワンクリック完結ルーレット（1回で全部決まる）
-   ・👑王様モード（10%の確率で発動）
+   ・👑王様モード（標準10%＝全員に自由命令／🔞大人向けパックのみ50%＝対象者2人を指名して罰を命じる）
    ・日本語／英語 切り替え
    （お題の生成は odai-generator.js が担当）
    ========================================================= */
 
 /* ---------------- 王様モードの発動確率 ---------------- */
-const KING_CHANCE = 0.10; // 10%
+// 🔞大人向けパックのときだけ、王様は対象者2人を指名し、その場で自由に罰の
+// 内容を考える（ノーガードではなく、画面に安全ガイド＝宗教政治NG・強要飲酒NG・
+// 接触はソフトタッチまで・外見いじりNG・パス自由を毎回リマインド表示して歯止めをかける）。
+// それ以外のパック（標準・ファミリー・ノンアル等）は、従来通り対象を指定しない
+// 「みんなへの自由命令」のまま、発動率も低めに保つ。
+const KING_CHANCE_STANDARD = 0.10; // 10%（標準パック等）
+const KING_CHANCE_ADULT = 0.50; // 50%（🔞大人向けパックのみ）
 
 /* ---------------- 🧑‍⚖️ 審査員ハプニングモードの発動確率 ---------------- */
 // 王様モードでない回のうち、この確率で「今回の審査員」が参加者の中から
@@ -59,6 +65,10 @@ const state = {
   everyone: [],
   currentSpeech: null, // 「もう一度読み上げ」用
   currentPair: null,   // パス用（同じ2人でお題だけ変える）
+  currentOdaiPack: null, // パス用（👑王様ゲームモードの「エッチなお題」等、state.packと異なるパックでお題を出した場合に記憶）
+  currentKing: null,   // パス用（王様はそのまま、対象者だけ選び直す）
+  currentKingTargets: null, // 🔞大人向けパック／👑王様ゲームモードの王様の対象者(配列)。標準パックの王様はnull(パス不可)
+  currentKingAlwaysWarn: false, // パス用（👑王様ゲームモードの安全ガイド表示を、対象者を選び直した後も維持する）
   isKing: false,
   voicePersona: "random", // 声のキャラクター（random / mc / oyaji / girl）
   currentVoice: null,     // 今回の読み上げに使った声（もう一度読み上げ用）
@@ -116,6 +126,7 @@ const UI = {
       party: "🎉 法人/パーティー",
       noalcohol: "🥤 ノンアル版",
       solo: "🍶 ひとり飲み",
+      kinggame: "👑 王様ゲームモード",
     },
     themes: { neon: "🌃 ネオン", casino: "🎰 カジノ", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 イカサマモード",
@@ -178,10 +189,16 @@ const UI = {
     statusPicked: (name) => `やる人は…【${name}】！`,
     statusOdai: "🔥 お題はこれだ！",
     statusKing: "👑 王様、誕生！！",
-    kingCard: (name) =>
-      `👑 王様、誕生！！\n\n王様は【${name}】！\n\n王様の命令は絶対！\nみんなへのお題を自由に出そう！`,
-    kingSpeech: (name) =>
-      `王様は、${name}さん！王様の命令は、絶対！好きなお題を出してください！`,
+    kingCard: (name, targets, alwaysWarn) =>
+      targets && targets.length
+        ? `👑 王様、誕生！！\n\n王様は【${name}】！\n【${targets.join("・")}】に、好きな罰を命じよう！\n\n⚠️宗教・政治・強要飲酒はNG／接触はソフトタッチまで／外見いじりはNG／イヤなら遠慮なくパスしてOK`
+        : alwaysWarn
+          ? `👑 王様、誕生！！\n\n王様は【${name}】！\n\n王様の命令は絶対！\nみんなへのお題を自由に出そう！\n\n⚠️宗教・政治・強要飲酒はNG／接触はソフトタッチまで／外見いじりはNG／イヤなら遠慮なくパスしてOK`
+          : `👑 王様、誕生！！\n\n王様は【${name}】！\n\n王様の命令は絶対！\nみんなへのお題を自由に出そう！`,
+    kingSpeech: (name, targets) =>
+      targets && targets.length
+        ? `王様は、${name}さん！${targets.join("さんと")}さんに、好きな罰を命じてください！`
+        : `王様は、${name}さん！王様の命令は、絶対！好きなお題を出してください！`,
     judgeAnnounce: (name) => `🧑‍⚖️ 今回の審査員は【${name}】！\n\n`,
     judgeAnnounceSpeech: (name) => `今回の審査員は、${name}さん！`,
     speak: "🔊 もう一度読み上げ",
@@ -212,6 +229,12 @@ const UI = {
     noalcoholOff: "🎲 通常パックに戻しました",
     soloOn: "🍶 ひとり飲みモードに切り替えました",
     soloOff: "🎲 通常パックに戻しました",
+    kinggameOn: "👑 王様ゲームモードに切り替えました",
+    kinggameOff: "🎲 通常パックに戻しました",
+    kinggameDisclaimerTitle: "👑 王様の絶対ルール／注意事項",
+    kinggameDisclaimerDesc: "人権を無視した誹謗中傷、過度な暴飲暴食の強要、身体に危害が及ぶような「痛いこと」は絶対に禁止です。王様であっても節度を守り、全員が笑顔になれる範囲で命令してください。トラブルや怪我について、当アプリは一切の責任を負いません。楽しく安全に遊びましょう！",
+    kinggameDisclaimerAgree: "同意して始める",
+    kinggameDisclaimerCancel: "やめておく",
     recModeOn: "🎬 RECモードON（撮影用の見た目に切り替えました）",
     recModeOff: "🎬 RECモードOFF",
     viralTitle: "🚀 バイラル投稿キット",
@@ -296,6 +319,7 @@ const UI = {
       noalcohol: "🥤 Non-Alcohol Pack",
       party: "🎉 Corporate/Party",
       solo: "🍶 Solo Drinking",
+      kinggame: "👑 King Game Mode",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Rig Mode",
@@ -345,10 +369,16 @@ const UI = {
     statusPicked: (name) => `It's... 【${name}】!`,
     statusOdai: "🔥 HERE'S THE CHALLENGE!",
     statusKing: "👑 ALL HAIL THE KING!",
-    kingCard: (name) =>
-      `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\n\nThe King's command is absolute!\nMake up any challenge you want!`,
-    kingSpeech: (name) =>
-      `The King is ${name}! The King's command is absolute! Make up any challenge you want!`,
+    kingCard: (name, targets, alwaysWarn) =>
+      targets && targets.length
+        ? `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\nCommand a punishment for 【${targets.join(" & ")}】!\n\n⚠️ Keep it safe: no religion/politics, no forced drinking, soft-touch only, no body-shaming, anyone can pass anytime.`
+        : alwaysWarn
+          ? `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\n\nThe King's command is absolute!\nMake up any challenge you want!\n\n⚠️ Keep it safe: no religion/politics, no forced drinking, soft-touch only, no body-shaming, anyone can pass anytime.`
+          : `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\n\nThe King's command is absolute!\nMake up any challenge you want!`,
+    kingSpeech: (name, targets) =>
+      targets && targets.length
+        ? `All hail King ${name}! Give a punishment to ${targets.join(" and ")}!`
+        : `The King is ${name}! The King's command is absolute! Make up any challenge you want!`,
     judgeAnnounce: (name) => `🧑‍⚖️ Today's judge is 【${name}】!\n\n`,
     judgeAnnounceSpeech: (name) => `Today's judge is ${name}!`,
     speak: "🔊 Read it again",
@@ -379,6 +409,12 @@ const UI = {
     noalcoholOff: "🎲 Switched back to Standard Pack",
     soloOn: "🍶 Switched to Solo Drinking Mode",
     soloOff: "🎲 Switched back to Standard Pack",
+    kinggameOn: "👑 Switched to King Game Mode",
+    kinggameOff: "🎲 Switched back to Standard Pack",
+    kinggameDisclaimerTitle: "👑 The King's Absolute Rules / Notice",
+    kinggameDisclaimerDesc: "Harassment that disrespects human dignity, forcing excessive eating or drinking, and anything that could physically hurt someone are strictly forbidden. Even the King must show restraint — only give commands that keep everyone smiling. This app takes no responsibility for any trouble or injury. Play safe and have fun!",
+    kinggameDisclaimerAgree: "Agree & Start",
+    kinggameDisclaimerCancel: "Never mind",
     recModeOn: "🎬 REC Mode ON (switched to filming-friendly view)",
     recModeOff: "🎬 REC Mode OFF",
     viralTitle: "🚀 Viral Post Kit",
@@ -463,6 +499,7 @@ const UI = {
       noalcohol: "🥤 無酒精版",
       party: "🎉 公司/派對",
       solo: "🍶 獨自小酌",
+      kinggame: "👑 國王遊戲模式",
     },
     themes: { neon: "🌃 霓虹", casino: "🎰 賭場", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 作弊模式",
@@ -512,10 +549,16 @@ const UI = {
     statusPicked: (name) => `是…【${name}】！`,
     statusOdai: "🔥 題目來了！",
     statusKing: "👑 國王誕生！！",
-    kingCard: (name) =>
-      `👑 國王誕生！！\n\n國王是【${name}】！\n\n國王的命令是絕對的！\n盡情對大家出題吧！`,
-    kingSpeech: (name) =>
-      `國王是，${name}！國王的命令是絕對的！請自由對大家出題！`,
+    kingCard: (name, targets, alwaysWarn) =>
+      targets && targets.length
+        ? `👑 國王誕生！！\n\n國王是【${name}】！\n請對【${targets.join("、")}】下達你想到的懲罰！\n\n⚠️禁止宗教／政治／強迫喝酒，肢體接觸僅限輕觸，禁止嘲笑外貌，不想玩隨時可以Pass`
+        : alwaysWarn
+          ? `👑 國王誕生！！\n\n國王是【${name}】！\n\n國王的命令是絕對的！\n盡情對大家出題吧！\n\n⚠️禁止宗教／政治／強迫喝酒，肢體接觸僅限輕觸，禁止嘲笑外貌，不想玩隨時可以Pass`
+          : `👑 國王誕生！！\n\n國王是【${name}】！\n\n國王的命令是絕對的！\n盡情對大家出題吧！`,
+    kingSpeech: (name, targets) =>
+      targets && targets.length
+        ? `國王是，${name}！請對${targets.join("和")}下達懲罰吧！`
+        : `國王是，${name}！國王的命令是絕對的！請自由對大家出題！`,
     judgeAnnounce: (name) => `🧑‍⚖️ 這回合的評審是【${name}】！\n\n`,
     judgeAnnounceSpeech: (name) => `這回合的評審是，${name}！`,
     speak: "🔊 再唸一次",
@@ -546,6 +589,12 @@ const UI = {
     noalcoholOff: "🎲 已切回標準套組",
     soloOn: "🍶 已切換為獨自小酌模式",
     soloOff: "🎲 已切回標準套組",
+    kinggameOn: "👑 已切換為國王遊戲模式",
+    kinggameOff: "🎲 已切回標準套組",
+    kinggameDisclaimerTitle: "👑 國王的絕對規則／注意事項",
+    kinggameDisclaimerDesc: "嚴禁不尊重人格的辱罵、強迫過度飲食、以及任何可能對身體造成傷害的「痛」的懲罰。即使是國王也請保持分寸，命令內容須讓大家都能笑著接受。若發生糾紛或受傷，本應用概不負責。請開心且安全地遊玩！",
+    kinggameDisclaimerAgree: "同意並開始",
+    kinggameDisclaimerCancel: "先不要",
     recModeOn: "🎬 拍攝模式已開啟（切換為適合拍攝的畫面）",
     recModeOff: "🎬 拍攝模式已關閉",
     viralTitle: "🚀 爆紅投稿套件",
@@ -630,6 +679,7 @@ const UI = {
       noalcohol: "🥤 논알코올 팩",
       party: "🎉 회사/파티",
       solo: "🍶 혼술",
+      kinggame: "👑 왕게임 모드",
     },
     themes: { neon: "🌃 네온", casino: "🎰 카지노", izakaya: "🏮 이자카야" },
     rigTitle: "🃏 조작 모드",
@@ -679,10 +729,16 @@ const UI = {
     statusPicked: (name) => `당첨은…【${name}】!`,
     statusOdai: "🔥 벌칙 공개！",
     statusKing: "👑 왕 탄생！！",
-    kingCard: (name) =>
-      `👑 왕 탄생！！\n\n왕은【${name}】!\n\n왕의 명령은 절대적！\n모두에게 자유롭게 명령을 내려보세요！`,
-    kingSpeech: (name) =>
-      `왕은, ${name}! 왕의 명령은 절대적! 자유롭게 명령을 내려주세요!`,
+    kingCard: (name, targets, alwaysWarn) =>
+      targets && targets.length
+        ? `👑 왕 탄생！！\n\n왕은【${name}】!\n【${targets.join("・")}】에게 원하는 벌칙을 명령하세요！\n\n⚠️종교・정치・음주 강요 금지／스킨십은 가벼운 터치까지／외모 비하 금지／싫으면 언제든 패스 가능`
+        : alwaysWarn
+          ? `👑 왕 탄생！！\n\n왕은【${name}】!\n\n왕의 명령은 절대적！\n모두에게 자유롭게 명령을 내려보세요！\n\n⚠️종교・정치・음주 강요 금지／스킨십은 가벼운 터치까지／외모 비하 금지／싫으면 언제든 패스 가능`
+          : `👑 왕 탄생！！\n\n왕은【${name}】!\n\n왕의 명령은 절대적！\n모두에게 자유롭게 명령을 내려보세요！`,
+    kingSpeech: (name, targets) =>
+      targets && targets.length
+        ? `왕은, ${name}! ${targets.join("과 ")}에게 벌칙을 명령해주세요!`
+        : `왕은, ${name}! 왕의 명령은 절대적! 자유롭게 명령을 내려주세요!`,
     judgeAnnounce: (name) => `🧑‍⚖️ 이번 심사위원은【${name}】！\n\n`,
     judgeAnnounceSpeech: (name) => `이번 심사위원은, ${name}님!`,
     speak: "🔊 다시 듣기",
@@ -713,6 +769,12 @@ const UI = {
     noalcoholOff: "🎲 기본 팩으로 되돌렸습니다",
     soloOn: "🍶 혼술 모드로 전환했습니다",
     soloOff: "🎲 기본 팩으로 되돌렸습니다",
+    kinggameOn: "👑 왕게임 모드로 전환했습니다",
+    kinggameOff: "🎲 기본 팩으로 되돌렸습니다",
+    kinggameDisclaimerTitle: "👑 왕의 절대 규칙 / 주의사항",
+    kinggameDisclaimerDesc: "인격을 무시하는 비방, 과도한 음주·음식 강요, 신체에 위해가 되는 「아픈 것」은 절대 금지입니다. 왕이라도 절도를 지키고, 모두가 웃을 수 있는 범위에서 명령해주세요. 문제나 부상에 대해 본 앱은 일체 책임지지 않습니다. 즐겁고 안전하게 즐기세요!",
+    kinggameDisclaimerAgree: "동의하고 시작하기",
+    kinggameDisclaimerCancel: "그만두기",
     recModeOn: "🎬 REC 모드 ON (촬영용 화면으로 전환했습니다)",
     recModeOff: "🎬 REC 모드 OFF",
     viralTitle: "🚀 바이럴 게시 키트",
@@ -797,6 +859,7 @@ const UI = {
       noalcohol: "🥤 Paquete Sin Alcohol",
       party: "🎉 Corporativo/Fiesta",
       solo: "🍶 Beber Solo",
+      kinggame: "👑 Modo Juego del Rey",
     },
     themes: { neon: "🌃 Neón", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Modo Amañado",
@@ -846,10 +909,16 @@ const UI = {
     statusPicked: (name) => `¡Es... 【${name}】!`,
     statusOdai: "🔥 ¡AQUÍ ESTÁ EL RETO!",
     statusKing: "👑 ¡TODOS ANTE EL REY!",
-    kingCard: (name) =>
-      `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n\n¡La orden del Rey es absoluta!\n¡Inventa el reto que quieras!`,
-    kingSpeech: (name) =>
-      `¡El Rey es ${name}! ¡La orden del Rey es absoluta! ¡Inventa el reto que quieras!`,
+    kingCard: (name, targets, alwaysWarn) =>
+      targets && targets.length
+        ? `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n¡Ordena un castigo para 【${targets.join(" y ")}】!\n\n⚠️ Mantén la seguridad: nada de religión/política, sin obligar a beber, solo contacto suave, nada de burlas por el físico, cualquiera puede pasar cuando quiera.`
+        : alwaysWarn
+          ? `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n\n¡La orden del Rey es absoluta!\n¡Inventa el reto que quieras!\n\n⚠️ Mantén la seguridad: nada de religión/política, sin obligar a beber, solo contacto suave, nada de burlas por el físico, cualquiera puede pasar cuando quiera.`
+          : `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n\n¡La orden del Rey es absoluta!\n¡Inventa el reto que quieras!`,
+    kingSpeech: (name, targets) =>
+      targets && targets.length
+        ? `¡El Rey es ${name}! ¡Ordena un castigo para ${targets.join(" y ")}!`
+        : `¡El Rey es ${name}! ¡La orden del Rey es absoluta! ¡Inventa el reto que quieras!`,
     judgeAnnounce: (name) => `🧑‍⚖️ El juez de esta ronda es 【${name}】!\n\n`,
     judgeAnnounceSpeech: (name) => `¡El juez de esta ronda es ${name}!`,
     speak: "🔊 Leer de nuevo",
@@ -880,6 +949,12 @@ const UI = {
     noalcoholOff: "🎲 Vuelto al paquete estándar",
     soloOn: "🍶 Cambiado al Modo Beber Solo",
     soloOff: "🎲 Vuelto al paquete estándar",
+    kinggameOn: "👑 Cambiado al Modo Juego del Rey",
+    kinggameOff: "🎲 Vuelto al paquete estándar",
+    kinggameDisclaimerTitle: "👑 Reglas Absolutas del Rey / Aviso",
+    kinggameDisclaimerDesc: "Están terminantemente prohibidos los insultos que falten al respeto humano, obligar a comer o beber en exceso, y cualquier cosa que pueda causar daño físico. Incluso el Rey debe mantener la moderación: da órdenes que hagan sonreír a todos. Esta app no se responsabiliza por problemas o lesiones. ¡Diviértanse de forma segura!",
+    kinggameDisclaimerAgree: "Aceptar y Empezar",
+    kinggameDisclaimerCancel: "Mejor no",
     recModeOn: "🎬 Modo REC activado (vista optimizada para grabar)",
     recModeOff: "🎬 Modo REC desactivado",
     viralTitle: "🚀 Kit de Publicación Viral",
@@ -964,6 +1039,7 @@ const UI = {
       noalcohol: "🥤 Pacote Sem Álcool",
       party: "🎉 Corporativo/Festa",
       solo: "🍶 Bebendo Sozinho",
+      kinggame: "👑 Modo Jogo do Rei",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Cassino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Modo Manipulado",
@@ -1013,10 +1089,16 @@ const UI = {
     statusPicked: (name) => `É... 【${name}】!`,
     statusOdai: "🔥 AQUI ESTÁ O DESAFIO!",
     statusKing: "👑 TODOS DIANTE DO REI!",
-    kingCard: (name) =>
-      `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\n\nA ordem do Rei é absoluta!\nInvente o desafio que quiser!`,
-    kingSpeech: (name) =>
-      `O Rei é ${name}! A ordem do Rei é absoluta! Invente o desafio que quiser!`,
+    kingCard: (name, targets, alwaysWarn) =>
+      targets && targets.length
+        ? `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\nDê um castigo para 【${targets.join(" e ")}】!\n\n⚠️ Mantenha seguro: nada de religião/política, sem forçar bebida, apenas toques leves, nada de piadas sobre o corpo, qualquer um pode passar a qualquer momento.`
+        : alwaysWarn
+          ? `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\n\nA ordem do Rei é absoluta!\nInvente o desafio que quiser!\n\n⚠️ Mantenha seguro: nada de religião/política, sem forçar bebida, apenas toques leves, nada de piadas sobre o corpo, qualquer um pode passar a qualquer momento.`
+          : `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\n\nA ordem do Rei é absoluta!\nInvente o desafio que quiser!`,
+    kingSpeech: (name, targets) =>
+      targets && targets.length
+        ? `O Rei é ${name}! Dê um castigo para ${targets.join(" e ")}!`
+        : `O Rei é ${name}! A ordem do Rei é absoluta! Invente o desafio que quiser!`,
     judgeAnnounce: (name) => `🧑‍⚖️ O juiz desta rodada é 【${name}】!\n\n`,
     judgeAnnounceSpeech: (name) => `O juiz desta rodada é ${name}!`,
     speak: "🔊 Ler novamente",
@@ -1047,6 +1129,12 @@ const UI = {
     noalcoholOff: "🎲 Voltou ao pacote padrão",
     soloOn: "🍶 Mudou para o Modo Bebendo Sozinho",
     soloOff: "🎲 Voltou ao pacote padrão",
+    kinggameOn: "👑 Mudou para o Modo Jogo do Rei",
+    kinggameOff: "🎲 Voltou ao pacote padrão",
+    kinggameDisclaimerTitle: "👑 Regras Absolutas do Rei / Aviso",
+    kinggameDisclaimerDesc: "É totalmente proibido humilhar alguém, forçar bebida ou comida em excesso, ou qualquer coisa que possa machucar fisicamente. Mesmo o Rei deve manter a moderação — dê ordens que deixem todos sorrindo. Este aplicativo não se responsabiliza por problemas ou ferimentos. Divirta-se com segurança!",
+    kinggameDisclaimerAgree: "Concordar e Começar",
+    kinggameDisclaimerCancel: "Deixa pra lá",
     recModeOn: "🎬 Modo REC ativado (visual otimizado para gravação)",
     recModeOff: "🎬 Modo REC desativado",
     viralTitle: "🚀 Kit de Postagem Viral",
@@ -1131,6 +1219,7 @@ const UI = {
       noalcohol: "🥤 Gói Không Cồn",
       party: "🎉 Công ty/Tiệc",
       solo: "🍶 Uống Một Mình",
+      kinggame: "👑 Chế độ Trò chơi Vua",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Quán nhậu" },
     rigTitle: "🃏 Chế độ Gian lận",
@@ -1180,10 +1269,16 @@ const UI = {
     statusPicked: (name) => `Là... 【${name}】!`,
     statusOdai: "🔥 THỬ THÁCH ĐÂY RỒI!",
     statusKing: "👑 VUA ĐÃ XUẤT HIỆN!",
-    kingCard: (name) =>
-      `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\n\nMệnh lệnh của Vua là tuyệt đối!\nHãy tự do ra lệnh cho mọi người!`,
-    kingSpeech: (name) =>
-      `Vua là ${name}! Mệnh lệnh của Vua là tuyệt đối! Hãy tự do ra lệnh cho mọi người!`,
+    kingCard: (name, targets, alwaysWarn) =>
+      targets && targets.length
+        ? `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\nHãy ra lệnh phạt cho 【${targets.join(" và ")}】!\n\n⚠️ Giữ an toàn: không tôn giáo/chính trị, không ép uống rượu, chỉ chạm nhẹ nhàng, không chê ngoại hình, ai cũng có thể bỏ qua bất cứ lúc nào.`
+        : alwaysWarn
+          ? `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\n\nMệnh lệnh của Vua là tuyệt đối!\nHãy tự do ra lệnh cho mọi người!\n\n⚠️ Giữ an toàn: không tôn giáo/chính trị, không ép uống rượu, chỉ chạm nhẹ nhàng, không chê ngoại hình, ai cũng có thể bỏ qua bất cứ lúc nào.`
+          : `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\n\nMệnh lệnh của Vua là tuyệt đối!\nHãy tự do ra lệnh cho mọi người!`,
+    kingSpeech: (name, targets) =>
+      targets && targets.length
+        ? `Vua là ${name}! Hãy ra lệnh phạt cho ${targets.join(" và ")}!`
+        : `Vua là ${name}! Mệnh lệnh của Vua là tuyệt đối! Hãy tự do ra lệnh cho mọi người!`,
     judgeAnnounce: (name) => `🧑‍⚖️ Giám khảo vòng này là 【${name}】!\n\n`,
     judgeAnnounceSpeech: (name) => `Giám khảo vòng này là ${name}!`,
     speak: "🔊 Đọc lại",
@@ -1214,6 +1309,12 @@ const UI = {
     noalcoholOff: "🎲 Đã quay lại gói tiêu chuẩn",
     soloOn: "🍶 Đã chuyển sang Chế độ Uống Một Mình",
     soloOff: "🎲 Đã quay lại gói tiêu chuẩn",
+    kinggameOn: "👑 Đã chuyển sang Chế độ Trò chơi Vua",
+    kinggameOff: "🎲 Đã quay lại gói tiêu chuẩn",
+    kinggameDisclaimerTitle: "👑 Luật Tuyệt Đối Của Vua / Lưu Ý",
+    kinggameDisclaimerDesc: "Nghiêm cấm tuyệt đối việc lăng mạ xúc phạm nhân phẩm, ép ăn uống quá mức, hoặc bất cứ điều gì gây tổn hại đến cơ thể. Dù là Vua cũng phải giữ chừng mực, chỉ ra lệnh trong phạm vi khiến mọi người đều vui vẻ. Ứng dụng này không chịu trách nhiệm về bất kỳ rắc rối hay chấn thương nào. Hãy chơi vui vẻ và an toàn!",
+    kinggameDisclaimerAgree: "Đồng ý & Bắt đầu",
+    kinggameDisclaimerCancel: "Thôi để sau",
     recModeOn: "🎬 Đã bật Chế độ Quay phim (chuyển sang giao diện tối ưu cho quay video)",
     recModeOff: "🎬 Đã tắt Chế độ Quay phim",
     viralTitle: "🚀 Bộ Công Cụ Đăng Bài Viral",
@@ -1298,6 +1399,7 @@ const UI = {
       noalcohol: "🥤 Alkoholfreies Paket",
       party: "🎉 Firmen-/Partypaket",
       solo: "🍶 Alleine trinken",
+      kinggame: "👑 König-Spiel-Modus",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Schummel-Modus",
@@ -1347,10 +1449,16 @@ const UI = {
     statusPicked: (name) => `Es ist... 【${name}】!`,
     statusOdai: "🔥 HIER IST DIE AUFGABE!",
     statusKing: "👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!",
-    kingCard: (name) =>
-      `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\n\nDer Befehl des Königs ist absolut!\nDenk dir jede beliebige Aufgabe aus!`,
-    kingSpeech: (name) =>
-      `Der König ist ${name}! Der Befehl des Königs ist absolut! Denk dir jede beliebige Aufgabe aus!`,
+    kingCard: (name, targets, alwaysWarn) =>
+      targets && targets.length
+        ? `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\nBefiehl eine Strafe für 【${targets.join(" und ")}】!\n\n⚠️ Sicher bleiben: keine Religion/Politik, kein Trinkzwang, nur sanfte Berührungen, keine Witze über das Aussehen, jeder kann jederzeit passen.`
+        : alwaysWarn
+          ? `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\n\nDer Befehl des Königs ist absolut!\nDenk dir jede beliebige Aufgabe aus!\n\n⚠️ Sicher bleiben: keine Religion/Politik, kein Trinkzwang, nur sanfte Berührungen, keine Witze über das Aussehen, jeder kann jederzeit passen.`
+          : `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\n\nDer Befehl des Königs ist absolut!\nDenk dir jede beliebige Aufgabe aus!`,
+    kingSpeech: (name, targets) =>
+      targets && targets.length
+        ? `Der König ist ${name}! Befiehl eine Strafe für ${targets.join(" und ")}!`
+        : `Der König ist ${name}! Der Befehl des Königs ist absolut! Denk dir jede beliebige Aufgabe aus!`,
     judgeAnnounce: (name) => `🧑‍⚖️ Der Richter dieser Runde ist 【${name}】!\n\n`,
     judgeAnnounceSpeech: (name) => `Der Richter dieser Runde ist ${name}!`,
     speak: "🔊 Nochmal vorlesen",
@@ -1381,6 +1489,12 @@ const UI = {
     noalcoholOff: "🎲 Zurück zum Standard-Paket",
     soloOn: "🍶 Zum Modus „Alleine trinken“ gewechselt",
     soloOff: "🎲 Zurück zum Standard-Paket",
+    kinggameOn: "👑 Zum König-Spiel-Modus gewechselt",
+    kinggameOff: "🎲 Zurück zum Standard-Paket",
+    kinggameDisclaimerTitle: "👑 Die absoluten Regeln des Königs / Hinweis",
+    kinggameDisclaimerDesc: "Beleidigungen, die die Menschenwürde missachten, das Erzwingen von übermäßigem Essen oder Trinken sowie alles, was körperlichen Schaden verursachen könnte, sind strengstens verboten. Auch der König muss Maß halten — gib nur Befehle, bei denen alle lächeln können. Diese App übernimmt keine Verantwortung für Ärger oder Verletzungen. Spielt sicher und habt Spaß!",
+    kinggameDisclaimerAgree: "Zustimmen & Starten",
+    kinggameDisclaimerCancel: "Lieber nicht",
     recModeOn: "🎬 REC-Modus AN (filmfreundliche Ansicht aktiviert)",
     recModeOff: "🎬 REC-Modus AUS",
     viralTitle: "🚀 Viral-Post-Kit",
@@ -1465,6 +1579,7 @@ const UI = {
       noalcohol: "🥤 Non-Alcohol Pack",
       party: "🎉 Corporate/Party",
       solo: "🍶 Solo Inuman",
+      kinggame: "👑 King Game Mode",
     },
     themes: { neon: "🌃 Neon", casino: "🎰 Casino", izakaya: "🏮 Izakaya" },
     rigTitle: "🃏 Rig Mode",
@@ -1514,10 +1629,16 @@ const UI = {
     statusPicked: (name) => `Ito na... si 【${name}】!`,
     statusOdai: "🔥 ETO NA ANG HAMON!",
     statusKing: "👑 MABUHAY ANG HARI!",
-    kingCard: (name) =>
-      `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\n\nAbsolute ang utos ng Hari!\nGumawa ng kahit anong hamon!`,
-    kingSpeech: (name) =>
-      `Ang Hari ay si ${name}! Absolute ang utos ng Hari! Gumawa ng kahit anong hamon!`,
+    kingCard: (name, targets, alwaysWarn) =>
+      targets && targets.length
+        ? `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\nMag-utos ng parusa para kay 【${targets.join(" at ")}】!\n\n⚠️ Manatiling ligtas: bawal ang relihiyon/politika, walang sapilitang inuman, magaan na hipo lang, bawal ang panlalait sa hitsura, pwedeng mag-pass kahit kailan.`
+        : alwaysWarn
+          ? `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\n\nAbsolute ang utos ng Hari!\nGumawa ng kahit anong hamon!\n\n⚠️ Manatiling ligtas: bawal ang relihiyon/politika, walang sapilitang inuman, magaan na hipo lang, bawal ang panlalait sa hitsura, pwedeng mag-pass kahit kailan.`
+          : `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\n\nAbsolute ang utos ng Hari!\nGumawa ng kahit anong hamon!`,
+    kingSpeech: (name, targets) =>
+      targets && targets.length
+        ? `Ang Hari ay si ${name}! Mag-utos ng parusa para kay ${targets.join(" at ")}!`
+        : `Ang Hari ay si ${name}! Absolute ang utos ng Hari! Gumawa ng kahit anong hamon!`,
     judgeAnnounce: (name) => `🧑‍⚖️ Ang huwes ngayong round ay si 【${name}】!\n\n`,
     judgeAnnounceSpeech: (name) => `Ang huwes ngayong round ay si ${name}!`,
     speak: "🔊 Ulitin ang pagbasa",
@@ -1548,6 +1669,12 @@ const UI = {
     noalcoholOff: "🎲 Bumalik sa Standard Pack",
     soloOn: "🍶 Napalitan sa Solo Inuman Mode",
     soloOff: "🎲 Bumalik sa Standard Pack",
+    kinggameOn: "👑 Napalitan sa King Game Mode",
+    kinggameOff: "🎲 Bumalik sa Standard Pack",
+    kinggameDisclaimerTitle: "👑 Mga Absolutong Panuntunan ng Hari / Paalala",
+    kinggameDisclaimerDesc: "Mahigpit na ipinagbabawal ang panlalait na hindi gumagalang sa dignidad ng tao, sapilitang labis na pag-inom o pagkain, at anumang maaaring makasakit sa katawan. Kahit ang Hari ay dapat magpakita ng kontrol — mag-utos lang ng bagay na magpapangiti sa lahat. Ang app na ito ay walang pananagutan sa anumang gulo o injury. Mag-enjoy nang ligtas!",
+    kinggameDisclaimerAgree: "Sumang-ayon at Simulan",
+    kinggameDisclaimerCancel: "Huwag na lang",
     recModeOn: "🎬 REC Mode ON (napalitan sa view na okay para sa paggawa ng video)",
     recModeOff: "🎬 REC Mode OFF",
     viralTitle: "🚀 Viral Post Kit",
@@ -1638,6 +1765,7 @@ function applyLanguage() {
   document.getElementById("pack-online").innerHTML = `${u.packs.online} <span class="lock">🔒</span>`;
   document.getElementById("pack-noalcohol").textContent = u.packs.noalcohol;
   document.getElementById("pack-solo").innerHTML = `${u.packs.solo} <span class="lock">🔒</span>`;
+  document.getElementById("pack-kinggame").textContent = u.packs.kinggame;
   document.getElementById("t-notice").innerHTML = u.noticeHTML;
   document.getElementById("t-viral-footer").textContent = u.viralFooter;
 
@@ -1917,6 +2045,7 @@ btnRomance.addEventListener("click", () => {
   btnRomance.classList.toggle("active-pack", state.pack === "romance");
   btnAdult.classList.remove("active-pack");
   btnNerutoon.classList.remove("active-pack");
+  btnKingGame.classList.remove("active-pack");
   showToast(state.pack === "romance" ? t("romanceOn") : t("romanceOff"));
 });
 
@@ -1943,6 +2072,7 @@ document.getElementById("agegate-yes").addEventListener("click", () => {
   state.pack = "adult";
   btnRomance.classList.remove("active-pack");
   btnNerutoon.classList.remove("active-pack");
+  btnKingGame.classList.remove("active-pack");
   btnAdult.classList.add("active-pack");
   showToast(t("adultOn"));
 });
@@ -1959,6 +2089,7 @@ btnNerutoon.addEventListener("click", () => {
   btnNerutoon.classList.toggle("active-pack", state.pack === "nerutoon");
   btnRomance.classList.remove("active-pack");
   btnAdult.classList.remove("active-pack");
+  btnKingGame.classList.remove("active-pack");
   showToast(state.pack === "nerutoon" ? t("nerutoonOn") : t("nerutoonOff"));
 });
 
@@ -1972,6 +2103,7 @@ btnNoAlcohol.addEventListener("click", () => {
   btnAdult.classList.remove("active-pack");
   btnNerutoon.classList.remove("active-pack");
   document.getElementById("pack-solo").classList.remove("active-pack");
+  btnKingGame.classList.remove("active-pack");
   showToast(state.pack === "noalcohol" ? t("noalcoholOn") : t("noalcoholOff"));
 });
 
@@ -1986,7 +2118,57 @@ btnSolo.addEventListener("click", () => {
   btnAdult.classList.remove("active-pack");
   btnNerutoon.classList.remove("active-pack");
   btnNoAlcohol.classList.remove("active-pack");
+  btnKingGame.classList.remove("active-pack");
   showToast(state.pack === "solo" ? t("soloOn") : t("soloOff"));
+});
+
+/* ---------------- 👑 王様ゲームモード（無料・QR配布などから即遊べる王様ゲーム特化モード） ---------------- */
+// プレミアム未解放: 王様50% / 王様×自動ランダム指名30% / 通常ネタ20%
+// プレミアム解放後: 王様60% / 残り40%はエッチなお題（ラウンド進行はrunKingGameRound()）
+const btnKingGame = document.getElementById("pack-kinggame");
+const modalKingGameDisclaimer = document.getElementById("modal-kinggame-disclaimer");
+const KINGGAME_DISCLAIMER_KEY = "batsu-kinggame-disclaimer-seen";
+
+function activateKingGameMode() {
+  state.pack = "kinggame";
+  btnRomance.classList.remove("active-pack");
+  btnAdult.classList.remove("active-pack");
+  btnNerutoon.classList.remove("active-pack");
+  btnNoAlcohol.classList.remove("active-pack");
+  btnSolo.classList.remove("active-pack");
+  btnKingGame.classList.add("active-pack");
+  showToast(t("kinggameOn"));
+}
+
+btnKingGame.addEventListener("click", () => {
+  if (state.pack === "kinggame") {
+    state.pack = "standard";
+    btnKingGame.classList.remove("active-pack");
+    showToast(t("kinggameOff"));
+    return;
+  }
+
+  let seen = false;
+  try { seen = localStorage.getItem(KINGGAME_DISCLAIMER_KEY) === "1"; } catch (e) {}
+  if (seen) {
+    activateKingGameMode();
+    return;
+  }
+
+  document.getElementById("t-kinggame-disclaimer-title").textContent = t("kinggameDisclaimerTitle");
+  document.getElementById("t-kinggame-disclaimer-desc").textContent = t("kinggameDisclaimerDesc");
+  document.getElementById("kinggame-disclaimer-agree").textContent = t("kinggameDisclaimerAgree");
+  document.getElementById("kinggame-disclaimer-cancel").textContent = t("kinggameDisclaimerCancel");
+  modalKingGameDisclaimer.classList.remove("hidden");
+});
+
+document.getElementById("kinggame-disclaimer-agree").addEventListener("click", () => {
+  try { localStorage.setItem(KINGGAME_DISCLAIMER_KEY, "1"); } catch (e) {}
+  modalKingGameDisclaimer.classList.add("hidden");
+  activateKingGameMode();
+});
+document.getElementById("kinggame-disclaimer-cancel").addEventListener("click", () => {
+  modalKingGameDisclaimer.classList.add("hidden");
 });
 
 /* ---------------- 🌶️ お色気レベルスライダー（有料機能：レベル3以上） ---------------- */
@@ -2000,6 +2182,7 @@ function applySpiceLevel(level) {
   state.pack = SPICE_TO_PACK[level] || "standard";
   btnRomance.classList.toggle("active-pack", state.pack === "romance");
   btnAdult.classList.toggle("active-pack", state.pack === "adult");
+  btnKingGame.classList.remove("active-pack");
 }
 
 spiceSlider.addEventListener("input", () => {
@@ -2422,7 +2605,8 @@ document.getElementById("btn-game-start").addEventListener("click", () => {
         showPremiumModal(t("coupleTeaser"));
         return;
       }
-      state.pack = "couple";
+      // 既に他のパック（👑王様ゲームモード等）を選んでいるときは上書きしない（"mf"モード側と同じ扱いに揃える）
+      if (state.pack === "standard") state.pack = "couple";
     } else if (state.everyone.length < 3) {
       setupMessage.textContent = t("msgNeedAll");
       return;
@@ -2634,6 +2818,23 @@ function pickPartner(winner) {
   return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
+// 王様の罰の対象者を本人以外から最大2人、重複なしで選ぶ
+// （🍶ひとり飲みモード等で他に誰もいない場合は空配列を返す＝王様ラウンド不成立）
+function pickKingTargets(king) {
+  const others = participants().filter((p) => p.name !== king.name);
+  const shuffled = [...others].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(2, others.length));
+}
+
+// 👑王様ゲームモード専用：対象の人数も組み合わせも完全ランダムに選ぶ（本人以外1人〜全員）
+function pickAutoAssignedTargets(king) {
+  const others = participants().filter((p) => p.name !== king.name);
+  if (others.length === 0) return [];
+  const shuffled = [...others].sort(() => Math.random() - 0.5);
+  const count = 1 + Math.floor(Math.random() * others.length);
+  return shuffled.slice(0, count);
+}
+
 // 王様回数・お題回数の記録（表彰式で使う）
 function bumpStat(name, field) {
   if (!state.stats[name]) state.stats[name] = { king: 0, challenge: 0 };
@@ -2660,6 +2861,16 @@ function startRound() {
   } else {
     onlineHostBadge.classList.add("hidden");
   }
+
+  // どのパックで遊んでいるか、プレイ中も常に見えるように表示する（不具合報告時の切り分け用にも使える）
+  const activePackBadge = document.getElementById("active-pack-badge");
+  const activePackLabel = UI[state.lang].packs[state.pack];
+  if (state.pack === "standard" || !activePackLabel) {
+    activePackBadge.classList.add("hidden");
+  } else {
+    activePackBadge.textContent = activePackLabel;
+    activePackBadge.classList.remove("hidden");
+  }
 }
 
 btnSpin.addEventListener("click", () => {
@@ -2675,8 +2886,16 @@ btnSpin.addEventListener("click", () => {
   gameStatus.classList.add("taunt-pulse");
   SFX.spinStart();
 
+  // 👑王様ゲームモードは確率配分が丸ごと別物なので、専用ロジックに分岐する
+  if (state.pack === "kinggame") {
+    runKingGameRound();
+    return;
+  }
+
   // このスピンが王様モード／審査員ハプニングになるかどうか、先に運命を決めておく
-  const kingRound = Math.random() < KING_CHANCE;
+  // 🔞大人向けパックのときだけ発動率50%＋対象者指名、それ以外は従来通り10%＋全員への自由命令
+  const isAdultPack = state.pack === "adult";
+  const kingRound = Math.random() < (isAdultPack ? KING_CHANCE_ADULT : KING_CHANCE_STANDARD);
   const judgeRound = !kingRound && Math.random() < JUDGE_CHANCE;
 
   spinWheel((winner, idx) => {
@@ -2688,16 +2907,20 @@ btnSpin.addEventListener("click", () => {
     flashWinnerWedge(idx);
     gameStatus.classList.remove("taunt-pulse");
 
-    bumpStat(winner.name, kingRound ? "king" : "challenge");
+    // 大人向けパックで王様が選ばれても、対象者がいなければ（例：ひとり飲みモード）通常のお題に切り替える
+    const kingTargets = kingRound && isAdultPack ? pickKingTargets(winner) : null;
+    const isActualKingRound = kingRound && (!isAdultPack || (kingTargets && kingTargets.length > 0));
+
+    bumpStat(winner.name, isActualKingRound ? "king" : "challenge");
     state.roundCount++;
     state.pendingCeremony = state.roundCount % CEREMONY_INTERVAL === 0;
 
     Achievements.bump("totalRounds");
-    if (kingRound) Achievements.bump("totalKings");
+    if (isActualKingRound) Achievements.bump("totalKings");
 
-    if (kingRound) {
+    if (isActualKingRound) {
       gameStatus.textContent = t("statusKing");
-      setTimeout(() => showKing(winner), 700);
+      setTimeout(() => showKing(winner, kingTargets), 700);
     } else {
       gameStatus.textContent = t("statusPicked")(winner.name);
       const partner = pickPartner(winner);
@@ -2713,6 +2936,62 @@ btnSpin.addEventListener("click", () => {
   });
 });
 
+// 👑王様ゲームモード専用のラウンド進行（QRコード等から即遊べる、王様ゲーム特化モード）
+// 【無料】王様50%（全員への自由命令）／王様×自動ランダム指名30%（対象者に自由に罰）／通常ネタ20%
+// 【プレミアム解放後】王様60%（全員への自由命令）／残り40%はエッチなお題
+//   （仕様上の「ユーザー投稿ネタ20%」は投稿・共有機能自体が将来タスクのため今回は未実装。
+//   実装され次第、この40%の一部を投稿ネタに振り分ける）
+function runKingGameRound() {
+  const premium = isPremiumUnlocked();
+  const roll = Math.random();
+
+  spinWheel((winner, idx) => {
+    state.riggedName = null;
+    btnRig.classList.remove("active");
+    flashWinnerWedge(idx);
+    gameStatus.classList.remove("taunt-pulse");
+
+    state.roundCount++;
+    state.pendingCeremony = state.roundCount % CEREMONY_INTERVAL === 0;
+    Achievements.bump("totalRounds");
+
+    // 👑王様ゲームモードは、対象者を指名しない「全員への自由命令」の回でも
+    // 安全ガイドを必ず表示する(alwaysWarn=true)。免責モーダルは最初の1回きりなので、
+    // 実際に王様になった人への注意喚起はこのカード表示で毎回担う。
+    const runKing = (targets) => {
+      bumpStat(winner.name, "king");
+      Achievements.bump("totalKings");
+      gameStatus.textContent = t("statusKing");
+      setTimeout(() => showKing(winner, targets, true), 700);
+    };
+    const runOdai = (packOverride) => {
+      bumpStat(winner.name, "challenge");
+      gameStatus.textContent = t("statusPicked")(winner.name);
+      const partner = pickPartner(winner);
+      setTimeout(() => showOdai(winner, partner, null, packOverride), 900);
+    };
+
+    if (!premium) {
+      if (roll < 0.5) {
+        runKing(null); // 王様の自由命令（全員向け）
+      } else if (roll < 0.8) {
+        const targets = pickAutoAssignedTargets(winner);
+        // 対象者がいない（例：ひとり飲み）ときは通常のお題にフォールバック
+        if (targets.length > 0) runKing(targets);
+        else runOdai("standard");
+      } else {
+        runOdai("standard");
+      }
+    } else {
+      if (roll < 0.6) {
+        runKing(null);
+      } else {
+        runOdai("adult"); // 🔞エッチなお題
+      }
+    }
+  });
+}
+
 // 結果発表の瞬間の演出（紙吹雪・振動）をまとめて起動する
 function celebrate(colors, vibrationPattern) {
   Confetti.burst(colors);
@@ -2724,12 +3003,15 @@ function celebrate(colors, vibrationPattern) {
 // お題の発表（生成 → 表示 → 朗読）
 // judgeName を渡すと「🧑‍⚖️今回の審査員は〇〇！」を先頭に添える(🧑‍⚖️審査員ハプニング)。
 // 審査員の判定・追加の罰の中身はアプリでは決めず、その場の人間に委ねる。
-function showOdai(from, to, judgeName) {
+// packOverride: 👑王様ゲームモード等、state.packとは別のお題パック（例:"adult"）で生成したいときに指定する。
+function showOdai(from, to, judgeName, packOverride) {
   state.isKing = false;
   state.currentJudgeName = judgeName || null;
   state.currentPair = { from, to };
+  state.currentOdaiPack = packOverride || null;
+  const odaiPack = packOverride || state.pack;
 
-  const odai = generateOdai(from.name, to.name, state.lang, state.pack);
+  const odai = generateOdai(from.name, to.name, state.lang, odaiPack);
   const judgePrefix = judgeName ? t("judgeAnnounce")(judgeName) : "";
   const judgeSpeechPrefix = judgeName ? t("judgeAnnounceSpeech")(judgeName) : "";
   const finalDisplay = judgePrefix + odai.displayText;
@@ -2744,8 +3026,8 @@ function showOdai(from, to, judgeName) {
 
   // 🎰 本命の前に、ダミー候補を2つポポポンと高速表示してから確定させる演出
   const decoys = [
-    judgePrefix + generateOdai(from.name, to.name, state.lang, state.pack).displayText,
-    judgePrefix + generateOdai(from.name, to.name, state.lang, state.pack).displayText,
+    judgePrefix + generateOdai(from.name, to.name, state.lang, odaiPack).displayText,
+    judgePrefix + generateOdai(from.name, to.name, state.lang, odaiPack).displayText,
   ];
   const sequence = [...decoys, finalDisplay];
   let step = 0;
@@ -2778,26 +3060,41 @@ function finishOdaiReveal(odai) {
 }
 
 // 👑 王様モード！
-function showKing(king) {
+// targets が配列（🔞大人向けパック／👑王様ゲームモード）: 王様が対象者を指名し、その場で
+//   自由に罰を命じる。罰の中身はアプリでは決めず人間に委ねる代わりに、画面に安全ガイド
+//   （宗教政治NG・強要飲酒NG・接触はソフトタッチまで・外見いじりNG・パス自由）を毎回表示する。
+// targets が null（標準パック等）: 従来通り、対象を指定せず「みんなへの自由命令」のまま。
+// alwaysWarn=true（👑王様ゲームモード）: targetsがnullの「全員への自由命令」の回でも、
+//   安全ガイドをカードに必ず表示する（初回だけの免責モーダルとは別に、実際に王様になった
+//   人への注意喚起を毎回担うため）。
+function showKing(king, targets, alwaysWarn) {
   state.isKing = true;
   state.currentJudgeName = null;
   state.currentPair = null;
-  state.currentSpeech = t("kingSpeech")(king.name);
+  state.currentKing = king;
+  state.currentKingTargets = targets;
+  state.currentKingAlwaysWarn = !!alwaysWarn;
+  const targetNames = targets ? targets.map((p) => p.name) : null;
+  state.currentSpeech = t("kingSpeech")(king.name, targetNames);
 
   gameStatus.textContent = t("statusKing");
-  odaiCard.textContent = t("kingCard")(king.name);
+  odaiCard.textContent = t("kingCard")(king.name, targetNames, alwaysWarn);
   odaiCard.classList.remove("judge-card");
   odaiCard.classList.add("king-card");
-  btnPass.classList.add("hidden"); // 王様の命令にパスはない！
+  if (targetNames) {
+    btnPass.classList.remove("hidden"); // 🔞対象者は罰の内容を聞く前でもパスしてOK（対象者を選び直す）
+  } else {
+    btnPass.classList.add("hidden"); // 標準パック：王様の命令にパスはない！
+  }
   wheelArea.classList.add("hidden");
   odaiArea.classList.remove("hidden");
 
   celebrate(["#ffe14b", "#ffb52d", "#ffffff"], [100, 50, 100, 50, 200]);
   SFX.kingFanfare();
 
-  lastHighlightDataUrl = Highlights.capture(t("kingCard")(king.name), "#ffe14b", document.getElementById("t-logo").textContent);
+  lastHighlightDataUrl = Highlights.capture(t("kingCard")(king.name, targetNames, alwaysWarn), "#ffe14b", document.getElementById("t-logo").textContent);
   if (state.onlineRole === "host") {
-    Online.broadcast({ type: "king", displayText: t("kingCard")(king.name), speechText: state.currentSpeech, lang: state.lang });
+    Online.broadcast({ type: "king", displayText: t("kingCard")(king.name, targetNames, alwaysWarn), speechText: state.currentSpeech, lang: state.lang });
   }
 
   speakOdai(state.currentSpeech, state.lang, resolveVoice());
@@ -2808,13 +3105,26 @@ document.getElementById("btn-speak").addEventListener("click", () => {
   if (state.currentSpeech) speakOdai(state.currentSpeech, state.lang, state.currentVoice);
 });
 
-// パス（同じ2人・同じ審査員(いれば)のまま、お題だけ変える）
+// パス（同じ2人・同じ審査員(いれば)のまま、お題だけ変える／王様ラウンドは同じ王様のまま対象者を選び直す）
 btnPass.addEventListener("click", () => {
+  if (state.isKing) {
+    if (!state.currentKing || !state.currentKingTargets) return; // 標準パックの王様はパス不可
+    odaiCard.style.animation = "none";
+    void odaiCard.offsetWidth;
+    odaiCard.style.animation = "";
+    // 👑王様ゲームモードは人数も組み合わせも毎回完全ランダム、それ以外(🔞大人向けパック)は最大2人固定
+    const newTargets = state.pack === "kinggame"
+      ? pickAutoAssignedTargets(state.currentKing)
+      : pickKingTargets(state.currentKing);
+    showKing(state.currentKing, newTargets, state.currentKingAlwaysWarn);
+    Achievements.bump("totalPasses");
+    return;
+  }
   if (!state.currentPair) return;
   odaiCard.style.animation = "none";
   void odaiCard.offsetWidth;
   odaiCard.style.animation = "";
-  showOdai(state.currentPair.from, state.currentPair.to, state.currentJudgeName);
+  showOdai(state.currentPair.from, state.currentPair.to, state.currentJudgeName, state.currentOdaiPack);
   Achievements.bump("totalPasses");
 });
 
