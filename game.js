@@ -2046,6 +2046,7 @@ btnRomance.addEventListener("click", () => {
   btnAdult.classList.remove("active-pack");
   btnNerutoon.classList.remove("active-pack");
   btnKingGame.classList.remove("active-pack");
+  try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
   showToast(state.pack === "romance" ? t("romanceOn") : t("romanceOff"));
 });
 
@@ -2073,6 +2074,7 @@ document.getElementById("agegate-yes").addEventListener("click", () => {
   btnRomance.classList.remove("active-pack");
   btnNerutoon.classList.remove("active-pack");
   btnKingGame.classList.remove("active-pack");
+  try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
   btnAdult.classList.add("active-pack");
   showToast(t("adultOn"));
 });
@@ -2090,6 +2092,7 @@ btnNerutoon.addEventListener("click", () => {
   btnRomance.classList.remove("active-pack");
   btnAdult.classList.remove("active-pack");
   btnKingGame.classList.remove("active-pack");
+  try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
   showToast(state.pack === "nerutoon" ? t("nerutoonOn") : t("nerutoonOff"));
 });
 
@@ -2104,6 +2107,7 @@ btnNoAlcohol.addEventListener("click", () => {
   btnNerutoon.classList.remove("active-pack");
   document.getElementById("pack-solo").classList.remove("active-pack");
   btnKingGame.classList.remove("active-pack");
+  try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
   showToast(state.pack === "noalcohol" ? t("noalcoholOn") : t("noalcoholOff"));
 });
 
@@ -2119,6 +2123,7 @@ btnSolo.addEventListener("click", () => {
   btnNerutoon.classList.remove("active-pack");
   btnNoAlcohol.classList.remove("active-pack");
   btnKingGame.classList.remove("active-pack");
+  try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
   showToast(state.pack === "solo" ? t("soloOn") : t("soloOff"));
 });
 
@@ -2128,6 +2133,10 @@ btnSolo.addEventListener("click", () => {
 const btnKingGame = document.getElementById("pack-kinggame");
 const modalKingGameDisclaimer = document.getElementById("modal-kinggame-disclaimer");
 const KINGGAME_DISCLAIMER_KEY = "batsu-kinggame-disclaimer-seen";
+// 王様ゲームモードは「ページを開き直すたびに選び直す」のを忘れがちで、
+// うっかり通常パックのまま遊んでしまう不具合報告があったため、選択状態を
+// 他の言語/声/テーマ同様localStorageに覚えさせ、次回訪問時も自動で復元する。
+const PACK_STORAGE_KEY = "batsu-pack";
 
 function activateKingGameMode() {
   state.pack = "kinggame";
@@ -2137,6 +2146,7 @@ function activateKingGameMode() {
   btnNoAlcohol.classList.remove("active-pack");
   btnSolo.classList.remove("active-pack");
   btnKingGame.classList.add("active-pack");
+  try { localStorage.setItem(PACK_STORAGE_KEY, "kinggame"); } catch (e) {}
   showToast(t("kinggameOn"));
 }
 
@@ -2144,6 +2154,7 @@ btnKingGame.addEventListener("click", () => {
   if (state.pack === "kinggame") {
     state.pack = "standard";
     btnKingGame.classList.remove("active-pack");
+    try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
     showToast(t("kinggameOff"));
     return;
   }
@@ -2183,6 +2194,7 @@ function applySpiceLevel(level) {
   btnRomance.classList.toggle("active-pack", state.pack === "romance");
   btnAdult.classList.toggle("active-pack", state.pack === "adult");
   btnKingGame.classList.remove("active-pack");
+  try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
 }
 
 spiceSlider.addEventListener("input", () => {
@@ -3471,6 +3483,11 @@ try {
   if (PERSONA_CYCLE.includes(savedVoice)) state.voicePersona = savedVoice;
   const savedTheme = localStorage.getItem("batsu-theme");
   if (isPremiumUnlocked() && THEME_CYCLE.includes(savedTheme)) state.theme = savedTheme;
+  // 👑王様ゲームモードは無料・年齢確認等が不要なパックなので、前回選んでいれば黙って復元する
+  if (localStorage.getItem(PACK_STORAGE_KEY) === "kinggame") {
+    state.pack = "kinggame";
+    btnKingGame.classList.add("active-pack");
+  }
 } catch (e) {}
 
 // 一部のスマホは音声リストの読み込みが遅れるため、先に読み込みを促しておく
