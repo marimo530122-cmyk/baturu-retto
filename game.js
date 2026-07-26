@@ -68,7 +68,7 @@ const state = {
   currentOdaiPack: null, // パス用（👑王様ゲームモードの「エッチなお題」等、state.packと異なるパックでお題を出した場合に記憶）
   currentKing: null,   // パス用（王様はそのまま、対象者だけ選び直す）
   currentKingTargets: null, // 🔞大人向けパック／👑王様ゲームモードの王様の対象者(配列)。標準パックの王様はnull(パス不可)
-  currentKingAlwaysWarn: false, // パス用（👑王様ゲームモードの安全ガイド表示を、対象者を選び直した後も維持する）
+  currentKingShowReminder: false, // パス用（👑王様ゲームモードの安全ガイド表示を、対象者を選び直した後も維持する）
   isKing: false,
   voicePersona: "random", // 声のキャラクター（random / mc / oyaji / girl）
   currentVoice: null,     // 今回の読み上げに使った声（もう一度読み上げ用）
@@ -189,12 +189,12 @@ const UI = {
     statusPicked: (name) => `やる人は…【${name}】！`,
     statusOdai: "🔥 お題はこれだ！",
     statusKing: "👑 王様、誕生！！",
-    kingCard: (name, targets, alwaysWarn) =>
-      targets && targets.length
-        ? `👑 王様、誕生！！\n\n王様は【${name}】！\n【${targets.join("・")}】に、好きな罰を命じよう！\n\n⚠️宗教・政治・強要飲酒はNG／接触はソフトタッチまで／外見いじりはNG／イヤなら遠慮なくパスしてOK`
-        : alwaysWarn
-          ? `👑 王様、誕生！！\n\n王様は【${name}】！\n\n王様の命令は絶対！\nみんなへのお題を自由に出そう！\n\n⚠️宗教・政治・強要飲酒はNG／接触はソフトタッチまで／外見いじりはNG／イヤなら遠慮なくパスしてOK`
-          : `👑 王様、誕生！！\n\n王様は【${name}】！\n\n王様の命令は絶対！\nみんなへのお題を自由に出そう！`,
+    kingCard: (name, targets, showReminder) => {
+      const base = targets && targets.length
+        ? `👑 王様、誕生！！\n\n王様は【${name}】！\n【${targets.join("・")}】に、好きな罰を命じよう！`
+        : `👑 王様、誕生！！\n\n王様は【${name}】！\n\n王様の命令は絶対！\nみんなへのお題を自由に出そう！`;
+      return showReminder ? `${base}\n\n⚠️宗教・政治・強要飲酒はNG／接触はソフトタッチまで／外見いじりはNG／イヤなら遠慮なくパスしてOK` : base;
+    },
     kingSpeech: (name, targets) =>
       targets && targets.length
         ? `王様は、${name}さん！${targets.join("さんと")}さんに、好きな罰を命じてください！`
@@ -369,12 +369,12 @@ const UI = {
     statusPicked: (name) => `It's... 【${name}】!`,
     statusOdai: "🔥 HERE'S THE CHALLENGE!",
     statusKing: "👑 ALL HAIL THE KING!",
-    kingCard: (name, targets, alwaysWarn) =>
-      targets && targets.length
-        ? `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\nCommand a punishment for 【${targets.join(" & ")}】!\n\n⚠️ Keep it safe: no religion/politics, no forced drinking, soft-touch only, no body-shaming, anyone can pass anytime.`
-        : alwaysWarn
-          ? `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\n\nThe King's command is absolute!\nMake up any challenge you want!\n\n⚠️ Keep it safe: no religion/politics, no forced drinking, soft-touch only, no body-shaming, anyone can pass anytime.`
-          : `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\n\nThe King's command is absolute!\nMake up any challenge you want!`,
+    kingCard: (name, targets, showReminder) => {
+      const base = targets && targets.length
+        ? `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\nCommand a punishment for 【${targets.join(" & ")}】!`
+        : `👑 ALL HAIL THE KING!\n\nThe King is 【${name}】!\n\nThe King's command is absolute!\nMake up any challenge you want!`;
+      return showReminder ? `${base}\n\n⚠️ Keep it safe: no religion/politics, no forced drinking, soft-touch only, no body-shaming, anyone can pass anytime.` : base;
+    },
     kingSpeech: (name, targets) =>
       targets && targets.length
         ? `All hail King ${name}! Give a punishment to ${targets.join(" and ")}!`
@@ -549,12 +549,12 @@ const UI = {
     statusPicked: (name) => `是…【${name}】！`,
     statusOdai: "🔥 題目來了！",
     statusKing: "👑 國王誕生！！",
-    kingCard: (name, targets, alwaysWarn) =>
-      targets && targets.length
-        ? `👑 國王誕生！！\n\n國王是【${name}】！\n請對【${targets.join("、")}】下達你想到的懲罰！\n\n⚠️禁止宗教／政治／強迫喝酒，肢體接觸僅限輕觸，禁止嘲笑外貌，不想玩隨時可以Pass`
-        : alwaysWarn
-          ? `👑 國王誕生！！\n\n國王是【${name}】！\n\n國王的命令是絕對的！\n盡情對大家出題吧！\n\n⚠️禁止宗教／政治／強迫喝酒，肢體接觸僅限輕觸，禁止嘲笑外貌，不想玩隨時可以Pass`
-          : `👑 國王誕生！！\n\n國王是【${name}】！\n\n國王的命令是絕對的！\n盡情對大家出題吧！`,
+    kingCard: (name, targets, showReminder) => {
+      const base = targets && targets.length
+        ? `👑 國王誕生！！\n\n國王是【${name}】！\n請對【${targets.join("、")}】下達你想到的懲罰！`
+        : `👑 國王誕生！！\n\n國王是【${name}】！\n\n國王的命令是絕對的！\n盡情對大家出題吧！`;
+      return showReminder ? `${base}\n\n⚠️禁止宗教／政治／強迫喝酒，肢體接觸僅限輕觸，禁止嘲笑外貌，不想玩隨時可以Pass` : base;
+    },
     kingSpeech: (name, targets) =>
       targets && targets.length
         ? `國王是，${name}！請對${targets.join("和")}下達懲罰吧！`
@@ -729,12 +729,12 @@ const UI = {
     statusPicked: (name) => `당첨은…【${name}】!`,
     statusOdai: "🔥 벌칙 공개！",
     statusKing: "👑 왕 탄생！！",
-    kingCard: (name, targets, alwaysWarn) =>
-      targets && targets.length
-        ? `👑 왕 탄생！！\n\n왕은【${name}】!\n【${targets.join("・")}】에게 원하는 벌칙을 명령하세요！\n\n⚠️종교・정치・음주 강요 금지／스킨십은 가벼운 터치까지／외모 비하 금지／싫으면 언제든 패스 가능`
-        : alwaysWarn
-          ? `👑 왕 탄생！！\n\n왕은【${name}】!\n\n왕의 명령은 절대적！\n모두에게 자유롭게 명령을 내려보세요！\n\n⚠️종교・정치・음주 강요 금지／스킨십은 가벼운 터치까지／외모 비하 금지／싫으면 언제든 패스 가능`
-          : `👑 왕 탄생！！\n\n왕은【${name}】!\n\n왕의 명령은 절대적！\n모두에게 자유롭게 명령을 내려보세요！`,
+    kingCard: (name, targets, showReminder) => {
+      const base = targets && targets.length
+        ? `👑 왕 탄생！！\n\n왕은【${name}】!\n【${targets.join("・")}】에게 원하는 벌칙을 명령하세요！`
+        : `👑 왕 탄생！！\n\n왕은【${name}】!\n\n왕의 명령은 절대적！\n모두에게 자유롭게 명령을 내려보세요！`;
+      return showReminder ? `${base}\n\n⚠️종교・정치・음주 강요 금지／스킨십은 가벼운 터치까지／외모 비하 금지／싫으면 언제든 패스 가능` : base;
+    },
     kingSpeech: (name, targets) =>
       targets && targets.length
         ? `왕은, ${name}! ${targets.join("과 ")}에게 벌칙을 명령해주세요!`
@@ -909,12 +909,12 @@ const UI = {
     statusPicked: (name) => `¡Es... 【${name}】!`,
     statusOdai: "🔥 ¡AQUÍ ESTÁ EL RETO!",
     statusKing: "👑 ¡TODOS ANTE EL REY!",
-    kingCard: (name, targets, alwaysWarn) =>
-      targets && targets.length
-        ? `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n¡Ordena un castigo para 【${targets.join(" y ")}】!\n\n⚠️ Mantén la seguridad: nada de religión/política, sin obligar a beber, solo contacto suave, nada de burlas por el físico, cualquiera puede pasar cuando quiera.`
-        : alwaysWarn
-          ? `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n\n¡La orden del Rey es absoluta!\n¡Inventa el reto que quieras!\n\n⚠️ Mantén la seguridad: nada de religión/política, sin obligar a beber, solo contacto suave, nada de burlas por el físico, cualquiera puede pasar cuando quiera.`
-          : `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n\n¡La orden del Rey es absoluta!\n¡Inventa el reto que quieras!`,
+    kingCard: (name, targets, showReminder) => {
+      const base = targets && targets.length
+        ? `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n¡Ordena un castigo para 【${targets.join(" y ")}】!`
+        : `👑 ¡TODOS ANTE EL REY!\n\n¡El Rey es 【${name}】!\n\n¡La orden del Rey es absoluta!\n¡Inventa el reto que quieras!`;
+      return showReminder ? `${base}\n\n⚠️ Mantén la seguridad: nada de religión/política, sin obligar a beber, solo contacto suave, nada de burlas por el físico, cualquiera puede pasar cuando quiera.` : base;
+    },
     kingSpeech: (name, targets) =>
       targets && targets.length
         ? `¡El Rey es ${name}! ¡Ordena un castigo para ${targets.join(" y ")}!`
@@ -1089,12 +1089,12 @@ const UI = {
     statusPicked: (name) => `É... 【${name}】!`,
     statusOdai: "🔥 AQUI ESTÁ O DESAFIO!",
     statusKing: "👑 TODOS DIANTE DO REI!",
-    kingCard: (name, targets, alwaysWarn) =>
-      targets && targets.length
-        ? `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\nDê um castigo para 【${targets.join(" e ")}】!\n\n⚠️ Mantenha seguro: nada de religião/política, sem forçar bebida, apenas toques leves, nada de piadas sobre o corpo, qualquer um pode passar a qualquer momento.`
-        : alwaysWarn
-          ? `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\n\nA ordem do Rei é absoluta!\nInvente o desafio que quiser!\n\n⚠️ Mantenha seguro: nada de religião/política, sem forçar bebida, apenas toques leves, nada de piadas sobre o corpo, qualquer um pode passar a qualquer momento.`
-          : `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\n\nA ordem do Rei é absoluta!\nInvente o desafio que quiser!`,
+    kingCard: (name, targets, showReminder) => {
+      const base = targets && targets.length
+        ? `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\nDê um castigo para 【${targets.join(" e ")}】!`
+        : `👑 TODOS DIANTE DO REI!\n\nO Rei é 【${name}】!\n\nA ordem do Rei é absoluta!\nInvente o desafio que quiser!`;
+      return showReminder ? `${base}\n\n⚠️ Mantenha seguro: nada de religião/política, sem forçar bebida, apenas toques leves, nada de piadas sobre o corpo, qualquer um pode passar a qualquer momento.` : base;
+    },
     kingSpeech: (name, targets) =>
       targets && targets.length
         ? `O Rei é ${name}! Dê um castigo para ${targets.join(" e ")}!`
@@ -1269,12 +1269,12 @@ const UI = {
     statusPicked: (name) => `Là... 【${name}】!`,
     statusOdai: "🔥 THỬ THÁCH ĐÂY RỒI!",
     statusKing: "👑 VUA ĐÃ XUẤT HIỆN!",
-    kingCard: (name, targets, alwaysWarn) =>
-      targets && targets.length
-        ? `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\nHãy ra lệnh phạt cho 【${targets.join(" và ")}】!\n\n⚠️ Giữ an toàn: không tôn giáo/chính trị, không ép uống rượu, chỉ chạm nhẹ nhàng, không chê ngoại hình, ai cũng có thể bỏ qua bất cứ lúc nào.`
-        : alwaysWarn
-          ? `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\n\nMệnh lệnh của Vua là tuyệt đối!\nHãy tự do ra lệnh cho mọi người!\n\n⚠️ Giữ an toàn: không tôn giáo/chính trị, không ép uống rượu, chỉ chạm nhẹ nhàng, không chê ngoại hình, ai cũng có thể bỏ qua bất cứ lúc nào.`
-          : `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\n\nMệnh lệnh của Vua là tuyệt đối!\nHãy tự do ra lệnh cho mọi người!`,
+    kingCard: (name, targets, showReminder) => {
+      const base = targets && targets.length
+        ? `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\nHãy ra lệnh phạt cho 【${targets.join(" và ")}】!`
+        : `👑 VUA ĐÃ XUẤT HIỆN!\n\nVua là 【${name}】!\n\nMệnh lệnh của Vua là tuyệt đối!\nHãy tự do ra lệnh cho mọi người!`;
+      return showReminder ? `${base}\n\n⚠️ Giữ an toàn: không tôn giáo/chính trị, không ép uống rượu, chỉ chạm nhẹ nhàng, không chê ngoại hình, ai cũng có thể bỏ qua bất cứ lúc nào.` : base;
+    },
     kingSpeech: (name, targets) =>
       targets && targets.length
         ? `Vua là ${name}! Hãy ra lệnh phạt cho ${targets.join(" và ")}!`
@@ -1449,12 +1449,12 @@ const UI = {
     statusPicked: (name) => `Es ist... 【${name}】!`,
     statusOdai: "🔥 HIER IST DIE AUFGABE!",
     statusKing: "👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!",
-    kingCard: (name, targets, alwaysWarn) =>
-      targets && targets.length
-        ? `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\nBefiehl eine Strafe für 【${targets.join(" und ")}】!\n\n⚠️ Sicher bleiben: keine Religion/Politik, kein Trinkzwang, nur sanfte Berührungen, keine Witze über das Aussehen, jeder kann jederzeit passen.`
-        : alwaysWarn
-          ? `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\n\nDer Befehl des Königs ist absolut!\nDenk dir jede beliebige Aufgabe aus!\n\n⚠️ Sicher bleiben: keine Religion/Politik, kein Trinkzwang, nur sanfte Berührungen, keine Witze über das Aussehen, jeder kann jederzeit passen.`
-          : `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\n\nDer Befehl des Königs ist absolut!\nDenk dir jede beliebige Aufgabe aus!`,
+    kingCard: (name, targets, showReminder) => {
+      const base = targets && targets.length
+        ? `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\nBefiehl eine Strafe für 【${targets.join(" und ")}】!`
+        : `👑 ALLE VERNEIGEN SICH VOR DEM KÖNIG!\n\nDer König ist 【${name}】!\n\nDer Befehl des Königs ist absolut!\nDenk dir jede beliebige Aufgabe aus!`;
+      return showReminder ? `${base}\n\n⚠️ Sicher bleiben: keine Religion/Politik, kein Trinkzwang, nur sanfte Berührungen, keine Witze über das Aussehen, jeder kann jederzeit passen.` : base;
+    },
     kingSpeech: (name, targets) =>
       targets && targets.length
         ? `Der König ist ${name}! Befiehl eine Strafe für ${targets.join(" und ")}!`
@@ -1629,12 +1629,12 @@ const UI = {
     statusPicked: (name) => `Ito na... si 【${name}】!`,
     statusOdai: "🔥 ETO NA ANG HAMON!",
     statusKing: "👑 MABUHAY ANG HARI!",
-    kingCard: (name, targets, alwaysWarn) =>
-      targets && targets.length
-        ? `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\nMag-utos ng parusa para kay 【${targets.join(" at ")}】!\n\n⚠️ Manatiling ligtas: bawal ang relihiyon/politika, walang sapilitang inuman, magaan na hipo lang, bawal ang panlalait sa hitsura, pwedeng mag-pass kahit kailan.`
-        : alwaysWarn
-          ? `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\n\nAbsolute ang utos ng Hari!\nGumawa ng kahit anong hamon!\n\n⚠️ Manatiling ligtas: bawal ang relihiyon/politika, walang sapilitang inuman, magaan na hipo lang, bawal ang panlalait sa hitsura, pwedeng mag-pass kahit kailan.`
-          : `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\n\nAbsolute ang utos ng Hari!\nGumawa ng kahit anong hamon!`,
+    kingCard: (name, targets, showReminder) => {
+      const base = targets && targets.length
+        ? `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\nMag-utos ng parusa para kay 【${targets.join(" at ")}】!`
+        : `👑 MABUHAY ANG HARI!\n\nAng Hari ay si 【${name}】!\n\nAbsolute ang utos ng Hari!\nGumawa ng kahit anong hamon!`;
+      return showReminder ? `${base}\n\n⚠️ Manatiling ligtas: bawal ang relihiyon/politika, walang sapilitang inuman, magaan na hipo lang, bawal ang panlalait sa hitsura, pwedeng mag-pass kahit kailan.` : base;
+    },
     kingSpeech: (name, targets) =>
       targets && targets.length
         ? `Ang Hari ay si ${name}! Mag-utos ng parusa para kay ${targets.join(" at ")}!`
@@ -2850,11 +2850,15 @@ function pickKingTargets(king) {
 }
 
 // 👑王様ゲームモード専用：対象の人数も組み合わせも完全ランダムに選ぶ（本人以外1人〜全員）
+// 戻り値: [] = 対象者がいない(ひとり飲み等、呼び出し側で通常お題にフォールバック)
+//         null = 結果的に「その場の全員」が選ばれた（名前を並べず「王様の命令は絶対」扱いにする）
+//         配列 = 実際に指名する対象者(本人以外の一部)
 function pickAutoAssignedTargets(king) {
   const others = participants().filter((p) => p.name !== king.name);
   if (others.length === 0) return [];
   const shuffled = [...others].sort(() => Math.random() - 0.5);
   const count = 1 + Math.floor(Math.random() * others.length);
+  if (count === others.length) return null; // 全員選ばれた＝「みんなへの自由命令」と同じ言い方にする
   return shuffled.slice(0, count);
 }
 
@@ -2964,6 +2968,8 @@ btnSpin.addEventListener("click", () => {
 // 【プレミアム解放後】王様60%（全員への自由命令）／残り40%はエッチなお題
 //   （仕様上の「ユーザー投稿ネタ20%」は投稿・共有機能自体が将来タスクのため今回は未実装。
 //   実装され次第、この40%の一部を投稿ネタに振り分ける）
+const KINGGAME_REMINDER_SHOWN_KEY = "batsu-kinggame-reminder-shown";
+
 function runKingGameRound() {
   const premium = isPremiumUnlocked();
   const roll = Math.random();
@@ -2978,14 +2984,20 @@ function runKingGameRound() {
     state.pendingCeremony = state.roundCount % CEREMONY_INTERVAL === 0;
     Achievements.bump("totalRounds");
 
-    // 👑王様ゲームモードは、対象者を指名しない「全員への自由命令」の回でも
-    // 安全ガイドを必ず表示する(alwaysWarn=true)。免責モーダルは最初の1回きりなので、
-    // 実際に王様になった人への注意喚起はこのカード表示で毎回担う。
+    // 安全ガイドは「このデバイスで王様が誕生した最初の1回」だけ表示する。
+    // それ以降は毎回表示すると読み飛ばされて逆効果になるため、一度読めば十分とみなす。
+    let reminderShown = false;
+    try { reminderShown = localStorage.getItem(KINGGAME_REMINDER_SHOWN_KEY) === "1"; } catch (e) {}
+    const showReminder = !reminderShown;
+
     const runKing = (targets) => {
       bumpStat(winner.name, "king");
       Achievements.bump("totalKings");
       gameStatus.textContent = t("statusKing");
-      setTimeout(() => showKing(winner, targets, true), 700);
+      if (showReminder) {
+        try { localStorage.setItem(KINGGAME_REMINDER_SHOWN_KEY, "1"); } catch (e) {}
+      }
+      setTimeout(() => showKing(winner, targets, showReminder), 700);
     };
     const runOdai = (packOverride) => {
       bumpStat(winner.name, "challenge");
@@ -2999,8 +3011,10 @@ function runKingGameRound() {
         runKing(null); // 王様の自由命令（全員向け）
       } else if (roll < 0.8) {
         const targets = pickAutoAssignedTargets(winner);
-        // 対象者がいない（例：ひとり飲み）ときは通常のお題にフォールバック
-        if (targets.length > 0) runKing(targets);
+        // 対象者がいない（例：ひとり飲み）ときは通常のお題にフォールバック。
+        // 結果的に全員が対象になった(null)ときは「みんなへの自由命令」スタイルで表示する。
+        if (targets === null) runKing(null);
+        else if (targets.length > 0) runKing(targets);
         else runOdai("standard");
       } else {
         runOdai("standard");
@@ -3085,23 +3099,23 @@ function finishOdaiReveal(odai) {
 // 👑 王様モード！
 // targets が配列（🔞大人向けパック／👑王様ゲームモード）: 王様が対象者を指名し、その場で
 //   自由に罰を命じる。罰の中身はアプリでは決めず人間に委ねる代わりに、画面に安全ガイド
-//   （宗教政治NG・強要飲酒NG・接触はソフトタッチまで・外見いじりNG・パス自由）を毎回表示する。
+//   （宗教政治NG・強要飲酒NG・接触はソフトタッチまで・外見いじりNG・パス自由）を表示する。
 // targets が null（標準パック等）: 従来通り、対象を指定せず「みんなへの自由命令」のまま。
-// alwaysWarn=true（👑王様ゲームモード）: targetsがnullの「全員への自由命令」の回でも、
-//   安全ガイドをカードに必ず表示する（初回だけの免責モーダルとは別に、実際に王様になった
-//   人への注意喚起を毎回担うため）。
-function showKing(king, targets, alwaysWarn) {
+// showReminder（👑王様ゲームモード）: 安全ガイドをカードに表示するかどうか。初回の免責
+//   モーダルとは別に、実際に王様になった人が読む機会を最低1回作るためのものなので、
+//   このデバイスで一度でも表示済みなら以降は表示しない（runKingGameRound()側で判定）。
+function showKing(king, targets, showReminder) {
   state.isKing = true;
   state.currentJudgeName = null;
   state.currentPair = null;
   state.currentKing = king;
   state.currentKingTargets = targets;
-  state.currentKingAlwaysWarn = !!alwaysWarn;
+  state.currentKingShowReminder = !!showReminder;
   const targetNames = targets ? targets.map((p) => p.name) : null;
   state.currentSpeech = t("kingSpeech")(king.name, targetNames);
 
   gameStatus.textContent = t("statusKing");
-  odaiCard.textContent = t("kingCard")(king.name, targetNames, alwaysWarn);
+  odaiCard.textContent = t("kingCard")(king.name, targetNames, showReminder);
   odaiCard.classList.remove("judge-card");
   odaiCard.classList.add("king-card");
   if (targetNames) {
@@ -3115,9 +3129,9 @@ function showKing(king, targets, alwaysWarn) {
   celebrate(["#ffe14b", "#ffb52d", "#ffffff"], [100, 50, 100, 50, 200]);
   SFX.kingFanfare();
 
-  lastHighlightDataUrl = Highlights.capture(t("kingCard")(king.name, targetNames, alwaysWarn), "#ffe14b", document.getElementById("t-logo").textContent);
+  lastHighlightDataUrl = Highlights.capture(t("kingCard")(king.name, targetNames, showReminder), "#ffe14b", document.getElementById("t-logo").textContent);
   if (state.onlineRole === "host") {
-    Online.broadcast({ type: "king", displayText: t("kingCard")(king.name, targetNames, alwaysWarn), speechText: state.currentSpeech, lang: state.lang });
+    Online.broadcast({ type: "king", displayText: t("kingCard")(king.name, targetNames, showReminder), speechText: state.currentSpeech, lang: state.lang });
   }
 
   speakOdai(state.currentSpeech, state.lang, resolveVoice());
@@ -3139,7 +3153,7 @@ btnPass.addEventListener("click", () => {
     const newTargets = state.pack === "kinggame"
       ? pickAutoAssignedTargets(state.currentKing)
       : pickKingTargets(state.currentKing);
-    showKing(state.currentKing, newTargets, state.currentKingAlwaysWarn);
+    showKing(state.currentKing, newTargets, state.currentKingShowReminder);
     Achievements.bump("totalPasses");
     return;
   }
