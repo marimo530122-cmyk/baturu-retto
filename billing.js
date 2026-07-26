@@ -1,5 +1,5 @@
 /* =========================================================
-   💎 プレミアム課金（Stripe決済リンク・サーバー不要版）
+   💎 課金（Stripe決済リンク・サーバー不要版）
    ---------------------------------------------------------
    ・アップグレードボタン → Stripeの決済リンクを新しいタブで開く
    ・決済完了後、Stripe側の「決済完了後のリダイレクト先」を
@@ -22,32 +22,37 @@
    ための現実的な強化です。本当の意味で突破不可能にするには、
    サーバー側でStripeのWebhookを受けて検証する仕組み（や、将来の
    アプリストア課金）が必要になります。
+
+   ---------------------------------------------------------
+   このファイルは createBillingModule() を使って、
+   通常のプレミアム（Billing）と、法人・パーティープラン
+   （PartyBilling）の2つを、同じ仕組みで作っています。
    ========================================================= */
 
-const Billing = (() => {
-  const STORAGE_KEY = "batsu-premium";
-  const RETURN_PARAM = "paid";
-  const SESSION_PARAM = "session_id";
+function createBillingModule(config) {
+  const { storageKey, returnParam, sessionParam, devParam, getPaymentLink, allowReferralBonus } = config;
+
   // Stripeのチェックアウトセッションidの形（cs_test_... / cs_live_...）
   const SESSION_ID_PATTERN = /^cs_(test|live)_[A-Za-z0-9]{16,}$/;
 
   const params = new URLSearchParams(location.search);
 
   // 開発確認用：本番のStripe決済リンクを設定するまでは
-  // ?premium=1 をURLに付けても有料機能を試せる
-  const devOverride = params.get("premium") === "1";
+  // このURLパラメータを付けても有料機能を試せる
+  const devOverride = params.get(devParam) === "1";
 
   function isConfigured() {
+    const link = getPaymentLink();
     return (
-      typeof STRIPE_PAYMENT_LINK === "string" &&
-      STRIPE_PAYMENT_LINK.indexOf("https://buy.stripe.com/") === 0 &&
-      STRIPE_PAYMENT_LINK.indexOf("YOUR_PAYMENT_LINK") === -1
+      typeof link === "string" &&
+      link.indexOf("https://buy.stripe.com/") === 0 &&
+      link.indexOf("YOUR_PAYMENT_LINK") === -1
     );
   }
 
   function readFlag() {
     try {
-      return localStorage.getItem(STORAGE_KEY) === "1";
+      return localStorage.getItem(storageKey) === "1";
     } catch (e) {
       return false;
     }
@@ -55,15 +60,15 @@ const Billing = (() => {
 
   function writeFlag(value) {
     try {
-      localStorage.setItem(STORAGE_KEY, value ? "1" : "0");
+      localStorage.setItem(storageKey, value ? "1" : "0");
     } catch (e) {}
   }
 
   // "?paid=1" が付いているだけでなく、Stripeのsession_idらしき
   // 文字列が一緒に付いているときだけ、本物の決済復帰とみなす
   function isValidCheckoutReturn() {
-    if (params.get(RETURN_PARAM) !== "1") return false;
-    const sessionId = params.get(SESSION_PARAM) || "";
+    if (params.get(returnParam) !== "1") return false;
+    const sessionId = params.get(sessionParam) || "";
     return SESSION_ID_PATTERN.test(sessionId);
   }
 
@@ -76,14 +81,19 @@ const Billing = (() => {
     writeFlag(true);
     justUnlocked = !alreadyUnlocked;
     const url = new URL(location.href);
-    url.searchParams.delete(RETURN_PARAM);
-    url.searchParams.delete(SESSION_PARAM);
+    url.searchParams.delete(returnParam);
+    url.searchParams.delete(sessionParam);
     history.replaceState({}, "", url.toString());
   }
   handleReturnFromCheckout();
 
   function isPremium() {
-    return devOverride || readFlag();
+    if (devOverride || readFlag()) return true;
+    // 友達紹介の特典（24時間お試し）は、通常プレミアムにのみ適用する
+    if (allowReferralBonus && typeof Referral !== "undefined" && Referral.hasActiveBonus()) {
+      return true;
+    }
+    return false;
   }
 
   // このページ読み込みで「たった今」解放された場合だけ true（お祝い演出を1回だけ出すため）
@@ -94,9 +104,34 @@ const Billing = (() => {
   // アップグレード導線。設定済みならStripeの決済リンクを開き、trueを返す
   function openCheckout() {
     if (!isConfigured()) return false;
-    window.open(STRIPE_PAYMENT_LINK, "_blank", "noopener");
+    let link = getPaymentLink();
+    // 紹介コード・アフィリエイトコードが分かれば、client_reference_idとして付与する
+    if (typeof Referral !== "undefined" && Referral.enrichCheckoutUrl) {
+      link = Referral.enrichCheckoutUrl(link);
+    }
+    window.open(link, "_blank", "noopener");
     return true;
   }
 
   return { isPremium, isConfigured, openCheckout, wasJustUnlocked };
-})();
+}
+
+// 通常のプレミアム（大人向けパック・1対1モード・ねるとんZoom等）
+const Billing = createBillingModule({
+  storageKey: "batsu-premium",
+  returnParam: "paid",
+  sessionParam: "session_id",
+  devParam: "premium",
+  getPaymentLink: () => STRIPE_PAYMENT_LINK,
+  allowReferralBonus: true,
+});
+
+// 法人・パーティープラン（結婚式二次会・会社の飲み会向け特別パック）
+const PartyBilling = createBillingModule({
+  storageKey: "batsu-party-premium",
+  returnParam: "party_paid",
+  sessionParam: "party_session_id",
+  devParam: "partypremium",
+  getPaymentLink: () => STRIPE_PARTY_PAYMENT_LINK,
+  allowReferralBonus: false,
+});
