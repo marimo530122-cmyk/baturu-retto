@@ -1766,6 +1766,17 @@ function applyLanguage() {
   document.getElementById("pack-noalcohol").textContent = u.packs.noalcohol;
   document.getElementById("pack-solo").innerHTML = `${u.packs.solo} <span class="lock">🔒</span>`;
   document.getElementById("pack-kinggame").textContent = u.packs.kinggame;
+  // 👑王様ゲームモードは「その場の人が罰を即興で考える」仕組みのため、外国人ゲスト等
+  // 文化的な地雷（宗教・パーソナルスペース感覚など）が分からない相手には向かない。
+  // スマホの言語設定が日本語以外（＝海外ゲストの可能性が高い）のときは、同じQRコード・
+  // 同じリンクのままボタン自体を隠し、安全な通常パックだけを見せる。
+  const kingGameAllowed = state.lang === "ja";
+  document.getElementById("pack-kinggame").classList.toggle("hidden", !kingGameAllowed);
+  if (!kingGameAllowed && state.pack === "kinggame") {
+    state.pack = "standard";
+    document.getElementById("pack-kinggame").classList.remove("active-pack");
+    try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
+  }
   document.getElementById("t-notice").innerHTML = u.noticeHTML;
   document.getElementById("t-viral-footer").textContent = u.viralFooter;
 
