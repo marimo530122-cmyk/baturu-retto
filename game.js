@@ -211,7 +211,7 @@ const UI = {
     copyShareClose: "あとで",
     shareAppText: "🎰 バツルーレット - 飲み会を爆上げする罰ゲームルーレット！",
     shareOdaiText: (text) => text, // 個人間のチャット共有はハッシュタグなし（Xシェアは別途 shareToX() で付与）
-    shareOnX: "𝕏でシェア",
+    shareOnX: "Xでシェア",
     next: "🎰 次のルーレットへ！",
     ceremonyTitle: (n) => `🏆 中間結果発表！（${n}回終了）`,
     ceremonyKing: (name, count) => `👑 王様運No.1：【${name}】（${count}回）`,
@@ -392,7 +392,7 @@ const UI = {
     copyShareClose: "Later",
     shareAppText: "🎰 Batsu Roulette - the ultimate party dare game!",
     shareOdaiText: (text) => text, // no hashtags for 1:1 chat shares (X sharing adds hashtags separately via shareToX())
-    shareOnX: "Share on 𝕏",
+    shareOnX: "Share on X",
     next: "🎰 NEXT SPIN!",
     ceremonyTitle: (n) => `🏆 RESULTS SO FAR! (${n} rounds)`,
     ceremonyKing: (name, count) => `👑 King of the Night: 【${name}】 (${count}x)`,
@@ -573,7 +573,7 @@ const UI = {
     copyShareClose: "稍後",
     shareAppText: "🎰 罰遊戲輪盤 - 讓聚會爆棚的懲罰遊戲轉盤！",
     shareOdaiText: (text) => text, // 一對一聊天分享不附加標籤（X分享另由shareToX()附加）
-    shareOnX: "在𝕏分享",
+    shareOnX: "在X分享",
     next: "🎰 下一輪！",
     ceremonyTitle: (n) => `🏆 目前戰績發表！（已進行${n}輪）`,
     ceremonyKing: (name, count) => `👑 國王運第一名：【${name}】（${count}次）`,
@@ -754,7 +754,7 @@ const UI = {
     copyShareClose: "나중에",
     shareAppText: "🎰 벌칙 룰렛 - 회식을 뜨겁게 달구는 벌칙 게임!",
     shareOdaiText: (text) => text, // 1:1 채팅 공유는 해시태그 없음（X 공유는 shareToX()에서 별도로 추가）
-    shareOnX: "𝕏에 공유하기",
+    shareOnX: "X에 공유하기",
     next: "🎰 다음 룰렛으로！",
     ceremonyTitle: (n) => `🏆 중간 결과 발표！（${n}회 종료）`,
     ceremonyKing: (name, count) => `👑 왕 운 1위：【${name}】（${count}회）`,
@@ -935,7 +935,7 @@ const UI = {
     copyShareClose: "Después",
     shareAppText: "🎰 Batsu Roulette - ¡el juego de retos definitivo para fiestas!",
     shareOdaiText: (text) => text, // sin hashtags para chats 1:1 (los hashtags de X se añaden en shareToX())
-    shareOnX: "Compartir en 𝕏",
+    shareOnX: "Compartir en X",
     next: "🎰 ¡SIGUIENTE!",
     ceremonyTitle: (n) => `🏆 ¡RESULTADOS HASTA AHORA! (${n} rondas)`,
     ceremonyKing: (name, count) => `👑 Rey de la noche: 【${name}】 (${count}x)`,
@@ -1116,7 +1116,7 @@ const UI = {
     copyShareClose: "Depois",
     shareAppText: "🎰 Batsu Roulette - o jogo de desafios definitivo para festas!",
     shareOdaiText: (text) => text, // sem hashtags em chats 1:1 (hashtags do X são adicionadas em shareToX())
-    shareOnX: "Compartilhar no 𝕏",
+    shareOnX: "Compartilhar no X",
     next: "🎰 PRÓXIMA RODADA!",
     ceremonyTitle: (n) => `🏆 RESULTADOS ATÉ AGORA! (${n} rodadas)`,
     ceremonyKing: (name, count) => `👑 Rei da noite: 【${name}】 (${count}x)`,
@@ -1297,7 +1297,7 @@ const UI = {
     copyShareClose: "Để sau",
     shareAppText: "🎰 Vòng Quay Phạt - trò chơi thử thách tiệc tùng đỉnh cao!",
     shareOdaiText: (text) => text, // không thêm hashtag khi chia sẻ 1:1 (hashtag của X được thêm riêng trong shareToX())
-    shareOnX: "Chia sẻ trên 𝕏",
+    shareOnX: "Chia sẻ trên X",
     next: "🎰 LƯỢT QUAY TIẾP THEO!",
     ceremonyTitle: (n) => `🏆 KẾT QUẢ ĐẾN LÚC NÀY! (${n} lượt)`,
     ceremonyKing: (name, count) => `👑 Vua của đêm nay: 【${name}】 (${count} lần)`,
@@ -1478,7 +1478,7 @@ const UI = {
     copyShareClose: "Später",
     shareAppText: "🎰 Batsu Roulette – das ultimative Party-Aufgabenspiel!",
     shareOdaiText: (text) => text,
-    shareOnX: "Auf 𝕏 teilen",
+    shareOnX: "Auf X teilen",
     next: "🎰 NÄCHSTE DREHUNG!",
     ceremonyTitle: (n) => `🏆 ZWISCHENSTAND! (${n} Runden)`,
     ceremonyKing: (name, count) => `👑 König des Abends: 【${name}】 (${count}x)`,
@@ -1659,7 +1659,7 @@ const UI = {
     copyShareClose: "Mamaya na lang",
     shareAppText: "🎰 Batsu Roulette - ang pinaka-explosive na party dare game!",
     shareOdaiText: (text) => text,
-    shareOnX: "I-share sa 𝕏",
+    shareOnX: "I-share sa X",
     next: "🎰 SUSUNOD NA IKOT!",
     ceremonyTitle: (n) => `🏆 RESULTA SA NGAYON! (${n} rounds)`,
     ceremonyKing: (name, count) => `👑 Hari ng Gabi: 【${name}】 (${count}x)`,
