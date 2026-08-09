@@ -225,6 +225,10 @@ const UI = {
     adultOff: "🎲 通常パックに戻しました",
     nerutoonOn: "💘 ねるとんZoomモードに切り替えました",
     nerutoonOff: "🎲 通常パックに戻しました",
+    familyOn: "👨‍👩‍👧 ファミリーパックに切り替えました",
+    familyOff: "🎲 通常パックに戻しました",
+    coupleOn: "💑 1対1モードに切り替えました",
+    coupleOff: "🎲 通常パックに戻しました",
     noalcoholOn: "🥤 ノンアル版に切り替えました",
     noalcoholOff: "🎲 通常パックに戻しました",
     soloOn: "🍶 ひとり飲みモードに切り替えました",
@@ -406,6 +410,12 @@ const UI = {
     adultOff: "🎲 Switched back to Standard Pack",
     nerutoonOn: "💘 Switched to Matchmaking Zoom Mode",
     nerutoonOff: "🎲 Switched back to Standard Pack",
+    familyOn: "👨‍👩‍👧 Switched to Family Pack",
+    familyOff: "🎲 Switched back to Standard Pack",
+    coupleOn: "💑 Switched to 1-on-1 Mode",
+    coupleOff: "🎲 Switched back to Standard Pack",
+    partyOn: "🎉 Corporate/Party Plan On",
+    partyOff: "🎉 Corporate/Party Plan Off",
     noalcoholOn: "🥤 Switched to Non-Alcohol Pack",
     noalcoholOff: "🎲 Switched back to Standard Pack",
     soloOn: "🍶 Switched to Solo Drinking Mode",
@@ -587,6 +597,12 @@ const UI = {
     adultOff: "🎲 已切回標準套組",
     nerutoonOn: "💘 已切換為聯誼Zoom模式",
     nerutoonOff: "🎲 已切回標準套組",
+    familyOn: "👨‍👩‍👧 已切換為家庭套組",
+    familyOff: "🎲 已切回標準套組",
+    coupleOn: "💑 已切換為一對一模式",
+    coupleOff: "🎲 已切回標準套組",
+    partyOn: "🎉 法人・派對方案 開啟",
+    partyOff: "🎉 法人・派對方案 關閉",
     noalcoholOn: "🥤 已切換為無酒精版",
     noalcoholOff: "🎲 已切回標準套組",
     soloOn: "🍶 已切換為獨自小酌模式",
@@ -768,6 +784,12 @@ const UI = {
     adultOff: "🎲 기본 팩으로 되돌렸습니다",
     nerutoonOn: "💘 미팅 Zoom 모드로 전환했습니다",
     nerutoonOff: "🎲 기본 팩으로 되돌렸습니다",
+    familyOn: "👨‍👩‍👧 패밀리 팩으로 전환했습니다",
+    familyOff: "🎲 기본 팩으로 되돌렸습니다",
+    coupleOn: "💑 1대1 모드로 전환했습니다",
+    coupleOff: "🎲 기본 팩으로 되돌렸습니다",
+    partyOn: "🎉 법인・파티 플랜 켜짐",
+    partyOff: "🎉 법인・파티 플랜 꺼짐",
     noalcoholOn: "🥤 논알코올 팩으로 전환했습니다",
     noalcoholOff: "🎲 기본 팩으로 되돌렸습니다",
     soloOn: "🍶 혼술 모드로 전환했습니다",
@@ -949,6 +971,12 @@ const UI = {
     adultOff: "🎲 Vuelto al paquete estándar",
     nerutoonOn: "💘 Cambiado al Modo Zoom de Citas",
     nerutoonOff: "🎲 Vuelto al paquete estándar",
+    familyOn: "👨‍👩‍👧 Cambiado al Paquete Familiar",
+    familyOff: "🎲 Vuelto al paquete estándar",
+    coupleOn: "💑 Cambiado al Modo Uno a Uno",
+    coupleOff: "🎲 Vuelto al paquete estándar",
+    partyOn: "🎉 Plan Corporativo/Fiesta Activado",
+    partyOff: "🎉 Plan Corporativo/Fiesta Desactivado",
     noalcoholOn: "🥤 Cambiado al Paquete Sin Alcohol",
     noalcoholOff: "🎲 Vuelto al paquete estándar",
     soloOn: "🍶 Cambiado al Modo Beber Solo",
@@ -1130,6 +1158,12 @@ const UI = {
     adultOff: "🎲 Voltou ao pacote padrão",
     nerutoonOn: "💘 Mudou para o Modo Zoom de Paquera",
     nerutoonOff: "🎲 Voltou ao pacote padrão",
+    familyOn: "👨‍👩‍👧 Mudou para o Pacote Família",
+    familyOff: "🎲 Voltou ao pacote padrão",
+    coupleOn: "💑 Mudou para o Modo a Dois",
+    coupleOff: "🎲 Voltou ao pacote padrão",
+    partyOn: "🎉 Plano Corporativo/Festa Ativado",
+    partyOff: "🎉 Plano Corporativo/Festa Desativado",
     noalcoholOn: "🥤 Mudou para o Pacote Sem Álcool",
     noalcoholOff: "🎲 Voltou ao pacote padrão",
     soloOn: "🍶 Mudou para o Modo Bebendo Sozinho",
@@ -1311,6 +1345,12 @@ const UI = {
     adultOff: "🎲 Đã quay lại gói tiêu chuẩn",
     nerutoonOn: "💘 Đã chuyển sang Chế độ Zoom Ghép đôi",
     nerutoonOff: "🎲 Đã quay lại gói tiêu chuẩn",
+    familyOn: "👨‍👩‍👧 Đã chuyển sang Gói Gia Đình",
+    familyOff: "🎲 Đã quay lại gói tiêu chuẩn",
+    coupleOn: "💑 Đã chuyển sang Chế độ 1-đối-1",
+    coupleOff: "🎲 Đã quay lại gói tiêu chuẩn",
+    partyOn: "🎉 Gói Công Ty/Tiệc Bật",
+    partyOff: "🎉 Gói Công Ty/Tiệc Tắt",
     noalcoholOn: "🥤 Đã chuyển sang Gói Không Cồn",
     noalcoholOff: "🎲 Đã quay lại gói tiêu chuẩn",
     soloOn: "🍶 Đã chuyển sang Chế độ Uống Một Mình",
@@ -1492,6 +1532,12 @@ const UI = {
     adultOff: "🎲 Zurück zum Standard-Paket",
     nerutoonOn: "💘 Zum Speed-Dating Zoom-Modus gewechselt",
     nerutoonOff: "🎲 Zurück zum Standard-Paket",
+    familyOn: "👨‍👩‍👧 Zum Familien-Paket gewechselt",
+    familyOff: "🎲 Zurück zum Standard-Paket",
+    coupleOn: "💑 Zum 1-zu-1-Modus gewechselt",
+    coupleOff: "🎲 Zurück zum Standard-Paket",
+    partyOn: "🎉 Firmen-/Party-Plan Ein",
+    partyOff: "🎉 Firmen-/Party-Plan Aus",
     noalcoholOn: "🥤 Zum alkoholfreien Paket gewechselt",
     noalcoholOff: "🎲 Zurück zum Standard-Paket",
     soloOn: "🍶 Zum Modus „Alleine trinken“ gewechselt",
@@ -1673,6 +1719,12 @@ const UI = {
     adultOff: "🎲 Bumalik sa Standard Pack",
     nerutoonOn: "💘 Napalitan sa Matchmaking Zoom Mode",
     nerutoonOff: "🎲 Bumalik sa Standard Pack",
+    familyOn: "👨‍👩‍👧 Napalitan sa Family Pack",
+    familyOff: "🎲 Bumalik sa Standard Pack",
+    coupleOn: "💑 Napalitan sa 1-on-1 Mode",
+    coupleOff: "🎲 Bumalik sa Standard Pack",
+    partyOn: "🎉 Naka-on ang Corporate/Party Plan",
+    partyOff: "🎉 Naka-off ang Corporate/Party Plan",
     noalcoholOn: "🥤 Napalitan sa Non-Alcohol Pack",
     noalcoholOff: "🎲 Bumalik sa Standard Pack",
     soloOn: "🍶 Napalitan sa Solo Inuman Mode",
@@ -1938,8 +1990,10 @@ function showPremiumModal(text) {
 }
 
 document.querySelectorAll(".btn-locked").forEach((btn) => {
-  // romance と online と adult は個別に実装済みの機能なので、専用ハンドラに任せる
-  if (["romance", "online", "adult"].includes(btn.dataset.pack)) return;
+  // 個別に専用ハンドラを持つパックは、ここでは何もしない（二重発火防止。以前は
+  // family/couple/party/nerutoon/soloがこの除外リストから漏れており、専用ハンドラが
+  // あるにも関わらずクリックのたびに常に「ご案内モーダル」が出てしまうバグがあった）
+  if (["romance", "online", "adult", "family", "couple", "party", "nerutoon", "solo"].includes(btn.dataset.pack)) return;
   btn.addEventListener("click", () => {
     showPremiumModal(t("packTeaser")(UI[state.lang].packs[btn.dataset.pack]));
   });
@@ -2058,23 +2112,54 @@ btnBgmGenre.addEventListener("click", () => {
   showToast(t("bgmGenres")[next]);
 });
 
+/* ---------------- パック切り替え共通ヘルパー ----------------
+   以前は「切り替え先以外の全ボタンからactive-packを外す」処理をハンドラごとに
+   手作業でリストしており、新しいパックを追加するたびに他の全ハンドラを
+   更新し忘れるリスクがあった（実際にfamily/couple/partyがこれで見落とされ、
+   ボタンを押しても何も起きない不具合になっていた）。今後はここに1回登録すれば
+   全ハンドラに反映されるようにする。
+   ---------------------------------------------------------- */
+const PACK_TOGGLE_BUTTONS = [];
+
+function clearOtherPackButtons(exceptBtn) {
+  PACK_TOGGLE_BUTTONS.forEach((b) => {
+    if (b !== exceptBtn) b.classList.remove("active-pack");
+  });
+}
+
+// シンプルな「オン/オフをトグルするだけ」のパック用の共通セットアップ
+// （王様ゲーム・大人向けのように専用フローを持つものは対象外）
+function setupSimplePackToggle(btn, packKey, onKey, offKey, requiresPremium) {
+  PACK_TOGGLE_BUTTONS.push(btn);
+  btn.addEventListener("click", () => {
+    if (requiresPremium && blockIfNotPremium(packKey)) return;
+    const turningOn = state.pack !== packKey;
+    clearOtherPackButtons(btn);
+    state.pack = turningOn ? packKey : "standard";
+    btn.classList.toggle("active-pack", turningOn);
+    try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
+    showToast(t(turningOn ? onKey : offKey));
+  });
+}
+
 /* ---------------- 💌 恋愛パック切り替え（有料機能） ---------------- */
 const btnRomance = document.getElementById("pack-romance");
 const btnAdult = document.getElementById("pack-adult");
+PACK_TOGGLE_BUTTONS.push(btnRomance);
 
 btnRomance.addEventListener("click", () => {
   if (blockIfNotPremium("romance")) return;
-  state.pack = state.pack === "romance" ? "standard" : "romance";
-  btnRomance.classList.toggle("active-pack", state.pack === "romance");
-  btnAdult.classList.remove("active-pack");
-  btnNerutoon.classList.remove("active-pack");
-  btnKingGame.classList.remove("active-pack");
+  const turningOn = state.pack !== "romance";
+  clearOtherPackButtons(btnRomance);
+  state.pack = turningOn ? "romance" : "standard";
+  btnRomance.classList.toggle("active-pack", turningOn);
   try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
-  showToast(state.pack === "romance" ? t("romanceOn") : t("romanceOff"));
+  showToast(turningOn ? t("romanceOn") : t("romanceOff"));
 });
 
 /* ---------------- 🔞 大人向けパック切り替え（有料機能・年齢確認つき） ---------------- */
 const modalAgeGate = document.getElementById("modal-agegate");
+PACK_TOGGLE_BUTTONS.push(btnAdult);
 
 btnAdult.addEventListener("click", () => {
   if (blockIfNotPremium("adult")) return;
@@ -2094,9 +2179,7 @@ btnAdult.addEventListener("click", () => {
 document.getElementById("agegate-yes").addEventListener("click", () => {
   modalAgeGate.classList.add("hidden");
   state.pack = "adult";
-  btnRomance.classList.remove("active-pack");
-  btnNerutoon.classList.remove("active-pack");
-  btnKingGame.classList.remove("active-pack");
+  clearOtherPackButtons(btnAdult);
   try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
   btnAdult.classList.add("active-pack");
   showToast(t("adultOn"));
@@ -2107,53 +2190,33 @@ document.getElementById("agegate-no").addEventListener("click", () => {
 
 /* ---------------- 💘 ねるとんZoomモード切り替え（有料機能） ---------------- */
 const btnNerutoon = document.getElementById("pack-nerutoon");
+setupSimplePackToggle(btnNerutoon, "nerutoon", "nerutoonOn", "nerutoonOff", true);
 
-btnNerutoon.addEventListener("click", () => {
-  if (blockIfNotPremium("nerutoon")) return;
-  state.pack = state.pack === "nerutoon" ? "standard" : "nerutoon";
-  btnNerutoon.classList.toggle("active-pack", state.pack === "nerutoon");
-  btnRomance.classList.remove("active-pack");
-  btnAdult.classList.remove("active-pack");
-  btnKingGame.classList.remove("active-pack");
-  try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
-  showToast(state.pack === "nerutoon" ? t("nerutoonOn") : t("nerutoonOff"));
-});
+/* ---------------- 👨‍👩‍👧 ファミリー向けパック切り替え（有料機能） ---------------- */
+const btnFamily = document.getElementById("pack-family");
+setupSimplePackToggle(btnFamily, "family", "familyOn", "familyOff", true);
+
+/* ---------------- 💑 1対1モード切り替え（有料機能） ---------------- */
+const btnCouple = document.getElementById("pack-couple");
+setupSimplePackToggle(btnCouple, "couple", "coupleOn", "coupleOff", true);
+
+/* ---------------- 🎉 法人・パーティープラン切り替え（有料機能） ---------------- */
+const btnParty = document.getElementById("pack-party");
+setupSimplePackToggle(btnParty, "party", "partyOn", "partyOff", true);
 
 /* ---------------- 🥤 ノンアルコール版パック（無料・プレミアム判定なし） ---------------- */
 const btnNoAlcohol = document.getElementById("pack-noalcohol");
+setupSimplePackToggle(btnNoAlcohol, "noalcohol", "noalcoholOn", "noalcoholOff", false);
 
-btnNoAlcohol.addEventListener("click", () => {
-  state.pack = state.pack === "noalcohol" ? "standard" : "noalcohol";
-  btnNoAlcohol.classList.toggle("active-pack", state.pack === "noalcohol");
-  btnRomance.classList.remove("active-pack");
-  btnAdult.classList.remove("active-pack");
-  btnNerutoon.classList.remove("active-pack");
-  document.getElementById("pack-solo").classList.remove("active-pack");
-  btnKingGame.classList.remove("active-pack");
-  try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
-  showToast(state.pack === "noalcohol" ? t("noalcoholOn") : t("noalcoholOff"));
-});
-
-/* ---------------- 🍶 ひとり飲みモード（無料・プレミアム判定なし） ---------------- */
+/* ---------------- 🍶 ひとり飲みモード（有料機能） ---------------- */
 const btnSolo = document.getElementById("pack-solo");
-
-btnSolo.addEventListener("click", () => {
-  if (blockIfNotPremium("solo")) return;
-  state.pack = state.pack === "solo" ? "standard" : "solo";
-  btnSolo.classList.toggle("active-pack", state.pack === "solo");
-  btnRomance.classList.remove("active-pack");
-  btnAdult.classList.remove("active-pack");
-  btnNerutoon.classList.remove("active-pack");
-  btnNoAlcohol.classList.remove("active-pack");
-  btnKingGame.classList.remove("active-pack");
-  try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
-  showToast(state.pack === "solo" ? t("soloOn") : t("soloOff"));
-});
+setupSimplePackToggle(btnSolo, "solo", "soloOn", "soloOff", true);
 
 /* ---------------- 👑 王様ゲームモード（無料・QR配布などから即遊べる王様ゲーム特化モード） ---------------- */
 // プレミアム未解放: 王様50% / 王様×自動ランダム指名30% / 通常ネタ20%
 // プレミアム解放後: 王様60% / 残り40%はエッチなお題（ラウンド進行はrunKingGameRound()）
 const btnKingGame = document.getElementById("pack-kinggame");
+PACK_TOGGLE_BUTTONS.push(btnKingGame);
 const modalKingGameDisclaimer = document.getElementById("modal-kinggame-disclaimer");
 const KINGGAME_DISCLAIMER_KEY = "batsu-kinggame-disclaimer-seen";
 // 王様ゲームモードは「ページを開き直すたびに選び直す」のを忘れがちで、
@@ -2163,11 +2226,7 @@ const PACK_STORAGE_KEY = "batsu-pack";
 
 function activateKingGameMode() {
   state.pack = "kinggame";
-  btnRomance.classList.remove("active-pack");
-  btnAdult.classList.remove("active-pack");
-  btnNerutoon.classList.remove("active-pack");
-  btnNoAlcohol.classList.remove("active-pack");
-  btnSolo.classList.remove("active-pack");
+  clearOtherPackButtons(btnKingGame);
   btnKingGame.classList.add("active-pack");
   try { localStorage.setItem(PACK_STORAGE_KEY, "kinggame"); } catch (e) {}
   showToast(t("kinggameOn"));
@@ -2214,9 +2273,9 @@ const FREE_SPICE_LEVEL = 2;
 function applySpiceLevel(level) {
   spiceValueEl.textContent = `Lv.${level}`;
   state.pack = SPICE_TO_PACK[level] || "standard";
+  clearOtherPackButtons(null);
   btnRomance.classList.toggle("active-pack", state.pack === "romance");
   btnAdult.classList.toggle("active-pack", state.pack === "adult");
-  btnKingGame.classList.remove("active-pack");
   try { localStorage.removeItem(PACK_STORAGE_KEY); } catch (e) {}
 }
 
