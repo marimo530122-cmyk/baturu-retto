@@ -11,8 +11,11 @@
    ========================================================= */
 
 const FIREBASE_CONFIG = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT",
+  apiKey: "AIzaSyChLirWDUkZjmdQs3Ir57r3eISJwDEN-BM",
+  authDomain: "baturu-retto.firebaseapp.com",
+  databaseURL: "https://baturu-retto-default-rtdb.firebaseio.com",
+  projectId: "baturu-retto",
+  storageBucket: "baturu-retto.firebasestorage.app",
+  messagingSenderId: "139707469571",
+  appId: "1:139707469571:web:8bf53e99786e5e138a2336",
 };
