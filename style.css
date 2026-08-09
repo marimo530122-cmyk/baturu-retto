@@ -507,6 +507,17 @@ body.premium-active .logo {
   margin-top: 12px;
   justify-content: center;
 }
+.family-role-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  justify-content: center;
+}
+.family-role-btn {
+  padding: 6px 10px;
+  font-size: 13px;
+}
 .chip {
   display: inline-flex;
   align-items: center;

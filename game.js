@@ -1975,6 +1975,7 @@ function showScreen(name) {
 document.getElementById("btn-start").addEventListener("click", () => {
   unlockSpeech(); // ゲームの一番最初のタップで読み上げ機能を起こしておく
   showScreen("setup");
+  updateFamilyRoleRowVisibility();
 });
 
 // 有料版（ロック中）ボタン → ご案内モーダル
@@ -2613,6 +2614,7 @@ function setMode(mode) {
   document.getElementById("setup-mf").classList.toggle("hidden", mode !== "mf");
   document.getElementById("setup-all").classList.toggle("hidden", mode !== "all");
   setupMessage.textContent = "";
+  updateFamilyRoleRowVisibility();
 }
 
 setupAddButton("add-m", "input-m", state.men);
@@ -2670,6 +2672,110 @@ function renderChipList(elementId, list) {
     chip.appendChild(del);
     el.appendChild(chip);
   });
+}
+
+/* ---------------- 👨‍👩‍👧 ファミリーパック専用：役割タグのワンタップ追加 ----------------
+   父⇄母／祖父⇄祖母／義父⇄義母 のペアを認識させることで、「馴れ初め」お題
+   （showOdai内のtryFamilyMeetStoryOdai()）を発動できるようにする。誰が父で誰が母かを
+   アプリに教える手段が他にないため、名前そのものをこの役割ラベルにして参加者リストに
+   追加する（例えばボタンを押すと名前欄に「父」が1人分追加される）。
+   子供・ゲストは人数がまちまちなため、重複しないよう自動で連番を振る（子供1、子供2…）。
+   「全員一緒」モードのみ対応（男女に分けるモードだと役割の性別と得点チームが噛み合わず
+   ややこしくなるため、家族向けはシンプルな全員一緒モードに寄せる）。 */
+const FAMILY_ROLE_LABELS = {
+  father: { ja: "父", en: "Father" },
+  mother: { ja: "母", en: "Mother" },
+  grandfather: { ja: "祖父", en: "Grandfather" },
+  grandmother: { ja: "祖母", en: "Grandmother" },
+  fatherInLaw: { ja: "義父", en: "Father-in-law" },
+  motherInLaw: { ja: "義母", en: "Mother-in-law" },
+  child: { ja: "子供", en: "Child" },
+  guest: { ja: "ゲスト", en: "Guest" },
+};
+const FAMILY_ROLE_ORDER = ["father", "mother", "grandfather", "grandmother", "fatherInLaw", "motherInLaw", "child", "guest"];
+const FAMILY_MULTI_ROLES = ["child", "guest"]; // 人数が何人いてもいい役割（自動採番）
+const FAMILY_MEET_STORY_PAIRS = [["father", "mother"], ["grandfather", "grandmother"], ["fatherInLaw", "motherInLaw"]];
+
+function familyRoleLabel(key) {
+  return FAMILY_ROLE_LABELS[key][state.lang] || FAMILY_ROLE_LABELS[key].en;
+}
+
+function addFamilyRoleName(key) {
+  const base = familyRoleLabel(key);
+  let name = base;
+  if (FAMILY_MULTI_ROLES.includes(key)) {
+    let n = 1;
+    while (allNames().includes(`${base}${n}`)) n++;
+    name = `${base}${n}`;
+  } else if (allNames().includes(name)) {
+    setupMessage.textContent = t("msgDup");
+    return;
+  }
+  if (allNames().length >= 12) {
+    setupMessage.textContent = t("msgMax");
+    return;
+  }
+  state.everyone.push(name);
+  setupMessage.textContent = "";
+  renderChips();
+}
+
+function renderFamilyRoleRow() {
+  const row = document.getElementById("family-role-row");
+  if (!row) return;
+  row.innerHTML = "";
+  FAMILY_ROLE_ORDER.forEach((key) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "btn btn-sub family-role-btn";
+    b.textContent = "+ " + familyRoleLabel(key);
+    b.addEventListener("click", () => addFamilyRoleName(key));
+    row.appendChild(b);
+  });
+}
+
+function updateFamilyRoleRowVisibility() {
+  const row = document.getElementById("family-role-row");
+  if (!row) return;
+  const show = state.pack === "family" && state.mode === "all";
+  row.classList.toggle("hidden", !show);
+  if (show) renderFamilyRoleRow();
+}
+
+// 「馴れ初め」お題：父/母・祖父/祖母・義父/義母のペアが役割タグ経由で両方参加しているときだけ、
+// 一定確率で通常のお題の代わりにこちらを返す（対応言語はja/enのみ。それ以外や条件を満たさない
+// ときはnullを返し、呼び出し側は通常どおりgenerateOdai()にフォールバックする）
+const FAMILY_MEET_STORY_CHANCE = 0.35;
+const FAMILY_MEET_STORY_PROMPTS = {
+  ja: [
+    (p) => `${p}さんとの馴れ初めを、惚気混みで教えてください！`,
+    (p) => `${p}さんと出会った日のことを、思い出しながら話してください！`,
+    (p) => `${p}さんに一目惚れした瞬間のポイントを教えてください！`,
+    (p) => `${p}さんに、今夜あらためて「好きなところ」を1つ伝えてください！`,
+    (p) => `${p}さんとの一番の思い出のデートを、詳しく話してください！`,
+  ],
+  en: [
+    (p) => `Tell everyone the story of how you and ${p} first met — a little bragging is allowed!`,
+    (p) => `Think back and share the day you first met ${p}.`,
+    (p) => `Tell everyone what made you fall for ${p} at first sight.`,
+    (p) => `Turn to ${p} right now and say one thing you love about them.`,
+    (p) => `Share your favorite memory of a date with ${p}, in detail.`,
+  ],
+};
+
+function tryFamilyMeetStoryOdai(fromName, lang) {
+  const prompts = FAMILY_MEET_STORY_PROMPTS[lang];
+  if (!prompts) return null;
+  const pair = FAMILY_MEET_STORY_PAIRS.find(
+    ([a, b]) => familyRoleLabel(a) === fromName || familyRoleLabel(b) === fromName
+  );
+  if (!pair) return null;
+  const [aKey, bKey] = pair;
+  const partnerName = familyRoleLabel(fromName === familyRoleLabel(aKey) ? bKey : aKey);
+  if (!allNames().includes(partnerName)) return null;
+  if (Math.random() > FAMILY_MEET_STORY_CHANCE) return null;
+  const text = prompts[Math.floor(Math.random() * prompts.length)](partnerName);
+  return { displayText: `【${fromName}】\n${text}`, speechText: text };
 }
 
 // ゲームスタート（人数チェックつき）
@@ -3119,7 +3225,9 @@ function showOdai(from, to, judgeName, packOverride) {
   state.currentOdaiPack = packOverride || null;
   const odaiPack = packOverride || state.pack;
 
-  const odai = generateOdai(from.name, to.name, state.lang, odaiPack);
+  const odai =
+    (odaiPack === "family" && tryFamilyMeetStoryOdai(from.name, state.lang)) ||
+    generateOdai(from.name, to.name, state.lang, odaiPack);
   const judgePrefix = judgeName ? t("judgeAnnounce")(judgeName) : "";
   const judgeSpeechPrefix = judgeName ? t("judgeAnnounceSpeech")(judgeName) : "";
   const finalDisplay = judgePrefix + odai.displayText;
