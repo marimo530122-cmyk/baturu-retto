@@ -166,6 +166,7 @@ const UI = {
     referralAffiliateNote: "💡 インフルエンサーの方へ：このリンク経由でプレミアムが購入されると、Stripeの決済一覧にこのコードが記録されます。運営までご連絡いただければ、紹介料についてご相談できます。",
     referralClose: "とじる",
     spiceLabel: "🌶️ お色気レベル",
+    bilingualLabel: "🌐 第二言語も表示",
     spiceLocked: "レベル3以上は有料版で解放されます。",
     modalTitle: "✨ 有料版のご案内 ✨",
     modalPrice: "買い切り 480円（現在準備中です。お楽しみに！）",
@@ -359,6 +360,7 @@ const UI = {
     coupleTeaser: "Just the two of you? Try Couple Mode — part of the premium version!",
     packTeaser: (packName) => `"${packName}" is part of the premium version.`,
     spiceLabel: "🌶️ Spice Level",
+    bilingualLabel: "🌐 Show a second language",
     spiceLocked: "Level 3 and up are unlocked in the premium version.",
     modalTitle: "✨ Premium Version ✨",
     modalPrice: "One-time purchase $3.99 (coming soon!)",
@@ -554,6 +556,7 @@ const UI = {
     coupleTeaser: "只有兩個人嗎？「兩人模式」最適合你們！這是付費版的內容。",
     packTeaser: (packName) => `「${packName}」是付費版的內容。`,
     spiceLabel: "🌶️ 辣度等級",
+    bilingualLabel: "🌐 同時顯示第二語言",
     spiceLocked: "等級3以上須付費版才能解鎖。",
     modalTitle: "✨ 付費版介紹 ✨",
     modalPrice: "買斷制 NT$90（目前準備中，敬請期待！）",
@@ -749,6 +752,7 @@ const UI = {
     coupleTeaser: "단둘이라면 「커플 모드」 추천! 프리미엄 콘텐츠입니다.",
     packTeaser: (packName) => `「${packName}」은 프리미엄 콘텐츠입니다.`,
     spiceLabel: "🌶️ 매콤 레벨",
+    bilingualLabel: "🌐 제2언어도 표시",
     spiceLocked: "레벨 3부터는 프리미엄 버전에서 해제됩니다.",
     modalTitle: "✨ 프리미엄 안내 ✨",
     modalPrice: "일회성 결제 ₩3,900（현재 준비중입니다. 기대해주세요！）",
@@ -944,6 +948,7 @@ const UI = {
     coupleTeaser: "¿Solo ustedes dos? ¡Prueba el Modo Pareja! Es contenido premium.",
     packTeaser: (packName) => `"${packName}" es contenido de la versión premium.`,
     spiceLabel: "🌶️ Nivel de Picante",
+    bilingualLabel: "🌐 Mostrar un segundo idioma",
     spiceLocked: "El nivel 3 en adelante se desbloquea en la versión premium.",
     modalTitle: "✨ Versión Premium ✨",
     modalPrice: "Pago único €3.49 / MX$29 (¡próximamente!)",
@@ -1139,6 +1144,7 @@ const UI = {
     coupleTeaser: "Só vocês dois? Experimente o Modo Casal! É um conteúdo premium.",
     packTeaser: (packName) => `"${packName}" é conteúdo da versão premium.`,
     spiceLabel: "🌶️ Nível de Picância",
+    bilingualLabel: "🌐 Mostrar um segundo idioma",
     spiceLocked: "O nível 3 em diante é desbloqueado na versão premium.",
     modalTitle: "✨ Versão Premium ✨",
     modalPrice: "Pagamento único R$9,90 (em breve!)",
@@ -1334,6 +1340,7 @@ const UI = {
     coupleTeaser: "Chỉ có hai người thôi à? Hãy thử Chế độ Cặp đôi! Đây là nội dung premium.",
     packTeaser: (packName) => `"${packName}" là nội dung của phiên bản premium.`,
     spiceLabel: "🌶️ Mức độ Nóng bỏng",
+    bilingualLabel: "🌐 Hiển thị thêm ngôn ngữ thứ hai",
     spiceLocked: "Mức 3 trở lên được mở khóa trong phiên bản premium.",
     modalTitle: "✨ Phiên bản Premium ✨",
     modalPrice: "Thanh toán một lần ₫39.000 (sắp ra mắt!)",
@@ -1529,6 +1536,7 @@ const UI = {
     coupleTeaser: "Nur zu zweit? Probiere den Paar-Modus – Teil der Premium-Version!",
     packTeaser: (packName) => `„${packName}“ ist Teil der Premium-Version.`,
     spiceLabel: "🌶️ Würze-Level",
+    bilingualLabel: "🌐 Zweite Sprache anzeigen",
     spiceLocked: "Level 3 und höher sind in der Premium-Version freigeschaltet.",
     modalTitle: "✨ Premium-Version ✨",
     modalPrice: "Einmaliger Kauf 3,99 € (demnächst verfügbar!)",
@@ -1724,6 +1732,7 @@ const UI = {
     coupleTeaser: "Kayong dalawa lang? Subukan ang Couple Mode — bahagi ng premium version!",
     packTeaser: (packName) => `Bahagi ng premium version ang "${packName}".`,
     spiceLabel: "🌶️ Spice Level",
+    bilingualLabel: "🌐 Ipakita rin ang pangalawang wika",
     spiceLocked: "Level 3 pataas ay bukas na sa premium version.",
     modalTitle: "✨ Premium Version ✨",
     modalPrice: "Isang beses na bayad ₱199 (malapit na!)",
@@ -1933,6 +1942,7 @@ function applyLanguage() {
   document.getElementById("btn-back-setup").textContent = u.backSetup;
 
   document.getElementById("t-spice-label").textContent = u.spiceLabel;
+  document.getElementById("t-bilingual-label").textContent = u.bilingualLabel;
   document.getElementById("btn-spin").textContent = u.spinBtn;
   document.getElementById("btn-speak").textContent = u.speak;
   document.getElementById("btn-pass").textContent = u.pass;
@@ -2837,6 +2847,37 @@ function renderFamilyRoleRow() {
   });
 }
 
+/* ---------------- 🌐 法人・パーティープラン限定：第二言語の併記 ----------------
+   多国籍の職場での利用を想定し、日本語(または表示言語)のお題に加えて、
+   もう1つの言語でも同じお題を併記できるようにする。英語固定にはせず、
+   職場の構成（例：ベトナム語話者が多い等）に合わせて9言語から選べるようにする。 */
+const PARTY_BILINGUAL_STORAGE_KEY = "batsu-party-bilingual";
+let partyBilingualLang = null;
+try { partyBilingualLang = localStorage.getItem(PARTY_BILINGUAL_STORAGE_KEY) || null; } catch (e) {}
+
+function partyBilingualLabel() {
+  return partyBilingualLang ? LANG_LABELS[partyBilingualLang] : "OFF";
+}
+
+function updatePartyBilingualRowVisibility() {
+  const row = document.getElementById("party-bilingual-row");
+  if (!row) return;
+  row.classList.toggle("hidden", state.pack !== "party");
+  document.getElementById("btn-party-bilingual").textContent = partyBilingualLabel();
+}
+
+document.getElementById("btn-party-bilingual").addEventListener("click", () => {
+  // OFF → 表示言語(state.lang)以外の8言語を順番に → OFFに戻る
+  const cycle = [null, ...LANG_CYCLE.filter((l) => l !== state.lang)];
+  const i = cycle.indexOf(partyBilingualLang);
+  partyBilingualLang = cycle[(i + 1) % cycle.length];
+  try {
+    if (partyBilingualLang) localStorage.setItem(PARTY_BILINGUAL_STORAGE_KEY, partyBilingualLang);
+    else localStorage.removeItem(PARTY_BILINGUAL_STORAGE_KEY);
+  } catch (e) {}
+  document.getElementById("btn-party-bilingual").textContent = partyBilingualLabel();
+});
+
 function updateFamilyRoleRowVisibility() {
   const row = document.getElementById("family-role-row");
   if (!row) return;
@@ -2916,6 +2957,7 @@ document.getElementById("btn-game-start").addEventListener("click", () => {
     }
   }
   showScreen("game");
+  updatePartyBilingualRowVisibility();
   startRound();
 });
 
@@ -3331,10 +3373,26 @@ function showOdai(from, to, judgeName, packOverride) {
   const odai =
     (odaiPack === "family" && tryFamilyMeetStoryOdai(from.name, state.lang)) ||
     generateOdai(from.name, to.name, state.lang, odaiPack);
+
+  // 🌐 法人・パーティープラン限定：第二言語が設定されていれば、同じ組み合わせ
+  // （situationIdx/actionIdxが同じ）をもう1つの言語でも生成し、あとで併記する
+  let bilingual = null;
+  if (
+    odaiPack === "party" &&
+    partyBilingualLang &&
+    partyBilingualLang !== state.lang &&
+    odai.situationIdx !== undefined
+  ) {
+    bilingual = generateOdai(from.name, to.name, partyBilingualLang, odaiPack, {
+      situationIdx: odai.situationIdx,
+      actionIdx: odai.actionIdx,
+    });
+  }
+
   const judgePrefix = judgeName ? t("judgeAnnounce")(judgeName) : "";
   const judgeSpeechPrefix = judgeName ? t("judgeAnnounceSpeech")(judgeName) : "";
-  const finalDisplay = judgePrefix + odai.displayText;
-  state.currentSpeech = judgeSpeechPrefix + odai.speechText;
+  const finalDisplay = judgePrefix + odai.displayText + (bilingual ? "\n\n🌐 " + bilingual.displayText : "");
+  state.currentSpeech = judgeSpeechPrefix + odai.speechText + (bilingual ? "。 " + bilingual.speechText : "");
 
   gameStatus.textContent = t("statusOdai");
   odaiCard.classList.remove("king-card");
@@ -3774,6 +3832,7 @@ function showCeremony() {
 
 document.getElementById("btn-ceremony-continue").addEventListener("click", () => {
   showScreen("game");
+  updatePartyBilingualRowVisibility();
   startRound();
 });
 

@@ -3924,20 +3924,33 @@ let lastCombinationKey = "";
  * @param {string} pack     - "standard"（通常）または "romance"（💌恋愛パック）または "adult"（🔞大人向けパック）または "party"（🎉法人・パーティープラン）または "noalcohol"（🥤ノンアルコール版・無料、いずれも現在は日英のみ）
  * @returns {object} displayText: 画面表示用 / speechText: 朗読用
  */
-function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
+// forceIndices（省略可）: {situationIdx, actionIdx} を渡すと、そのインデックスの
+// シチュエーション・アクションを使う（ランダム抽選をスキップ）。
+// 🌐 バイリンガル表示（法人・パーティープラン限定）で、同じ組み合わせを
+// 2つの言語で表示するために、片方の言語で選んだインデックスをもう片方にも使い回す用途。
+function generateOdai(fromName, toName, lang = "ja", pack = "standard", forceIndices) {
   const PACK_DATA = { romance: ROMANCE_DATA, adult: ADULT_DATA, family: FAMILY_DATA, couple: COUPLE_DATA, nerutoon: NERUTON_DATA, party: PARTY_DATA, noalcohol: NOALCOHOL_DATA, solo: SOLO_DATA };
   const data =
     PACK_DATA[pack] ? PACK_DATA[pack][lang] || ODAI_DATA[lang] || ODAI_DATA.ja // 未対応言語は通常パックに戻す
       : ODAI_DATA[lang] || ODAI_DATA.ja;
-  let situation, action, key;
+  let situation, action, key, situationIdx, actionIdx;
 
-  // 同じ組み合わせが2回連続したら引き直す
-  do {
-    situation = pickRandom(data.situations);
-    action = pickRandom(data.actions);
-    key = situation + "|" + action;
-  } while (key === lastCombinationKey);
-  lastCombinationKey = key;
+  if (forceIndices) {
+    situationIdx = forceIndices.situationIdx % data.situations.length;
+    actionIdx = forceIndices.actionIdx % data.actions.length;
+    situation = data.situations[situationIdx];
+    action = data.actions[actionIdx];
+  } else {
+    // 同じ組み合わせが2回連続したら引き直す
+    do {
+      situationIdx = Math.floor(Math.random() * data.situations.length);
+      actionIdx = Math.floor(Math.random() * data.actions.length);
+      situation = data.situations[situationIdx];
+      action = data.actions[actionIdx];
+      key = situation + "|" + action;
+    } while (key === lastCombinationKey);
+    lastCombinationKey = key;
+  }
 
   action = maybeInjectSponsorAction(action, lang);
 
@@ -3959,7 +3972,7 @@ function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
       displayText = `【${fromName}】\n${situation},\n${action}!`;
       speechText = `${fromName}! ${situation}, ${action}!`;
     }
-    return { displayText, speechText: toSpeechSafe(speechText), situation, action };
+    return { displayText, speechText: toSpeechSafe(speechText), situation, action, situationIdx, actionIdx };
   }
 
   if (lang === "en") {
@@ -4034,6 +4047,8 @@ function generateOdai(fromName, toName, lang = "ja", pack = "standard") {
     speechText: toSpeechSafe(speechText),
     situation,
     action,
+    situationIdx,
+    actionIdx,
   };
 }
 
