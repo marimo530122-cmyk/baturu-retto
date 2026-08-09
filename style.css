@@ -883,6 +883,28 @@ body.premium-active .logo {
   gap: 10px;
   margin: 18px 0;
 }
+.help-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  margin: 18px 0;
+  text-align: left;
+}
+.help-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--c-panel-border);
+}
+.help-item .help-icon {
+  font-size: 20px;
+  width: 28px;
+  flex-shrink: 0;
+  text-align: center;
+}
+.help-item .help-label {
+  font-size: 14px;
+}
 .achievement-badge {
   background: var(--c-panel);
   border: 1px solid var(--c-panel-border);

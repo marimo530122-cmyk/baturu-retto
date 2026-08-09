@@ -284,7 +284,15 @@ const UI = {
     adminClose: "とじる",
     achTitle: "🏆 実績バッジ",
     achClose: "とじる",
+    helpClose: "とじる",
     achUnlocked: (name) => `🏅 実績解除：${name}！`,
+    helpTitle: "❓ アイコンの説明",
+    helpItems: [
+      "BGMのオン・オフ", "BGMのジャンル切り替え", "読み上げの声を切り替え", "表示言語の切り替え",
+      "ルーレットの見た目（有料）", "お題結果の振り返り", "実績バッジ一覧", "お題の投稿・みんなの投稿",
+      "アプリをシェア", "Xでシェア", "WhatsAppでシェア", "Telegramでシェア", "Instagramでシェア",
+      "WeChatでシェア", "盛り上がる瞬間の録画モード", "SNS投稿用キット", "お友達紹介リンク",
+    ],
     hlTitle: "📸 今夜のハイライト",
     hlEmpty: "まだハイライトがありません。お題が発表されると自動で記録されます。",
     hlClose: "とじる",
@@ -471,7 +479,15 @@ const UI = {
     adminClose: "Close",
     achTitle: "🏆 Achievements",
     achClose: "Close",
+    helpClose: "Close",
     achUnlocked: (name) => `🏅 Achievement unlocked: ${name}!`,
+    helpTitle: "❓ What the icons do",
+    helpItems: [
+      "Toggle BGM on/off", "Switch BGM genre", "Switch the read-aloud voice", "Switch display language",
+      "Roulette look & theme (premium)", "Look back at past results", "Achievement badges", "Post & browse dare submissions",
+      "Share the app", "Share on X", "Share on WhatsApp", "Share on Telegram", "Share on Instagram",
+      "Share on WeChat", "Recording mode for big moments", "Social media posting kit", "Get your referral link",
+    ],
     hlTitle: "📸 Tonight's Highlights",
     hlEmpty: "No highlights yet. They're saved automatically when a challenge is revealed.",
     hlClose: "Close",
@@ -658,7 +674,15 @@ const UI = {
     adminClose: "關閉",
     achTitle: "🏆 成就徽章",
     achClose: "關閉",
+    helpClose: "關閉",
     achUnlocked: (name) => `🏅 解鎖成就：${name}！`,
+    helpTitle: "❓ 圖示說明",
+    helpItems: [
+      "BGM開關", "切換BGM曲風", "切換朗讀聲音", "切換顯示語言",
+      "輪盤外觀主題（付費）", "回顧過去的結果", "成就徽章一覽", "投稿・瀏覽大家的投稿",
+      "分享本應用程式", "在X分享", "在WhatsApp分享", "在Telegram分享", "在Instagram分享",
+      "在WeChat分享", "精彩瞬間錄影模式", "社群投稿套件", "取得推薦連結",
+    ],
     hlTitle: "📸 今晚的精彩瞬間",
     hlEmpty: "還沒有精彩瞬間，題目公布時會自動記錄。",
     hlClose: "關閉",
@@ -845,7 +869,15 @@ const UI = {
     adminClose: "닫기",
     achTitle: "🏆 업적 배지",
     achClose: "닫기",
+    helpClose: "닫기",
     achUnlocked: (name) => `🏅 업적 달성: ${name}!`,
+    helpTitle: "❓ 아이콘 설명",
+    helpItems: [
+      "BGM 켜기/끄기", "BGM 장르 전환", "읽어주는 목소리 전환", "표시 언어 전환",
+      "룰렛 테마(프리미엄)", "지난 결과 돌아보기", "업적 배지 목록", "투고・모두의 투고 보기",
+      "앱 공유하기", "X에 공유", "WhatsApp에 공유", "Telegram에 공유", "Instagram에 공유",
+      "WeChat에 공유", "하이라이트 녹화 모드", "SNS 게시용 키트", "친구 추천 링크 받기",
+    ],
     hlTitle: "📸 오늘 밤의 하이라이트",
     hlEmpty: "아직 하이라이트가 없습니다. 벌칙이 발표되면 자동으로 기록됩니다.",
     hlClose: "닫기",
@@ -1032,7 +1064,15 @@ const UI = {
     adminClose: "Cerrar",
     achTitle: "🏆 Logros",
     achClose: "Cerrar",
+    helpClose: "Cerrar",
     achUnlocked: (name) => `🏅 ¡Logro desbloqueado: ${name}!`,
+    helpTitle: "❓ Qué hace cada icono",
+    helpItems: [
+      "Activar/desactivar BGM", "Cambiar género de BGM", "Cambiar voz narradora", "Cambiar idioma",
+      "Tema visual de la ruleta (premium)", "Ver resultados anteriores", "Lista de logros", "Publicar y ver retos de otros",
+      "Compartir la app", "Compartir en X", "Compartir en WhatsApp", "Compartir en Telegram", "Compartir en Instagram",
+      "Compartir en WeChat", "Modo grabación de momentos", "Kit para redes sociales", "Obtener enlace de referido",
+    ],
     hlTitle: "📸 Momentos de esta noche",
     hlEmpty: "Aún no hay momentos guardados. Se guardan automáticamente al revelar un reto.",
     hlClose: "Cerrar",
@@ -1219,7 +1259,15 @@ const UI = {
     adminClose: "Fechar",
     achTitle: "🏆 Conquistas",
     achClose: "Fechar",
+    helpClose: "Fechar",
     achUnlocked: (name) => `🏅 Conquista desbloqueada: ${name}!`,
+    helpTitle: "❓ O que cada ícone faz",
+    helpItems: [
+      "Ativar/desativar BGM", "Trocar gênero da BGM", "Trocar voz de narração", "Trocar idioma",
+      "Tema visual da roleta (premium)", "Ver resultados anteriores", "Lista de conquistas", "Publicar e ver desafios de outros",
+      "Compartilhar o app", "Compartilhar no X", "Compartilhar no WhatsApp", "Compartilhar no Telegram", "Compartilhar no Instagram",
+      "Compartilhar no WeChat", "Modo de gravação de momentos", "Kit para redes sociais", "Obter link de indicação",
+    ],
     hlTitle: "📸 Melhores momentos da noite",
     hlEmpty: "Ainda não há momentos salvos. Eles são salvos automaticamente quando um desafio é revelado.",
     hlClose: "Fechar",
@@ -1406,7 +1454,15 @@ const UI = {
     adminClose: "Đóng",
     achTitle: "🏆 Thành tích",
     achClose: "Đóng",
+    helpClose: "Đóng",
     achUnlocked: (name) => `🏅 Đã mở khóa thành tích: ${name}!`,
+    helpTitle: "❓ Chức năng của các biểu tượng",
+    helpItems: [
+      "Bật/tắt nhạc nền", "Đổi thể loại nhạc nền", "Đổi giọng đọc", "Đổi ngôn ngữ hiển thị",
+      "Giao diện vòng quay (premium)", "Xem lại kết quả trước đó", "Danh sách huy hiệu thành tích", "Đăng & xem bài của mọi người",
+      "Chia sẻ ứng dụng", "Chia sẻ trên X", "Chia sẻ trên WhatsApp", "Chia sẻ trên Telegram", "Chia sẻ trên Instagram",
+      "Chia sẻ trên WeChat", "Chế độ quay khoảnh khắc nổi bật", "Bộ công cụ đăng mạng xã hội", "Lấy link giới thiệu bạn bè",
+    ],
     hlTitle: "📸 Khoảnh khắc nổi bật đêm nay",
     hlEmpty: "Chưa có khoảnh khắc nào được lưu. Chúng sẽ tự động được lưu khi một thử thách được công bố.",
     hlClose: "Đóng",
@@ -1593,7 +1649,15 @@ const UI = {
     adminClose: "Schließen",
     achTitle: "🏆 Erfolge",
     achClose: "Schließen",
+    helpClose: "Schließen",
     achUnlocked: (name) => `🏅 Erfolg freigeschaltet: ${name}!`,
+    helpTitle: "❓ Was die Symbole bedeuten",
+    helpItems: [
+      "Hintergrundmusik ein/aus", "Musikgenre wechseln", "Vorlesestimme wechseln", "Sprache wechseln",
+      "Roulette-Design (Premium)", "Frühere Ergebnisse ansehen", "Erfolgsabzeichen", "Beiträge posten & ansehen",
+      "App teilen", "Auf X teilen", "Auf WhatsApp teilen", "Auf Telegram teilen", "Auf Instagram teilen",
+      "Auf WeChat teilen", "Aufnahmemodus für Highlights", "Social-Media-Kit", "Empfehlungslink erhalten",
+    ],
     hlTitle: "📸 Highlights des Abends",
     hlEmpty: "Noch keine Highlights. Sie werden automatisch gespeichert, wenn eine Aufgabe angezeigt wird.",
     hlClose: "Schließen",
@@ -1780,7 +1844,15 @@ const UI = {
     adminClose: "Isara",
     achTitle: "🏆 Mga Achievement",
     achClose: "Isara",
+    helpClose: "Isara",
     achUnlocked: (name) => `🏅 Na-unlock ang achievement: ${name}!`,
+    helpTitle: "❓ Ano ang ginagawa ng mga icon",
+    helpItems: [
+      "I-on/off ang BGM", "Palitan ang genre ng BGM", "Palitan ang boses sa pagbasa", "Palitan ang wika",
+      "Tema ng roulette (premium)", "Balikan ang mga nakaraang resulta", "Listahan ng achievement badges", "I-post at tingnan ang mga isinumite",
+      "I-share ang app", "I-share sa X", "I-share sa WhatsApp", "I-share sa Telegram", "I-share sa Instagram",
+      "I-share sa WeChat", "Recording mode para sa mga highlight", "Kit para sa social media posting", "Kumuha ng referral link",
+    ],
     hlTitle: "📸 Mga Highlight Ngayong Gabi",
     hlEmpty: "Wala pang highlights. Automatic itong nase-save kapag lumabas ang hamon.",
     hlClose: "Isara",
@@ -1887,6 +1959,8 @@ function applyLanguage() {
 
   document.getElementById("t-ach-title").textContent = u.achTitle;
   document.getElementById("achievements-close").textContent = u.achClose;
+  document.getElementById("t-help-title").textContent = u.helpTitle;
+  document.getElementById("help-close").textContent = u.helpClose;
   document.getElementById("t-hl-title").textContent = u.hlTitle;
   document.getElementById("highlights-close").textContent = u.hlClose;
 
@@ -2315,6 +2389,35 @@ document.getElementById("btn-achievements").addEventListener("click", () => {
 });
 document.getElementById("achievements-close").addEventListener("click", () => {
   modalAchievements.classList.add("hidden");
+});
+
+/* ---------------- ❓ アイコンの説明モーダル ----------------
+   画面上部に並ぶ、文字ラベルのない小さいアイコンボタン群が
+   「何のボタンか分かりにくい」というご要望から追加。
+   HELP_ICONSの並び順は、UI[lang].helpItems（game.js内、各言語の
+   achUnlocked直後）の並び順と1対1で対応させること。 */
+const modalHelp = document.getElementById("modal-help");
+const HELP_ICONS = ["🎷", "🎷", "🎲", "🌐", "🎨", "📸", "🏆", "📮", "📤", "X", "💬", "✈️", "📷", "💚", "🎬", "🚀", "🔗"];
+
+function renderHelp() {
+  document.getElementById("t-help-title").textContent = t("helpTitle");
+  const list = document.getElementById("help-list");
+  list.innerHTML = "";
+  t("helpItems").forEach((label, i) => {
+    const row = document.createElement("div");
+    row.className = "help-item";
+    row.innerHTML = `<span class="help-icon">${HELP_ICONS[i] || "•"}</span><span class="help-label"></span>`;
+    row.querySelector(".help-label").textContent = label;
+    list.appendChild(row);
+  });
+}
+
+document.getElementById("btn-help").addEventListener("click", () => {
+  renderHelp();
+  modalHelp.classList.remove("hidden");
+});
+document.getElementById("help-close").addEventListener("click", () => {
+  modalHelp.classList.add("hidden");
 });
 
 // 新しいバッジが解除された瞬間にトーストで知らせる
