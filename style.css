@@ -330,6 +330,11 @@ body.premium-active .logo {
   font-weight: bold;
   color: #fff;
 }
+#btn-share-x-app {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+}
 
 /* LINE等アプリ内ブラウザ向けの案内バナー */
 .inapp-banner {
