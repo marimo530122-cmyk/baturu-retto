@@ -17,7 +17,7 @@
    一切影響しません。
    ========================================================= */
 
-const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/YOUR_PAYMENT_LINK";
+const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/00waEY15ceBKcaQg6q5kk00";
 
 /* =========================================================
    🎉 法人・パーティープランの設定（Stripe決済リンク・別売り）
