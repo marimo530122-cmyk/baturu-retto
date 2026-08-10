@@ -127,7 +127,16 @@ const UI = {
       noalcohol: "🥤 ノンアル版",
       solo: "🍶 ひとり飲み",
       kinggame: "👑 王様ゲームモード（日本人向け）",
+      roast: "😈 タゴサクAI（日本語のみ）",
     },
+    roastTitle: "😈 タゴサクAI",
+    roastDesc: "あなたを容赦なく「おっさん」呼ばわりしてくる毒舌AIです。何か話しかけてみましょう。",
+    roastPlaceholder: "何か言い返してみる…",
+    roastSend: "送信",
+    roastNotConfigured: "タゴサクAIはまだ準備中です（Vercelへのデプロイ設定が必要です）",
+    roastQuota: (max) => `今夜はこのくらいにしといてやる（1日${max}回まで）。また明日話しかけてこい`,
+    roastError: "タゴサクAIが不機嫌なようです……少し待ってからもう一度試してください",
+    roastYou: "あなた",
     themes: { neon: "🌃 ネオン", casino: "🎰 カジノ", izakaya: "🏮 居酒屋" },
     rigTitle: "🃏 イカサマモード",
     rigDesc: "次のルーレット、当たりやすくする人を選んでください",
@@ -1907,6 +1916,10 @@ function applyLanguage() {
   document.getElementById("pack-online").innerHTML = `${u.packs.online} <span class="lock">🔒</span>`;
   document.getElementById("pack-noalcohol").textContent = u.packs.noalcohol;
   document.getElementById("pack-solo").innerHTML = `${u.packs.solo} <span class="lock">🔒</span>`;
+  document.getElementById("pack-roast").innerHTML = `${u.packs.roast} <span class="lock">🔒</span>`;
+  // 😈タゴサクAIは「おっさんいじり」という日本語文化圏のジョークが前提のため、
+  // 👑王様ゲームモードと同じ理由で、日本語以外を選んでいるときはボタンごと隠す
+  document.getElementById("pack-roast").classList.toggle("hidden", state.lang !== "ja");
   document.getElementById("pack-kinggame").textContent = u.packs.kinggame;
   // 👑王様ゲームモードは「その場の人が罰を即興で考える」仕組みのため、外国人ゲスト等
   // 文化的な地雷（宗教・パーソナルスペース感覚など）が分からない相手には向かない。
@@ -2078,7 +2091,7 @@ document.querySelectorAll(".btn-locked").forEach((btn) => {
   // 個別に専用ハンドラを持つパックは、ここでは何もしない（二重発火防止。以前は
   // family/couple/party/nerutoon/soloがこの除外リストから漏れており、専用ハンドラが
   // あるにも関わらずクリックのたびに常に「ご案内モーダル」が出てしまうバグがあった）
-  if (["romance", "online", "adult", "family", "couple", "party", "nerutoon", "solo"].includes(btn.dataset.pack)) return;
+  if (["romance", "online", "adult", "family", "couple", "party", "nerutoon", "solo", "roast"].includes(btn.dataset.pack)) return;
   btn.addEventListener("click", () => {
     showPremiumModal(t("packTeaser")(UI[state.lang].packs[btn.dataset.pack]));
   });
@@ -2124,6 +2137,7 @@ function updateCachedThemeColors() {
     a: style.getPropertyValue("--c-accent-a").trim() || "#ff2d95",
     b: style.getPropertyValue("--c-accent-b").trim() || "#8f4bff",
   };
+  if (typeof Swarm !== "undefined" && Swarm.readThemeColors) Swarm.readThemeColors();
 }
 
 function applyTheme() {
@@ -2711,6 +2725,118 @@ document.getElementById("btn-online-leave").addEventListener("click", () => {
   state.onlineCode = null;
   showScreen("title");
 });
+
+/* ---------------- 😈 タゴサクAI（有料機能・要Vercelデプロイ） ---------------- */
+const modalRoast = document.getElementById("modal-roast");
+const roastLog = document.getElementById("roast-log");
+const roastInput = document.getElementById("roast-input");
+const roastMessage = document.getElementById("roast-message");
+
+function renderRoastTexts() {
+  document.getElementById("t-roast-title").textContent = t("roastTitle");
+  document.getElementById("t-roast-desc").textContent = t("roastDesc");
+  roastInput.placeholder = t("roastPlaceholder");
+  document.getElementById("roast-send").textContent = t("roastSend");
+}
+
+function appendRoastBubble(text, who) {
+  const row = document.createElement("div");
+  row.className = "submission-item roast-bubble" + (who === "user" ? " roast-bubble-user" : "");
+  row.innerHTML = `<p></p>`;
+  row.querySelector("p").textContent = text;
+  roastLog.appendChild(row);
+  roastLog.scrollTop = roastLog.scrollHeight;
+}
+
+document.getElementById("pack-roast").addEventListener("click", () => {
+  if (blockIfNotPremium("roast")) return;
+  renderRoastTexts();
+  roastMessage.textContent = "";
+  modalRoast.classList.remove("hidden");
+  roastInput.focus();
+});
+
+document.getElementById("roast-close").addEventListener("click", () => {
+  modalRoast.classList.add("hidden");
+});
+
+async function sendRoastMessage() {
+  const text = roastInput.value.trim();
+  if (!text) return;
+  roastInput.value = "";
+  roastInput.disabled = true;
+  document.getElementById("roast-send").disabled = true;
+  appendRoastBubble(`【${t("roastYou")}】${text}`, "user");
+  roastMessage.textContent = "";
+
+  const result = await AiRoast.send(text);
+
+  if (result.ok) {
+    appendRoastBubble(result.reply, "ai");
+    speakOdai(result.reply, "ja", resolveVoice());
+  } else if (result.reason === "not_configured") {
+    roastMessage.textContent = t("roastNotConfigured");
+  } else if (result.reason === "quota") {
+    roastMessage.textContent = t("roastQuota")(AiRoast.maxTurnsPerDay);
+  } else {
+    roastMessage.textContent = t("roastError");
+  }
+
+  roastInput.disabled = false;
+  document.getElementById("roast-send").disabled = false;
+  roastInput.focus();
+}
+
+document.getElementById("roast-send").addEventListener("click", sendRoastMessage);
+roastInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") sendRoastMessage();
+});
+
+// 🎤 音声入力（対応ブラウザのみ・タイプせずに話しかけられるように）
+// 誤変換対策として、認識結果は自動送信せず入力欄に入れるだけにする（送るかどうかは本人が確認してから）
+(function setupRoastMic() {
+  const micBtn = document.getElementById("roast-mic");
+  const RecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!RecognitionCtor) return; // 非対応ブラウザではボタンを出さない（デフォルトhidden済み）
+  micBtn.classList.remove("hidden");
+
+  let recognizing = false;
+  let recognition = null;
+
+  micBtn.addEventListener("click", () => {
+    if (recognizing) {
+      recognition.stop();
+      return;
+    }
+    recognition = new RecognitionCtor();
+    recognition.lang = "ja-JP";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.onstart = () => {
+      recognizing = true;
+      micBtn.classList.add("active");
+    };
+    recognition.onend = () => {
+      recognizing = false;
+      micBtn.classList.remove("active");
+    };
+    recognition.onerror = () => {
+      recognizing = false;
+      micBtn.classList.remove("active");
+    };
+    recognition.onresult = (e) => {
+      const text = e.results[0][0].transcript;
+      roastInput.value = (roastInput.value ? roastInput.value + " " : "") + text;
+      roastInput.focus();
+    };
+    recognition.start();
+  });
+
+  // モーダルを閉じたら、録音中でも一緒に止める
+  document.getElementById("roast-close").addEventListener("click", () => {
+    if (recognizing) recognition.stop();
+  });
+})();
 
 /* =========================================================
    メンバー登録画面
@@ -3869,6 +3995,9 @@ if (isPremiumUnlocked()) {
   document.body.classList.add("premium-active");
   document.getElementById("premium-badge").classList.remove("hidden");
 }
+
+// 📢 広告（無料版のみ表示。ads-config.js が未設定なら何も起きない）
+if (typeof Ads !== "undefined") Ads.refresh();
 
 // Stripeの決済リンクから戻ってきて、たった今プレミアムが解放された場合だけお祝いを出す
 if (typeof Billing !== "undefined" && Billing.wasJustUnlocked()) {

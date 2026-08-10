@@ -61,6 +61,7 @@ body.rec-mode .spice-row,
 body.rec-mode .online-room-badge,
 body.rec-mode .share-icon-row,
 body.rec-mode .odai-buttons,
+body.rec-mode .ad-slot,
 body.rec-mode .floating-controls > button:not(#btn-rec-mode) {
   display: none !important;
 }
@@ -135,6 +136,14 @@ body.premium-active .logo {
   text-align: center;
   min-height: 100vh;
   position: relative;
+}
+
+/* ---------- ✨ 群知能ふうスワーム（最背面・クリックを一切邪魔しない） ---------- */
+#swarm-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* ---------- 背景の粒子感（写真フィルターのような質感） ---------- */
@@ -259,6 +268,29 @@ body.premium-active .logo {
   padding: 10px 18px;
   font-size: 15px;
   flex-shrink: 0;
+}
+
+/* 🎤 音声入力ボタン（対応ブラウザのみ表示。録音中は赤く点滅）
+   .modal-box .btn の汎用パディングは詳細度が同じクラス2つ同士で
+   後勝ちしてしまうため、IDセレクタで確実に上書きする */
+#roast-mic.btn-mic {
+  background: var(--c-panel);
+  border: 1px solid var(--c-panel-border);
+  color: #fff;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  padding: 0;
+  margin-top: 0;
+  border-radius: 50%;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.btn-mic.active {
+  border-color: #ff2d2d;
+  color: #ff2d2d;
+  box-shadow: 0 0 14px rgba(255, 45, 45, 0.7);
+  animation: recPulse 1.2s ease-in-out infinite;
 }
 
 /* ---------- 無料版を目立たせる演出 ---------- */
@@ -447,6 +479,20 @@ body.premium-active .logo {
   font-size: 10.5px;
   line-height: 1.7;
   color: #8d7fb5;
+}
+
+/* 📢 広告（無料版のみ・有料版とRECモードでは自動的に隠れる） */
+.ad-slot {
+  margin: 18px auto 0;
+  max-width: 320px;
+  min-height: 50px;
+  overflow: hidden;
+}
+.ad-slot.hidden {
+  display: none;
+}
+body.premium-active .ad-slot {
+  display: none !important;
 }
 
 /* ---------- メンバー登録画面 ---------- */
@@ -833,6 +879,24 @@ body.premium-active .logo {
   padding: 8px 12px;
   font-size: 12px;
   margin-top: 0;
+}
+
+/* 😈 タゴサクAI（毒舌チャット） */
+#roast-log {
+  max-height: 260px;
+  overflow-y: auto;
+}
+.roast-bubble {
+  border-color: var(--c-accent-a);
+}
+.roast-bubble-user {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--c-panel-border);
+  opacity: 0.85;
+}
+.roast-bubble p {
+  padding-right: 0;
+  white-space: pre-line;
 }
 
 /* 💎 プレミアム解放のお祝いモーダル */

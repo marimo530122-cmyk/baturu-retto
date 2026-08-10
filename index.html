@@ -29,7 +29,7 @@
   <meta name="twitter:description" content="飲み会を爆上げする罰ゲームルーレット。罰ゲーム2,500通り × 👑王様モード × 司会者ボイスで、スマホ1台あればすぐ遊べます。" />
   <meta name="twitter:image" content="https://marimo530122-cmyk.github.io/baturu-retto/og-image.jpg" />
 
-  <link rel="stylesheet" href="style.css?v=39" />
+  <link rel="stylesheet" href="style.css?v=45" />
 </head>
 <body>
 
@@ -72,6 +72,7 @@
   </script>
 
   <!-- ============ 背景の質感・紙吹雪（全画面共通の演出レイヤー） ============ -->
+  <canvas id="swarm-canvas"></canvas>
   <div class="grain-overlay"></div>
   <canvas id="confetti-canvas"></canvas>
 
@@ -125,9 +126,11 @@
         <button class="btn btn-locked" data-pack="nerutoon" id="pack-nerutoon">💘 ねるとんZoom <span class="lock">🔒</span></button>
         <button class="btn btn-locked" data-pack="party" id="pack-party">🎉 法人/パーティー <span class="lock">🔒</span></button>
         <button class="btn btn-locked" data-pack="solo" id="pack-solo">🍶 ひとり飲み <span class="lock">🔒</span></button>
+        <button class="btn btn-locked" data-pack="roast" id="pack-roast">😈 タゴサクAI <span class="lock">🔒</span></button>
       </div>
 
       <p class="notice" id="t-notice">※20歳未満の飲酒は法律で禁止されています。<br>お酒やお題の無理強いはやめましょう。</p>
+      <div id="ad-slot-title" class="ad-slot hidden"></div>
       <p class="viral-footer" id="t-viral-footer">📮 #BatsuRoulette を付けて投稿してね！面白い動画は公式が紹介するかも！</p>
     </div>
   </section>
@@ -222,6 +225,7 @@
       <button id="btn-next" class="btn btn-primary btn-big">🎰 次のルーレットへ！</button>
     </div>
 
+    <div id="ad-slot-game" class="ad-slot hidden"></div>
     <button id="btn-back-setup" class="btn btn-ghost">← メンバーを変える</button>
   </section>
 
@@ -394,6 +398,22 @@
     </div>
   </div>
 
+  <!-- ============ 😈 タゴサクAI（毒舌チャット・プレミアム機能・要Vercelデプロイ） ============ -->
+  <div id="modal-roast" class="modal hidden">
+    <div class="modal-box modal-box-wide">
+      <h3 class="neon-pink" id="t-roast-title">😈 タゴサクAI</h3>
+      <p id="t-roast-desc">あなたを容赦なく「おっさん」呼ばわりしてくる毒舌AIです。何か話しかけてみましょう。</p>
+      <div id="roast-log" class="submission-list"></div>
+      <p id="roast-message" class="message"></p>
+      <div class="input-row">
+        <button id="roast-mic" class="btn btn-mic hidden" title="音声入力">🎤</button>
+        <input id="roast-input" type="text" maxlength="200" placeholder="何か言い返してみる…" />
+        <button id="roast-send" class="btn btn-add">送信</button>
+      </div>
+      <button id="roast-close" class="btn btn-ghost">とじる</button>
+    </div>
+  </div>
+
   <!-- ============ 🏆 実績バッジ一覧 ============ -->
   <div id="modal-achievements" class="modal hidden">
     <div class="modal-box">
@@ -425,26 +445,35 @@
   <!-- Firebase（📡オンラインモード用。firebase-config.js が未設定でも他の機能には影響しません） -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-  <script src="firebase-config.js?v=39"></script>
-  <script src="online.js?v=39"></script>
+  <script src="firebase-config.js?v=45"></script>
+  <script src="online.js?v=45"></script>
 
   <!-- 📮 罰ゲーム投稿・共有（同じくFirebaseを使用。moderation.jsが自動審査を担当） -->
-  <script src="moderation.js?v=39"></script>
-  <script src="submissions.js?v=39"></script>
+  <script src="moderation.js?v=45"></script>
+  <script src="submissions.js?v=45"></script>
 
   <!-- 🔗 お友達紹介・アフィリエイト（Firebase設定済みなら招待者側の特典も自動反映） -->
-  <script src="referral.js?v=39"></script>
+  <script src="referral.js?v=45"></script>
 
   <!-- 💎 プレミアム課金（Stripe決済リンク用。billing-config.js が未設定でも他の機能には影響しません） -->
-  <script src="billing-config.js?v=39"></script>
-  <script src="billing.js?v=39"></script>
+  <script src="billing-config.js?v=45"></script>
+  <script src="billing.js?v=45"></script>
 
-  <script src="bgm.js?v=39"></script>
-  <script src="sfx.js?v=39"></script>
-  <script src="confetti.js?v=39"></script>
-  <script src="achievements.js?v=39"></script>
-  <script src="highlights.js?v=39"></script>
-  <script src="odai-generator.js?v=39"></script>
-  <script src="game.js?v=39"></script>
+  <!-- 📢 広告（Google AdSense用。ads-config.js が未設定でも他の機能には影響しません） -->
+  <script src="ads-config.js?v=45"></script>
+  <script src="ads.js?v=45"></script>
+
+  <!-- 😈 タゴサクAI（毒舌チャット。Vercelへのデプロイ・ai-roast-config.jsの設定が必要。未設定でも他の機能には影響しません） -->
+  <script src="ai-roast-config.js?v=45"></script>
+  <script src="ai-roast.js?v=45"></script>
+
+  <script src="bgm.js?v=45"></script>
+  <script src="sfx.js?v=45"></script>
+  <script src="confetti.js?v=45"></script>
+  <script src="achievements.js?v=45"></script>
+  <script src="highlights.js?v=45"></script>
+  <script src="odai-generator.js?v=45"></script>
+  <script src="swarm.js?v=45"></script>
+  <script src="game.js?v=45"></script>
 </body>
 </html>
