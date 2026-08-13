@@ -102,6 +102,7 @@ const state = {
   pendingTrialOffer: false, // 次の「次のルーレットへ」で24時間お試し案内を挟むかどうか
   theme: "neon",       // "neon" / "casino" / "izakaya"（🎨着せ替え・有料機能）
   riggedName: null,    // 🃏イカサマモードで仕込んだ名前（次の1回だけ有効）
+  hypeEnabled: false,  // 🔊盛り上がりメーター（マイク音量連動、有効時のみゲーム画面でマイクを起動）
   pack: "standard",    // "standard" / "romance"（💌恋愛パック・有料機能）
   onlineRole: null,    // null / "host" / "guest"（📡オンラインモード・有料機能）
   onlineCode: null,    // オンラインモードの部屋コード
@@ -301,6 +302,13 @@ const UI = {
     trialOfferDesc: "ここまで遊んでくれてありがとう！記念に、大人向けパックやイカサマモードなど有料コンテンツを24時間だけ無料で解放しちゃいます。",
     trialOfferAccept: "🎁 無料で試す",
     trialOfferDecline: "また今度",
+    hypeOn: "🔊 盛り上がりメーターON",
+    hypeOff: "🔊 盛り上がりメーターOFF",
+    hypeUnsupported: "このブラウザは盛り上がりメーターに対応していません",
+    hypeMicDenied: "マイクの使用が許可されませんでした",
+    hypeChallenge: "🔥 声を出して盛り上げろ！",
+    hypeSuccess: "🔥 MAX HYPE!!",
+    hypeFail: "……今回は静かめでした（笑）",
     subTitle: "📮 罰ゲーム投稿・共有",
     subDesc: "あなたが考えたオリジナルの罰ゲームを投稿できます。自動審査＋確認を経てから、他のユーザーに共有されます（個人情報や誹謗中傷は含めないでください）。",
     subPlaceholder: "例：好きな芸能人のモノマネをする",
@@ -328,7 +336,7 @@ const UI = {
     helpTitle: "❓ アイコンの説明",
     helpItems: [
       "BGMのオン・オフ", "BGMのジャンル切り替え", "読み上げの声を切り替え", "表示言語の切り替え",
-      "ルーレットの見た目（有料）", "お題結果の振り返り", "実績バッジ一覧", "お題の投稿・みんなの投稿",
+      "ルーレットの見た目（有料）", "盛り上がりメーター（マイク音量）", "お題結果の振り返り", "実績バッジ一覧", "お題の投稿・みんなの投稿",
       "アプリをシェア", "Xでシェア", "WhatsAppでシェア", "Telegramでシェア", "Instagramでシェア",
       "WeChatでシェア", "盛り上がる瞬間の録画モード", "SNS投稿用キット", "お友達紹介リンク",
     ],
@@ -501,6 +509,13 @@ const UI = {
     trialOfferDesc: "Thanks for playing this far! As a thank-you, all premium content — Adults Only, Rig Mode, and more — is unlocked free for the next 24 hours.",
     trialOfferAccept: "🎁 Try it free",
     trialOfferDecline: "Maybe later",
+    hypeOn: "🔊 Hype Meter ON",
+    hypeOff: "🔊 Hype Meter OFF",
+    hypeUnsupported: "This browser doesn't support the Hype Meter",
+    hypeMicDenied: "Microphone access was denied",
+    hypeChallenge: "🔥 Get loud!",
+    hypeSuccess: "🔥 MAX HYPE!!",
+    hypeFail: "...pretty quiet this time (lol)",
     subTitle: "📮 Post & Share Dares",
     subDesc: "Submit an original dare you came up with. After passing automatic screening and review, it'll be shared with other users (please don't include personal info or insults).",
     subPlaceholder: "e.g. do an impression of your favorite celebrity",
@@ -528,7 +543,7 @@ const UI = {
     helpTitle: "❓ What the icons do",
     helpItems: [
       "Toggle BGM on/off", "Switch BGM genre", "Switch the read-aloud voice", "Switch display language",
-      "Roulette look & theme (premium)", "Look back at past results", "Achievement badges", "Post & browse dare submissions",
+      "Roulette look & theme (premium)", "Hype meter (mic volume)", "Look back at past results", "Achievement badges", "Post & browse dare submissions",
       "Share the app", "Share on X", "Share on WhatsApp", "Share on Telegram", "Share on Instagram",
       "Share on WeChat", "Recording mode for big moments", "Social media posting kit", "Get your referral link",
     ],
@@ -701,6 +716,13 @@ const UI = {
     trialOfferDesc: "感謝你玩到現在！作為回饋，成人限定套組、作弊模式等所有付費內容將免費解鎖24小時。",
     trialOfferAccept: "🎁 免費試用",
     trialOfferDecline: "下次再說",
+    hypeOn: "🔊 熱鬧度儀表 已開啟",
+    hypeOff: "🔊 熱鬧度儀表 已關閉",
+    hypeUnsupported: "此瀏覽器不支援熱鬧度儀表",
+    hypeMicDenied: "麥克風權限被拒絕",
+    hypeChallenge: "🔥 大聲歡呼炒熱氣氛！",
+    hypeSuccess: "🔥 MAX HYPE!!",
+    hypeFail: "……這次有點安靜呢（笑）",
     subTitle: "📮 罰遊戲投稿・分享",
     subDesc: "您可以投稿自己想的原創罰遊戲。經過自動審查與確認後，會分享給其他使用者（請勿包含個人資訊或誹謗中傷內容）。",
     subPlaceholder: "例：模仿喜歡的藝人",
@@ -728,7 +750,7 @@ const UI = {
     helpTitle: "❓ 圖示說明",
     helpItems: [
       "BGM開關", "切換BGM曲風", "切換朗讀聲音", "切換顯示語言",
-      "輪盤外觀主題（付費）", "回顧過去的結果", "成就徽章一覽", "投稿・瀏覽大家的投稿",
+      "輪盤外觀主題（付費）", "熱鬧度儀表（麥克風音量）", "回顧過去的結果", "成就徽章一覽", "投稿・瀏覽大家的投稿",
       "分享本應用程式", "在X分享", "在WhatsApp分享", "在Telegram分享", "在Instagram分享",
       "在WeChat分享", "精彩瞬間錄影模式", "社群投稿套件", "取得推薦連結",
     ],
@@ -901,6 +923,13 @@ const UI = {
     trialOfferDesc: "여기까지 즐겨주셔서 감사합니다! 감사의 의미로 성인 전용 팩·조작 모드 등 모든 프리미엄 콘텐츠를 24시간 동안 무료로 해제해드립니다.",
     trialOfferAccept: "🎁 무료로 체험하기",
     trialOfferDecline: "다음에 할게요",
+    hypeOn: "🔊 흥분도 미터 켜짐",
+    hypeOff: "🔊 흥분도 미터 꺼짐",
+    hypeUnsupported: "이 브라우저는 흥분도 미터를 지원하지 않습니다",
+    hypeMicDenied: "마이크 사용이 허용되지 않았습니다",
+    hypeChallenge: "🔥 소리쳐서 분위기를 띄워라!",
+    hypeSuccess: "🔥 MAX HYPE!!",
+    hypeFail: "……이번엔 조용했네요（웃음）",
     subTitle: "📮 벌칙 투고・공유",
     subDesc: "직접 생각한 오리지널 벌칙을 투고할 수 있습니다. 자동 심사와 확인을 거친 후 다른 사용자와 공유됩니다（개인정보나 비방은 포함하지 말아주세요）.",
     subPlaceholder: "예：좋아하는 연예인 성대모사하기",
@@ -928,7 +957,7 @@ const UI = {
     helpTitle: "❓ 아이콘 설명",
     helpItems: [
       "BGM 켜기/끄기", "BGM 장르 전환", "읽어주는 목소리 전환", "표시 언어 전환",
-      "룰렛 테마(프리미엄)", "지난 결과 돌아보기", "업적 배지 목록", "투고・모두의 투고 보기",
+      "룰렛 테마(프리미엄)", "흥분도 미터(마이크 음량)", "지난 결과 돌아보기", "업적 배지 목록", "투고・모두의 투고 보기",
       "앱 공유하기", "X에 공유", "WhatsApp에 공유", "Telegram에 공유", "Instagram에 공유",
       "WeChat에 공유", "하이라이트 녹화 모드", "SNS 게시용 키트", "친구 추천 링크 받기",
     ],
@@ -1101,6 +1130,13 @@ const UI = {
     trialOfferDesc: "¡Gracias por jugar hasta aquí! Como agradecimiento, todo el contenido premium —Paquete Solo Adultos, Modo Amañado y más— se desbloquea gratis durante 24 horas.",
     trialOfferAccept: "🎁 Probar gratis",
     trialOfferDecline: "Quizás luego",
+    hypeOn: "🔊 Medidor de Hype ACTIVADO",
+    hypeOff: "🔊 Medidor de Hype DESACTIVADO",
+    hypeUnsupported: "Este navegador no admite el Medidor de Hype",
+    hypeMicDenied: "Se denegó el acceso al micrófono",
+    hypeChallenge: "🔥 ¡Griten fuerte!",
+    hypeSuccess: "🔥 ¡MAX HYPE!!",
+    hypeFail: "...estuvo bastante tranquilo esta vez (jaja)",
     subTitle: "📮 Publicar y Compartir Retos",
     subDesc: "Envía un reto original que se te haya ocurrido. Tras pasar la revisión automática y la confirmación, se compartirá con otros usuarios (no incluyas información personal ni insultos).",
     subPlaceholder: "ej: imita a tu famoso favorito",
@@ -1128,7 +1164,7 @@ const UI = {
     helpTitle: "❓ Qué hace cada icono",
     helpItems: [
       "Activar/desactivar BGM", "Cambiar género de BGM", "Cambiar voz narradora", "Cambiar idioma",
-      "Tema visual de la ruleta (premium)", "Ver resultados anteriores", "Lista de logros", "Publicar y ver retos de otros",
+      "Tema visual de la ruleta (premium)", "Medidor de Hype (volumen del micrófono)", "Ver resultados anteriores", "Lista de logros", "Publicar y ver retos de otros",
       "Compartir la app", "Compartir en X", "Compartir en WhatsApp", "Compartir en Telegram", "Compartir en Instagram",
       "Compartir en WeChat", "Modo grabación de momentos", "Kit para redes sociales", "Obtener enlace de referido",
     ],
@@ -1301,6 +1337,13 @@ const UI = {
     trialOfferDesc: "Obrigado por jogar até aqui! Como agradecimento, todo o conteúdo premium — Pacote Somente Adultos, Modo Manipulado e mais — fica liberado grátis por 24 horas.",
     trialOfferAccept: "🎁 Testar grátis",
     trialOfferDecline: "Talvez depois",
+    hypeOn: "🔊 Medidor de Hype LIGADO",
+    hypeOff: "🔊 Medidor de Hype DESLIGADO",
+    hypeUnsupported: "Este navegador não suporta o Medidor de Hype",
+    hypeMicDenied: "O acesso ao microfone foi negado",
+    hypeChallenge: "🔥 Gritem alto!",
+    hypeSuccess: "🔥 MAX HYPE!!",
+    hypeFail: "...ficou bem quieto dessa vez (kkk)",
     subTitle: "📮 Publicar e Compartilhar Desafios",
     subDesc: "Envie um desafio original que você inventou. Após passar pela triagem automática e revisão, será compartilhado com outros usuários (não inclua informações pessoais nem ofensas).",
     subPlaceholder: "ex: imitar seu famoso favorito",
@@ -1328,7 +1371,7 @@ const UI = {
     helpTitle: "❓ O que cada ícone faz",
     helpItems: [
       "Ativar/desativar BGM", "Trocar gênero da BGM", "Trocar voz de narração", "Trocar idioma",
-      "Tema visual da roleta (premium)", "Ver resultados anteriores", "Lista de conquistas", "Publicar e ver desafios de outros",
+      "Tema visual da roleta (premium)", "Medidor de Hype (volume do microfone)", "Ver resultados anteriores", "Lista de conquistas", "Publicar e ver desafios de outros",
       "Compartilhar o app", "Compartilhar no X", "Compartilhar no WhatsApp", "Compartilhar no Telegram", "Compartilhar no Instagram",
       "Compartilhar no WeChat", "Modo de gravação de momentos", "Kit para redes sociais", "Obter link de indicação",
     ],
@@ -1501,6 +1544,13 @@ const UI = {
     trialOfferDesc: "Cảm ơn bạn đã chơi đến giờ! Để cảm ơn, toàn bộ nội dung premium — Gói Chỉ dành cho người lớn, Chế độ Gian lận và hơn thế nữa — sẽ được mở khóa miễn phí trong 24 giờ.",
     trialOfferAccept: "🎁 Dùng thử miễn phí",
     trialOfferDecline: "Để sau",
+    hypeOn: "🔊 Đã bật Máy đo độ sôi động",
+    hypeOff: "🔊 Đã tắt Máy đo độ sôi động",
+    hypeUnsupported: "Trình duyệt này không hỗ trợ Máy đo độ sôi động",
+    hypeMicDenied: "Quyền truy cập micro đã bị từ chối",
+    hypeChallenge: "🔥 Hét thật to lên nào!",
+    hypeSuccess: "🔥 MAX HYPE!!",
+    hypeFail: "...lần này hơi yên tĩnh nhỉ (cười)",
     subTitle: "📮 Đăng & Chia sẻ Thử thách",
     subDesc: "Gửi một thử thách gốc mà bạn nghĩ ra. Sau khi vượt qua kiểm duyệt tự động và xét duyệt, nó sẽ được chia sẻ với những người dùng khác (vui lòng không bao gồm thông tin cá nhân hoặc lời lẽ xúc phạm).",
     subPlaceholder: "vd: bắt chước người nổi tiếng yêu thích của bạn",
@@ -1528,7 +1578,7 @@ const UI = {
     helpTitle: "❓ Chức năng của các biểu tượng",
     helpItems: [
       "Bật/tắt nhạc nền", "Đổi thể loại nhạc nền", "Đổi giọng đọc", "Đổi ngôn ngữ hiển thị",
-      "Giao diện vòng quay (premium)", "Xem lại kết quả trước đó", "Danh sách huy hiệu thành tích", "Đăng & xem bài của mọi người",
+      "Giao diện vòng quay (premium)", "Máy đo độ sôi động (âm lượng micro)", "Xem lại kết quả trước đó", "Danh sách huy hiệu thành tích", "Đăng & xem bài của mọi người",
       "Chia sẻ ứng dụng", "Chia sẻ trên X", "Chia sẻ trên WhatsApp", "Chia sẻ trên Telegram", "Chia sẻ trên Instagram",
       "Chia sẻ trên WeChat", "Chế độ quay khoảnh khắc nổi bật", "Bộ công cụ đăng mạng xã hội", "Lấy link giới thiệu bạn bè",
     ],
@@ -1701,6 +1751,13 @@ const UI = {
     trialOfferDesc: "Danke, dass du bis hierhin gespielt hast! Als Dankeschön schalten wir alle Premium-Inhalte – das Erwachsenen-Paket, den Schummel-Modus und mehr – für 24 Stunden kostenlos frei.",
     trialOfferAccept: "🎁 Kostenlos testen",
     trialOfferDecline: "Vielleicht später",
+    hypeOn: "🔊 Hype-Meter AN",
+    hypeOff: "🔊 Hype-Meter AUS",
+    hypeUnsupported: "Dieser Browser unterstützt das Hype-Meter nicht",
+    hypeMicDenied: "Mikrofonzugriff wurde verweigert",
+    hypeChallenge: "🔥 Werdet laut!",
+    hypeSuccess: "🔥 MAX HYPE!!",
+    hypeFail: "...war diesmal ziemlich leise (haha)",
     subTitle: "📮 Aufgaben posten & teilen",
     subDesc: "Reiche eine eigene Aufgabe ein, die du dir ausgedacht hast. Nach automatischer Prüfung und Freigabe wird sie mit anderen Nutzern geteilt (bitte keine persönlichen Daten oder Beleidigungen).",
     subPlaceholder: "z. B. mach eine Imitation deines Lieblingspromis",
@@ -1728,7 +1785,7 @@ const UI = {
     helpTitle: "❓ Was die Symbole bedeuten",
     helpItems: [
       "Hintergrundmusik ein/aus", "Musikgenre wechseln", "Vorlesestimme wechseln", "Sprache wechseln",
-      "Roulette-Design (Premium)", "Frühere Ergebnisse ansehen", "Erfolgsabzeichen", "Beiträge posten & ansehen",
+      "Roulette-Design (Premium)", "Hype-Meter (Mikrofonlautstärke)", "Frühere Ergebnisse ansehen", "Erfolgsabzeichen", "Beiträge posten & ansehen",
       "App teilen", "Auf X teilen", "Auf WhatsApp teilen", "Auf Telegram teilen", "Auf Instagram teilen",
       "Auf WeChat teilen", "Aufnahmemodus für Highlights", "Social-Media-Kit", "Empfehlungslink erhalten",
     ],
@@ -1901,6 +1958,13 @@ const UI = {
     trialOfferDesc: "Salamat sa paglalaro hanggang dito! Bilang pasasalamat, lahat ng premium content — Adults Only pack, Rig Mode, at marami pa — bukas na libre sa susunod na 24 oras.",
     trialOfferAccept: "🎁 Subukan nang libre",
     trialOfferDecline: "Sa susunod na lang",
+    hypeOn: "🔊 Naka-ON ang Hype Meter",
+    hypeOff: "🔊 Naka-OFF ang Hype Meter",
+    hypeUnsupported: "Hindi suportado ng browser na ito ang Hype Meter",
+    hypeMicDenied: "Hindi pinayagan ang paggamit ng mikropono",
+    hypeChallenge: "🔥 Sumigaw kayo nang malakas!",
+    hypeSuccess: "🔥 MAX HYPE!!",
+    hypeFail: "...tahimik medyo ngayon (haha)",
     subTitle: "📮 I-post ang Hamon",
     subDesc: "Mag-submit ng orihinal na hamon na naisip mo. Pagkatapos ng automatic screening at review, ishe-share ito sa ibang users (huwag maglagay ng personal info o insulto).",
     subPlaceholder: "hal. gumaya sa paborito mong celebrity",
@@ -1928,7 +1992,7 @@ const UI = {
     helpTitle: "❓ Ano ang ginagawa ng mga icon",
     helpItems: [
       "I-on/off ang BGM", "Palitan ang genre ng BGM", "Palitan ang boses sa pagbasa", "Palitan ang wika",
-      "Tema ng roulette (premium)", "Balikan ang mga nakaraang resulta", "Listahan ng achievement badges", "I-post at tingnan ang mga isinumite",
+      "Tema ng roulette (premium)", "Hype meter (lakas ng mikropono)", "Balikan ang mga nakaraang resulta", "Listahan ng achievement badges", "I-post at tingnan ang mga isinumite",
       "I-share ang app", "I-share sa X", "I-share sa WhatsApp", "I-share sa Telegram", "I-share sa Instagram",
       "I-share sa WeChat", "Recording mode para sa mga highlight", "Kit para sa social media posting", "Kumuha ng referral link",
     ],
@@ -1975,6 +2039,8 @@ function applyLanguage() {
   document.getElementById("pack-couple").innerHTML = `${u.packs.couple} <span class="lock">🔒</span>`;
   document.getElementById("pack-romance").innerHTML = `${u.packs.romance} <span class="lock">🔒</span>`;
   document.getElementById("pack-online").innerHTML = `${u.packs.online} <span class="lock">🔒</span>`;
+  document.getElementById("pack-nerutoon").innerHTML = `${u.packs.nerutoon} <span class="lock">🔒</span>`;
+  document.getElementById("pack-party").innerHTML = `${u.packs.party} <span class="lock">🔒</span>`;
   document.getElementById("pack-noalcohol").textContent = u.packs.noalcohol;
   document.getElementById("pack-solo").innerHTML = `${u.packs.solo} <span class="lock">🔒</span>`;
   document.getElementById("pack-roast").innerHTML = `${u.packs.roast} <span class="lock">🔒</span>`;
@@ -2125,6 +2191,15 @@ function showScreen(name) {
   Object.values(screens).forEach((s) => s.classList.add("hidden"));
   screens[name].classList.remove("hidden");
   window.scrollTo(0, 0);
+  // 🔊盛り上がりメーター：ゲーム画面にいる間だけマイクを起動し、離れたら必ず止める（プライバシー配慮）
+  if (typeof HypeMeter !== "undefined") {
+    if (name === "game" && state.hypeEnabled) {
+      HypeMeter.start();
+    } else {
+      HypeMeter.stop();
+      stopHypeChallenge();
+    }
+  }
 }
 
 /* =========================================================
@@ -2217,6 +2292,90 @@ btnTheme.addEventListener("click", () => {
   applyTheme();
   showToast(t("themes")[state.theme]);
 });
+
+/* ---------------- 🔊 盛り上がりメーター（マイク音量連動・無料機能） ----------------
+   マイクの音量に応じたゲージを表示し、盛り上がったらボーナス演出。
+   声が足りなくても一切ペナルティは無い（罰の強制はしない、という設計方針を守るため） */
+const btnHype = document.getElementById("btn-hype");
+
+btnHype.addEventListener("click", async () => {
+  const turningOn = !state.hypeEnabled;
+  if (turningOn) {
+    if (!HypeMeter.isSupported()) {
+      showToast(t("hypeUnsupported"));
+      return;
+    }
+    const ok = await HypeMeter.start();
+    if (!ok) {
+      showToast(t("hypeMicDenied"));
+      return;
+    }
+  } else {
+    HypeMeter.stop();
+    stopHypeChallenge();
+  }
+  state.hypeEnabled = turningOn;
+  btnHype.classList.toggle("active", turningOn);
+  try { localStorage.setItem("batsu-hype-enabled", turningOn ? "1" : "0"); } catch (e) {}
+  showToast(t(turningOn ? "hypeOn" : "hypeOff"));
+});
+
+const HYPE_CHALLENGE_DURATION = 8000; // 8秒以内に盛り上げられるか
+const HYPE_THRESHOLD = 62; // 0〜100の目安値のうち、これを超えたら成功（体感で調整可能）
+let hypeChallengeActive = false;
+let hypeChallengeFrame = null;
+
+function startHypeChallenge() {
+  if (!state.hypeEnabled || !HypeMeter.isRunning()) return;
+  stopHypeChallenge(); // 前回分の後片付け
+
+  const panel = document.getElementById("hype-panel");
+  const fill = document.getElementById("hype-bar-fill");
+  const label = document.getElementById("hype-label");
+  const timerEl = document.getElementById("hype-timer");
+
+  panel.classList.remove("hidden", "hype-success", "hype-fail");
+  label.textContent = t("hypeChallenge");
+  hypeChallengeActive = true;
+  const startTime = performance.now();
+
+  function frame(now) {
+    if (!hypeChallengeActive) return;
+    const level = HypeMeter.getLevel();
+    fill.style.width = level + "%";
+    const elapsed = now - startTime;
+    const remaining = Math.max(0, HYPE_CHALLENGE_DURATION - elapsed);
+    timerEl.textContent = (remaining / 1000).toFixed(1) + "s";
+
+    if (level >= HYPE_THRESHOLD) {
+      hypeChallengeActive = false;
+      panel.classList.add("hype-success");
+      label.textContent = t("hypeSuccess");
+      celebrate(["#ffe14b", "#2de2ff", "#ffffff"], 60);
+      SFX.reveal();
+      setTimeout(() => panel.classList.add("hidden"), 1800);
+      return;
+    }
+    if (elapsed >= HYPE_CHALLENGE_DURATION) {
+      hypeChallengeActive = false;
+      // 声が足りなくても、ここでは何も罰は与えない。コミカルな「不発」演出だけ
+      panel.classList.add("hype-fail");
+      label.textContent = t("hypeFail");
+      setTimeout(() => panel.classList.add("hidden"), 1800);
+      return;
+    }
+    hypeChallengeFrame = requestAnimationFrame(frame);
+  }
+  hypeChallengeFrame = requestAnimationFrame(frame);
+}
+
+function stopHypeChallenge() {
+  hypeChallengeActive = false;
+  if (hypeChallengeFrame) cancelAnimationFrame(hypeChallengeFrame);
+  hypeChallengeFrame = null;
+  const panel = document.getElementById("hype-panel");
+  if (panel) panel.classList.add("hidden");
+}
 
 /* ---------------- 🃏 イカサマモード（幹事専用・有料機能） ---------------- */
 const btnRig = document.getElementById("btn-rig");
@@ -2482,7 +2641,7 @@ document.getElementById("achievements-close").addEventListener("click", () => {
    HELP_ICONSの並び順は、UI[lang].helpItems（game.js内、各言語の
    achUnlocked直後）の並び順と1対1で対応させること。 */
 const modalHelp = document.getElementById("modal-help");
-const HELP_ICONS = ["🎷", "🎷", "🎲", "🌐", "🎨", "📸", "🏆", "📮", "📤", "X", "💬", "✈️", "📷", "💚", "🎬", "🚀", "🔗"];
+const HELP_ICONS = ["🎷", "🎷", "🎲", "🌐", "🎨", "🔊", "📸", "🏆", "📮", "📤", "X", "💬", "✈️", "📷", "💚", "🎬", "🚀", "🔗"];
 
 function renderHelp() {
   document.getElementById("t-help-title").textContent = t("helpTitle");
@@ -3627,6 +3786,7 @@ function finishOdaiReveal(odai) {
   }
 
   speakOdai(odai.speechText, state.lang, resolveVoice());
+  startHypeChallenge();
 }
 
 // 👑 王様モード！
@@ -3668,6 +3828,7 @@ function showKing(king, targets, showReminder) {
   }
 
   speakOdai(state.currentSpeech, state.lang, resolveVoice());
+  startHypeChallenge();
 }
 
 // もう一度読み上げ（さっきと同じ声で）
@@ -3963,6 +4124,39 @@ document.getElementById("viral-copy-shorturl").addEventListener("click", async (
   }
 });
 
+/* ---------------- 🔗 お友達紹介 / アフィリエイト ---------------- */
+const btnReferral = document.getElementById("btn-referral");
+const modalReferral = document.getElementById("modal-referral");
+
+function renderReferral() {
+  document.getElementById("t-referral-title").textContent = t("referralTitle");
+  document.getElementById("t-referral-desc").textContent = t("referralDesc");
+  document.getElementById("referral-copy").textContent = t("referralCopy");
+  document.getElementById("t-referral-affiliate-note").textContent = t("referralAffiliateNote");
+  document.getElementById("referral-close").textContent = t("referralClose");
+  document.getElementById("referral-link-input").value =
+    typeof Referral !== "undefined" ? Referral.getShareLink() : "";
+  document.getElementById("referral-bonus-status").textContent =
+    typeof Referral !== "undefined" && Referral.hasActiveBonus() ? t("referralBonusActive") : "";
+}
+
+btnReferral.addEventListener("click", () => {
+  renderReferral();
+  modalReferral.classList.remove("hidden");
+});
+document.getElementById("referral-close").addEventListener("click", () => {
+  modalReferral.classList.add("hidden");
+});
+document.getElementById("referral-copy").addEventListener("click", async () => {
+  const link = document.getElementById("referral-link-input").value;
+  try {
+    await navigator.clipboard.writeText(link);
+    showToast(t("referralCopied"));
+  } catch (e) {
+    showToast(link);
+  }
+});
+
 document.getElementById("btn-share").addEventListener("click", () => {
   if (!odaiCard.textContent) return;
   shareContent(t("shareOdaiText")(odaiCard.textContent), lastHighlightDataUrl);
@@ -4080,6 +4274,11 @@ try {
   if (localStorage.getItem(PACK_STORAGE_KEY) === "kinggame") {
     state.pack = "kinggame";
     btnKingGame.classList.add("active-pack");
+  }
+  // 🔊盛り上がりメーターの設定を復元（実際のマイク起動はゲーム画面に入った時、showScreen()内で行う）
+  if (localStorage.getItem("batsu-hype-enabled") === "1") {
+    state.hypeEnabled = true;
+    btnHype.classList.add("active");
   }
 } catch (e) {}
 
