@@ -15,6 +15,14 @@
 const KING_CHANCE_STANDARD = 0.10; // 10%（標準パック等）
 const KING_CHANCE_ADULT = 0.50; // 50%（🔞大人向けパックのみ）
 
+/* ---------------- 王様の「不成立が続いたら少し当たりやすくする」補正 ----------------
+   完全な確率通りだと「10回中0回」のような偏りが体感を悪くする（実際には約35%の確率で
+   起こりうる範囲内の分散でも、ユーザーには「壊れてる」「不公平」に見える）。
+   王様不成立のラウンドが続くほど当選率をわずかに底上げし、外れ続ける体験を和らげる。
+   上限を設けて確率を歪めすぎないようにする（1回あたり+1.5%、最大+20%まで）。 */
+const KING_DRY_STREAK_STEP = 0.015;
+const KING_DRY_STREAK_CAP = 0.20;
+
 /* ---------------- 🧑‍⚖️ 審査員ハプニングモードの発動確率 ---------------- */
 // 王様モードでない回のうち、この確率で「今回の審査員」が参加者の中から
 // ランダムに指名される(通常のお題に一言添えるだけの演出)。実際に何か
@@ -24,6 +32,21 @@ const JUDGE_CHANCE = 0.35; // 35%
 
 /* ---------------- 表彰式の間隔 ---------------- */
 const CEREMONY_INTERVAL = 10; // 10ラウンドごとに表彰式
+
+/* ---------------- 🎁 無料版のグロース導線：規定回数遊んだら24時間お試しを案内 ---------------- */
+// referral.jsの「友達紹介24時間特典」と同じ仕組みを、規定ラウンド数プレイという
+// 別の条件からも起動する（表示は端末につき1回だけ。無料で遊べる範囲は一切減らさない）
+const FREE_TRIAL_OFFER_ROUND = 5;
+const TRIAL_OFFER_SHOWN_KEY = "batsu-trial-offer-shown";
+
+function maybeQueueTrialOffer() {
+  if (isPremiumUnlocked()) return;
+  if (state.roundCount < FREE_TRIAL_OFFER_ROUND) return;
+  try {
+    if (localStorage.getItem(TRIAL_OFFER_SHOWN_KEY)) return;
+  } catch (e) {}
+  state.pendingTrialOffer = true;
+}
 
 /* ---------------- 言語の切り替え順番 ---------------- */
 const LANG_CYCLE = ["ja", "en", "zh", "ko", "es", "pt", "vi", "de", "tl"];
@@ -73,8 +96,10 @@ const state = {
   voicePersona: "random", // 声のキャラクター（random / mc / oyaji / girl）
   currentVoice: null,     // 今回の読み上げに使った声（もう一度読み上げ用）
   roundCount: 0,       // これまでに終わったラウンド数（表彰の判定に使う）
+  roundsSinceKing: 0,  // 王様不成立が連続した回数（当選率の底上げ判定用）
   stats: {},           // 名前 -> { king: 王様になった回数, challenge: お題をやった回数 }
   pendingCeremony: false, // 次の「次のルーレットへ」で表彰画面を挟むかどうか
+  pendingTrialOffer: false, // 次の「次のルーレットへ」で24時間お試し案内を挟むかどうか
   theme: "neon",       // "neon" / "casino" / "izakaya"（🎨着せ替え・有料機能）
   riggedName: null,    // 🃏イカサマモードで仕込んだ名前（次の1回だけ有効）
   pack: "standard",    // "standard" / "romance"（💌恋愛パック・有料機能）
@@ -272,6 +297,10 @@ const UI = {
     unlockedTitle: "✨ 有料版が有効になりました！",
     unlockedDesc: "ご購入ありがとうございます！大人向けパック・イカサマモード・着せ替えテーマなど、有料コンテンツが全て解放されました。乾杯🍻",
     unlockedClose: "はじめる",
+    trialOfferTitle: "🎁 24時間、有料版を無料お試し！",
+    trialOfferDesc: "ここまで遊んでくれてありがとう！記念に、大人向けパックやイカサマモードなど有料コンテンツを24時間だけ無料で解放しちゃいます。",
+    trialOfferAccept: "🎁 無料で試す",
+    trialOfferDecline: "また今度",
     subTitle: "📮 罰ゲーム投稿・共有",
     subDesc: "あなたが考えたオリジナルの罰ゲームを投稿できます。自動審査＋確認を経てから、他のユーザーに共有されます（個人情報や誹謗中傷は含めないでください）。",
     subPlaceholder: "例：好きな芸能人のモノマネをする",
@@ -468,6 +497,10 @@ const UI = {
     unlockedTitle: "✨ Premium Unlocked!",
     unlockedDesc: "Thanks for your purchase! All premium content — the Adults Only pack, Rig Mode, roulette themes, and more — is now unlocked. Cheers! 🍻",
     unlockedClose: "Let's go",
+    trialOfferTitle: "🎁 24-Hour Free Trial!",
+    trialOfferDesc: "Thanks for playing this far! As a thank-you, all premium content — Adults Only, Rig Mode, and more — is unlocked free for the next 24 hours.",
+    trialOfferAccept: "🎁 Try it free",
+    trialOfferDecline: "Maybe later",
     subTitle: "📮 Post & Share Dares",
     subDesc: "Submit an original dare you came up with. After passing automatic screening and review, it'll be shared with other users (please don't include personal info or insults).",
     subPlaceholder: "e.g. do an impression of your favorite celebrity",
@@ -664,6 +697,10 @@ const UI = {
     unlockedTitle: "✨ 付費版已啟用！",
     unlockedDesc: "感謝您的購買！成人限定套組、作弊模式、輪盤換裝等所有付費內容現已全部解鎖。乾杯🍻",
     unlockedClose: "開始",
+    trialOfferTitle: "🎁 24小時免費試用付費版！",
+    trialOfferDesc: "感謝你玩到現在！作為回饋，成人限定套組、作弊模式等所有付費內容將免費解鎖24小時。",
+    trialOfferAccept: "🎁 免費試用",
+    trialOfferDecline: "下次再說",
     subTitle: "📮 罰遊戲投稿・分享",
     subDesc: "您可以投稿自己想的原創罰遊戲。經過自動審查與確認後，會分享給其他使用者（請勿包含個人資訊或誹謗中傷內容）。",
     subPlaceholder: "例：模仿喜歡的藝人",
@@ -860,6 +897,10 @@ const UI = {
     unlockedTitle: "✨ 프리미엄이 활성화되었습니다!",
     unlockedDesc: "구매해주셔서 감사합니다! 성인 전용 팩·조작 모드·룰렛 테마 변경 등 모든 프리미엄 콘텐츠가 해제되었습니다. 건배🍻",
     unlockedClose: "시작하기",
+    trialOfferTitle: "🎁 24시간 프리미엄 무료 체험!",
+    trialOfferDesc: "여기까지 즐겨주셔서 감사합니다! 감사의 의미로 성인 전용 팩·조작 모드 등 모든 프리미엄 콘텐츠를 24시간 동안 무료로 해제해드립니다.",
+    trialOfferAccept: "🎁 무료로 체험하기",
+    trialOfferDecline: "다음에 할게요",
     subTitle: "📮 벌칙 투고・공유",
     subDesc: "직접 생각한 오리지널 벌칙을 투고할 수 있습니다. 자동 심사와 확인을 거친 후 다른 사용자와 공유됩니다（개인정보나 비방은 포함하지 말아주세요）.",
     subPlaceholder: "예：좋아하는 연예인 성대모사하기",
@@ -1056,6 +1097,10 @@ const UI = {
     unlockedTitle: "✨ ¡Versión Premium Activada!",
     unlockedDesc: "¡Gracias por tu compra! Todo el contenido premium — el Paquete Solo Adultos, Modo Amañado, temas de la ruleta y más — ya está desbloqueado. ¡Salud! 🍻",
     unlockedClose: "Empezar",
+    trialOfferTitle: "🎁 ¡Prueba Premium gratis por 24 horas!",
+    trialOfferDesc: "¡Gracias por jugar hasta aquí! Como agradecimiento, todo el contenido premium —Paquete Solo Adultos, Modo Amañado y más— se desbloquea gratis durante 24 horas.",
+    trialOfferAccept: "🎁 Probar gratis",
+    trialOfferDecline: "Quizás luego",
     subTitle: "📮 Publicar y Compartir Retos",
     subDesc: "Envía un reto original que se te haya ocurrido. Tras pasar la revisión automática y la confirmación, se compartirá con otros usuarios (no incluyas información personal ni insultos).",
     subPlaceholder: "ej: imita a tu famoso favorito",
@@ -1252,6 +1297,10 @@ const UI = {
     unlockedTitle: "✨ Versão Premium Ativada!",
     unlockedDesc: "Obrigado pela compra! Todo o conteúdo premium — Pacote Somente Adultos, Modo Manipulado, temas da roleta e mais — já está desbloqueado. Saúde! 🍻",
     unlockedClose: "Vamos lá",
+    trialOfferTitle: "🎁 Teste grátis de 24 horas!",
+    trialOfferDesc: "Obrigado por jogar até aqui! Como agradecimento, todo o conteúdo premium — Pacote Somente Adultos, Modo Manipulado e mais — fica liberado grátis por 24 horas.",
+    trialOfferAccept: "🎁 Testar grátis",
+    trialOfferDecline: "Talvez depois",
     subTitle: "📮 Publicar e Compartilhar Desafios",
     subDesc: "Envie um desafio original que você inventou. Após passar pela triagem automática e revisão, será compartilhado com outros usuários (não inclua informações pessoais nem ofensas).",
     subPlaceholder: "ex: imitar seu famoso favorito",
@@ -1448,6 +1497,10 @@ const UI = {
     unlockedTitle: "✨ Đã kích hoạt Phiên bản Premium!",
     unlockedDesc: "Cảm ơn bạn đã mua! Toàn bộ nội dung premium — Gói Chỉ dành cho người lớn, Chế độ Gian lận, giao diện vòng quay và hơn thế nữa — đã được mở khóa. Cạn ly! 🍻",
     unlockedClose: "Bắt đầu thôi",
+    trialOfferTitle: "🎁 Dùng thử Premium miễn phí 24 giờ!",
+    trialOfferDesc: "Cảm ơn bạn đã chơi đến giờ! Để cảm ơn, toàn bộ nội dung premium — Gói Chỉ dành cho người lớn, Chế độ Gian lận và hơn thế nữa — sẽ được mở khóa miễn phí trong 24 giờ.",
+    trialOfferAccept: "🎁 Dùng thử miễn phí",
+    trialOfferDecline: "Để sau",
     subTitle: "📮 Đăng & Chia sẻ Thử thách",
     subDesc: "Gửi một thử thách gốc mà bạn nghĩ ra. Sau khi vượt qua kiểm duyệt tự động và xét duyệt, nó sẽ được chia sẻ với những người dùng khác (vui lòng không bao gồm thông tin cá nhân hoặc lời lẽ xúc phạm).",
     subPlaceholder: "vd: bắt chước người nổi tiếng yêu thích của bạn",
@@ -1644,6 +1697,10 @@ const UI = {
     unlockedTitle: "✨ Premium freigeschaltet!",
     unlockedDesc: "Danke für deinen Kauf! Alle Premium-Inhalte – das Erwachsenen-Paket, der Schummel-Modus, Roulette-Designs und mehr – sind jetzt freigeschaltet. Prost! 🍻",
     unlockedClose: "Los geht's",
+    trialOfferTitle: "🎁 24 Stunden Premium gratis testen!",
+    trialOfferDesc: "Danke, dass du bis hierhin gespielt hast! Als Dankeschön schalten wir alle Premium-Inhalte – das Erwachsenen-Paket, den Schummel-Modus und mehr – für 24 Stunden kostenlos frei.",
+    trialOfferAccept: "🎁 Kostenlos testen",
+    trialOfferDecline: "Vielleicht später",
     subTitle: "📮 Aufgaben posten & teilen",
     subDesc: "Reiche eine eigene Aufgabe ein, die du dir ausgedacht hast. Nach automatischer Prüfung und Freigabe wird sie mit anderen Nutzern geteilt (bitte keine persönlichen Daten oder Beleidigungen).",
     subPlaceholder: "z. B. mach eine Imitation deines Lieblingspromis",
@@ -1840,6 +1897,10 @@ const UI = {
     unlockedTitle: "✨ Premium Unlocked!",
     unlockedDesc: "Salamat sa pagbili! Lahat ng premium content — Adults Only pack, Rig Mode, roulette themes, at marami pa — bukas na ngayon. Cheers! 🍻",
     unlockedClose: "Tara na",
+    trialOfferTitle: "🎁 24-Oras na Libreng Pagsubok!",
+    trialOfferDesc: "Salamat sa paglalaro hanggang dito! Bilang pasasalamat, lahat ng premium content — Adults Only pack, Rig Mode, at marami pa — bukas na libre sa susunod na 24 oras.",
+    trialOfferAccept: "🎁 Subukan nang libre",
+    trialOfferDecline: "Sa susunod na lang",
     subTitle: "📮 I-post ang Hamon",
     subDesc: "Mag-submit ng orihinal na hamon na naisip mo. Pagkatapos ng automatic screening at review, ishe-share ito sa ibang users (huwag maglagay ng personal info o insulto).",
     subPlaceholder: "hal. gumaya sa paborito mong celebrity",
@@ -3369,8 +3430,11 @@ btnSpin.addEventListener("click", () => {
 
   // このスピンが王様モード／審査員ハプニングになるかどうか、先に運命を決めておく
   // 🔞大人向けパックのときだけ発動率50%＋対象者指名、それ以外は従来通り10%＋全員への自由命令
+  // 王様不成立が続くほど当選率をわずかに底上げする（外れ運が続く体験を和らげる。上限20%まで）
   const isAdultPack = state.pack === "adult";
-  const kingRound = Math.random() < (isAdultPack ? KING_CHANCE_ADULT : KING_CHANCE_STANDARD);
+  const baseKingChance = isAdultPack ? KING_CHANCE_ADULT : KING_CHANCE_STANDARD;
+  const dryStreakBonus = Math.min(state.roundsSinceKing * KING_DRY_STREAK_STEP, KING_DRY_STREAK_CAP);
+  const kingRound = Math.random() < baseKingChance + dryStreakBonus;
   const judgeRound = !kingRound && Math.random() < JUDGE_CHANCE;
 
   spinWheel((winner, idx) => {
@@ -3385,10 +3449,12 @@ btnSpin.addEventListener("click", () => {
     // 大人向けパックで王様が選ばれても、対象者がいなければ（例：ひとり飲みモード）通常のお題に切り替える
     const kingTargets = kingRound && isAdultPack ? pickKingTargets(winner) : null;
     const isActualKingRound = kingRound && (!isAdultPack || (kingTargets && kingTargets.length > 0));
+    state.roundsSinceKing = isActualKingRound ? 0 : state.roundsSinceKing + 1;
 
     bumpStat(winner.name, isActualKingRound ? "king" : "challenge");
     state.roundCount++;
     state.pendingCeremony = state.roundCount % CEREMONY_INTERVAL === 0;
+    maybeQueueTrialOffer();
 
     Achievements.bump("totalRounds");
     if (isActualKingRound) Achievements.bump("totalKings");
@@ -3430,6 +3496,7 @@ function runKingGameRound() {
 
     state.roundCount++;
     state.pendingCeremony = state.roundCount % CEREMONY_INTERVAL === 0;
+    maybeQueueTrialOffer();
     Achievements.bump("totalRounds");
 
     // 安全ガイドは「このデバイスで王様が誕生した最初の1回」だけ表示する。
@@ -3921,15 +3988,49 @@ document.getElementById("btn-share-wechat").addEventListener("click", () => {
   shareToWeChat(odaiCard.textContent);
 });
 
-// 次のルーレットへ（10ラウンドごとに表彰式を挟む）
+// 次のルーレットへ（10ラウンドごとに表彰式、5ラウンド目に1回だけお試し案内を挟む）
 document.getElementById("btn-next").addEventListener("click", () => {
   speechSynthesis.cancel();
   if (state.pendingCeremony) {
     state.pendingCeremony = false;
     showCeremony();
+  } else if (state.pendingTrialOffer) {
+    state.pendingTrialOffer = false;
+    showTrialOfferModal();
   } else {
     startRound();
   }
+});
+
+/* ---------------- 🎁 24時間お試し案内モーダル ---------------- */
+const modalTrialOffer = document.getElementById("modal-trial-offer");
+
+function showTrialOfferModal() {
+  document.getElementById("t-trial-title").textContent = t("trialOfferTitle");
+  document.getElementById("t-trial-desc").textContent = t("trialOfferDesc");
+  document.getElementById("trial-accept").textContent = t("trialOfferAccept");
+  document.getElementById("trial-decline").textContent = t("trialOfferDecline");
+  modalTrialOffer.classList.remove("hidden");
+}
+
+function closeTrialOfferModal() {
+  modalTrialOffer.classList.add("hidden");
+  try { localStorage.setItem(TRIAL_OFFER_SHOWN_KEY, "1"); } catch (e) {}
+  startRound();
+}
+
+document.getElementById("trial-accept").addEventListener("click", () => {
+  if (typeof Referral !== "undefined") Referral.grantBonus();
+  document.body.classList.add("premium-active");
+  document.getElementById("premium-badge").classList.remove("hidden");
+  if (typeof Ads !== "undefined") Ads.refresh();
+  celebrate(["#ffe14b", "#ffb52d", "#ffffff"], [100, 50, 100, 50, 200]);
+  SFX.kingFanfare();
+  closeTrialOfferModal();
+});
+
+document.getElementById("trial-decline").addEventListener("click", () => {
+  closeTrialOfferModal();
 });
 
 // 🏆 表彰式：王様回数・お題回数のランキングを表示

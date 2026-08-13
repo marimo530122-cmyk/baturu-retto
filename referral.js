@@ -171,6 +171,7 @@ const Referral = (() => {
     getReferrerCode,
     getShareLink,
     hasActiveBonus,
+    grantBonus,
     enrichCheckoutUrl,
     isFirebaseConfigured,
   };

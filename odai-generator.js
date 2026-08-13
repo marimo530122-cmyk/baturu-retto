@@ -4289,6 +4289,19 @@ function pickRandom(array) {
 // 直前と全く同じ組み合わせが連続で出るのを防ぐ
 let lastCombinationKey = "";
 
+// 直近数回で使ったシチュエーション/行動を覚えておき、短い間隔での再登場を避ける
+// （パック・言語ごとに別管理。文言の中身自体は別物なので、切り替えたら別カウントにする）
+const RECENT_ODAI_WINDOW = 4;
+const recentOdaiHistory = new Map(); // key: `${pack}|${lang}` -> { situations: string[], actions: string[] }
+
+function getRecentOdaiHistory(pack, lang) {
+  const key = pack + "|" + lang;
+  if (!recentOdaiHistory.has(key)) {
+    recentOdaiHistory.set(key, { situations: [], actions: [] });
+  }
+  return recentOdaiHistory.get(key);
+}
+
 /**
  * お題を生成する
  * @param {string} fromName - お題を実行する人の名前
@@ -4314,15 +4327,26 @@ function generateOdai(fromName, toName, lang = "ja", pack = "standard", forceInd
     situation = data.situations[situationIdx];
     action = data.actions[actionIdx];
   } else {
-    // 同じ組み合わせが2回連続したら引き直す
+    // 同じ組み合わせが2回連続、または直近で使ったシチュエーション/行動が
+    // 出てしまったら引き直す（プールが小さいパックでも詰まないよう試行回数に上限を設ける）
+    const hist = getRecentOdaiHistory(pack, lang);
+    let attempts = 0;
     do {
       situationIdx = Math.floor(Math.random() * data.situations.length);
       actionIdx = Math.floor(Math.random() * data.actions.length);
       situation = data.situations[situationIdx];
       action = data.actions[actionIdx];
       key = situation + "|" + action;
-    } while (key === lastCombinationKey);
+      attempts++;
+    } while (
+      attempts < 20 &&
+      (key === lastCombinationKey || hist.situations.includes(situation) || hist.actions.includes(action))
+    );
     lastCombinationKey = key;
+    hist.situations.push(situation);
+    if (hist.situations.length > RECENT_ODAI_WINDOW) hist.situations.shift();
+    hist.actions.push(action);
+    if (hist.actions.length > RECENT_ODAI_WINDOW) hist.actions.shift();
   }
 
   action = maybeInjectSponsorAction(action, lang);
