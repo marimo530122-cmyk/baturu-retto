@@ -201,6 +201,27 @@ function generateOdai(fromName, toName, lang = "ja", pack = "standard", forceInd
       `${action}!`;
     speechText =
       `${fromName}, ang target mo ay si ${toName}! ${situation}, ${action}!`;
+  } else if (lang === "fr") {
+    displayText =
+      `【${fromName}】 ➜ 【${toName}】!\n` +
+      `${situation},\n` +
+      `${action}!`;
+    speechText =
+      `${fromName}, ta cible est ${toName}! ${situation}, ${action}!`;
+  } else if (lang === "th") {
+    displayText =
+      `【${fromName}】 ➜ 【${toName}】!\n` +
+      `${situation},\n` +
+      `${action}!`;
+    speechText =
+      `${fromName} เป้าหมายของคุณคือ ${toName}! ${situation} ${action}!`;
+  } else if (lang === "id") {
+    displayText =
+      `【${fromName}】 ➜ 【${toName}】!\n` +
+      `${situation},\n` +
+      `${action}!`;
+    speechText =
+      `${fromName}, targetmu adalah ${toName}! ${situation}, ${action}!`;
   } else {
     // 日本語：名前に「さん」を付けて「から」「へ」がどんな名前でも自然につながるようにする
     displayText =
@@ -270,7 +291,7 @@ function classifyVoiceGender(voice) {
 
 // 希望の言語＆性別に一番近い声を選ぶ
 function pickVoice(lang, gender) {
-  const PREFIX_MAP = { en: "en", zh: "zh", ko: "ko", es: "es", ja: "ja", pt: "pt", vi: "vi" };
+  const PREFIX_MAP = { en: "en", zh: "zh", ko: "ko", es: "es", ja: "ja", pt: "pt", vi: "vi", fr: "fr", th: "th", id: "id" };
   const prefix = PREFIX_MAP[lang] || "ja";
   const list = speechSynthesis
     .getVoices()
@@ -299,7 +320,7 @@ function speakOdai(speechText, lang = "ja", persona = null) {
     // 一部のAndroid/Chromeは、止めた直後にすぐ喋らせようとすると
     // 無言のまま失敗することがあるため、ごくわずかに間を空ける
     const utterance = new SpeechSynthesisUtterance(speechText);
-    const BCP47_MAP = { en: "en-US", zh: "zh-TW", ko: "ko-KR", es: "es-ES", ja: "ja-JP", pt: "pt-BR", vi: "vi-VN" };
+    const BCP47_MAP = { en: "en-US", zh: "zh-TW", ko: "ko-KR", es: "es-ES", ja: "ja-JP", pt: "pt-BR", vi: "vi-VN", fr: "fr-FR", th: "th-TH", id: "id-ID" };
     utterance.lang = BCP47_MAP[lang] || "ja-JP";
     utterance.rate = persona && persona.rate ? persona.rate : 1.0;
     utterance.pitch = persona && persona.pitch ? persona.pitch : 1.1;
