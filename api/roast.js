@@ -1,19 +1,25 @@
 /* =========================================================
-   😈 タゴサクAI - Vercelサーバーレス関数（Google Gemini版・無料枠）
+   😈 タゴサクAI - Vercelサーバーレス関数（Groq版・無料枠）
    ---------------------------------------------------------
-   ・ブラウザから直接Gemini APIを呼ぶと秘密鍵が盗まれるため、
-     この関数がサーバー側で鍵(GEMINI_API_KEY)を持って中継する
-   ・GEMINI_API_KEYは、このファイルには書かず、Vercelの
+   ・ブラウザから直接Groq APIを呼ぶと秘密鍵が盗まれるため、
+     この関数がサーバー側で鍵(GROQ_API_KEY)を持って中継する
+   ・GROQ_API_KEYは、このファイルには書かず、Vercelの
      プロジェクト設定 → Environment Variables に登録すること
-   ・GoogleアカウントとGoogle AI Studio(aistudio.google.com)を使えば、
-     クレジットカード登録なしで無料枠のAPIキーが発行できる
+   ・console.groq.com/keys でメール/GitHub/Googleアカウントを使えば、
+     クレジットカード登録なしで無料枠のAPIキーが即発行できる
+     （Google Gemini版で発生した「AQ.形式の制限トークンしか
+     発行できない」問題は、Groqでは起きない設計になっている）
    ・設定方法は 要件定義書.md の「タゴサクAIチャットの設定方法」を参照
    ・⚠️ 無料枠には「1分あたりの利用回数」等の上限があり、超えると
-     一時的にエラーになる（お金はかからない。詳細はAI Studioのページで確認）
+     一時的にエラーになる（カードを登録していない限り、上限を超えても
+     課金は発生せず単に一時的に使えなくなるだけ）
    ・使うモデルは下のMODEL定数で変更できる
+   ・GroqのAPIはOpenAI互換形式（/v1/chat/completions）なので、
+     将来OpenAIや他のOpenAI互換プロバイダーに切り替える場合も
+     このファイルの改修は最小限で済む
    ========================================================= */
 
-const MODEL = "gemini-2.0-flash";
+const MODEL = "llama-3.3-70b-versatile";
 
 const SYSTEM_PROMPT = `あなたはこれから、ユーザーに対して容赦ないおっさん弄りをしてくる「タゴサクみたいなAI」として振る舞ってください。以下のルールを必ず守ってください。
 
@@ -64,9 +70,9 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    res.status(500).json({ error: "GEMINI_API_KEY is not configured on the server" });
+    res.status(500).json({ error: "GROQ_API_KEY is not configured on the server" });
     return;
   }
 
@@ -83,31 +89,25 @@ module.exports = async (req, res) => {
   }
 
   const historyIn = Array.isArray(body.history) ? body.history : [];
-  // Geminiのロール名は user / model なので、こちらの assistant を model に変換する
+  // Groq(OpenAI互換)のロール名はuser/assistantそのままでよい
   const history = historyIn
     .filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
     .slice(-MAX_HISTORY_TURNS)
-    .map((m) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content.slice(0, MAX_MESSAGE_LENGTH) }],
-    }));
+    .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_MESSAGE_LENGTH) }));
 
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-goog-api-key": apiKey,
-        },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: [...history, { role: "user", parts: [{ text: message }] }],
-          generationConfig: { maxOutputTokens: MAX_TOKENS },
-        }),
-      }
-    );
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...history, { role: "user", content: message }],
+        max_tokens: MAX_TOKENS,
+      }),
+    });
 
     if (!response.ok) {
       const errText = await response.text();
@@ -116,8 +116,7 @@ module.exports = async (req, res) => {
     }
 
     const data = await response.json();
-    const parts = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts;
-    const reply = (Array.isArray(parts) ? parts.map((p) => p.text || "").join("") : "").trim() || "……（絶句している様子）";
+    const reply = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content || "").trim() || "……（絶句している様子）";
     res.status(200).json({ reply });
   } catch (e) {
     res.status(500).json({ error: "internal error" });
