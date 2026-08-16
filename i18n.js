@@ -37,6 +37,7 @@ const UI = {
     roastDesc: "あなたを容赦なく「おっさん」呼ばわりしてくる毒舌AIです。何か話しかけてみましょう。",
     roastPlaceholder: "何か言い返してみる…",
     roastSend: "送信",
+    roastSoloBtn: "😈 タゴサクと話す",
     roastNotConfigured: "タゴサクAIはまだ準備中です（Vercelへのデプロイ設定が必要です）",
     roastQuota: (max) => `今夜はこのくらいにしといてやる（1日${max}回まで）。また明日話しかけてこい`,
     roastError: "タゴサクAIが不機嫌なようです……少し待ってからもう一度試してください",

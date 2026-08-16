@@ -160,10 +160,9 @@ function applyLanguage() {
   document.getElementById("pack-party").innerHTML = `${u.packs.party} <span class="lock">🔒</span>`;
   document.getElementById("pack-noalcohol").textContent = u.packs.noalcohol;
   document.getElementById("pack-solo").innerHTML = `${u.packs.solo} <span class="lock">🔒</span>`;
-  document.getElementById("pack-roast").innerHTML = `${u.packs.roast} <span class="lock">🔒</span>`;
-  // 😈タゴサクAIは「おっさんいじり」という日本語文化圏のジョークが前提のため、
-  // 👑王様ゲームモードと同じ理由で、日本語以外を選んでいるときはボタンごと隠す
-  document.getElementById("pack-roast").classList.toggle("hidden", state.lang !== "ja");
+  // 😈タゴサクAIは🍶ひとり飲みモードの中だけで使える機能として統合済み（旧・独立パックボタンは廃止）。
+  // ボタン自体は startRound() 側で state.pack==="solo" && state.lang==="ja" のときだけ表示する
+  document.getElementById("btn-roast-solo").textContent = t("roastSoloBtn");
   document.getElementById("pack-kinggame").textContent = u.packs.kinggame;
   // 👑王様ゲームモードは「その場の人が罰を即興で考える」仕組みのため、外国人ゲスト等
   // 文化的な地雷（宗教・パーソナルスペース感覚など）が分からない相手には向かない。
@@ -344,7 +343,7 @@ document.querySelectorAll(".btn-locked").forEach((btn) => {
   // 個別に専用ハンドラを持つパックは、ここでは何もしない（二重発火防止。以前は
   // family/couple/party/nerutoon/soloがこの除外リストから漏れており、専用ハンドラが
   // あるにも関わらずクリックのたびに常に「ご案内モーダル」が出てしまうバグがあった）
-  if (["romance", "online", "adult", "family", "couple", "party", "nerutoon", "solo", "roast"].includes(btn.dataset.pack)) return;
+  if (["romance", "online", "adult", "family", "couple", "party", "nerutoon", "solo"].includes(btn.dataset.pack)) return;
   btn.addEventListener("click", () => {
     showPremiumModal(t("packTeaser")(UI[state.lang].packs[btn.dataset.pack]));
   });
@@ -1085,7 +1084,7 @@ function appendRoastBubble(text, who) {
   roastLog.scrollTop = roastLog.scrollHeight;
 }
 
-document.getElementById("pack-roast").addEventListener("click", () => {
+document.getElementById("btn-roast-solo").addEventListener("click", () => {
   if (blockIfNotPremium("roast")) return;
   renderRoastTexts();
   roastMessage.textContent = "";
@@ -1683,6 +1682,12 @@ function startRound() {
     activePackBadge.textContent = activePackLabel;
     activePackBadge.classList.remove("hidden");
   }
+
+  // 😈タゴサクAIは🍶ひとり飲みモード限定（かつ日本語のジョーク前提のため日本語UIのみ）
+  document.getElementById("btn-roast-solo").classList.toggle(
+    "hidden",
+    !(state.pack === "solo" && state.lang === "ja")
+  );
 }
 
 btnSpin.addEventListener("click", () => {
