@@ -79,6 +79,11 @@ function isPremiumUnlocked() {
   return typeof Billing !== "undefined" && Billing.isPremium();
 }
 
+// 🍶 ひとり飲みモード＋飲み友AI専用の月額サブスク（通常プレミアムとは別枠）
+function isSoloPremiumUnlocked() {
+  return typeof SoloBilling !== "undefined" && SoloBilling.isPremium();
+}
+
 /* ---------------- 状態（ゲームの記憶） ---------------- */
 const state = {
   lang: "ja",          // "ja"日本語 / "en"英語 / "zh"繁體中文 / "ko"한국어 / "es"español
@@ -331,12 +336,17 @@ document.getElementById("btn-start").addEventListener("click", () => {
 const modal = document.getElementById("modal-premium");
 const modalUpgradeBtn = document.getElementById("modal-upgrade");
 
+// アップグレードボタンを押したときにどのプランの決済リンクを開くか
+// （通常はBilling。🍶ひとり飲み系の案内のときだけSoloBillingに切り替える）
+let modalActiveBilling = Billing;
+
 // 有料版ご案内モーダルを、アップグレードボタン付きで表示する
-function showPremiumModal(text) {
+function showPremiumModal(text, billingModule) {
   document.getElementById("modal-text").textContent = text;
   modalUpgradeBtn.textContent = t("upgradeBtn");
   modalUpgradeBtn.classList.remove("hidden");
   modal.classList.remove("hidden");
+  modalActiveBilling = billingModule || Billing;
 }
 
 document.querySelectorAll(".btn-locked").forEach((btn) => {
@@ -352,7 +362,7 @@ document.getElementById("modal-close").addEventListener("click", () => {
   modal.classList.add("hidden");
 });
 modalUpgradeBtn.addEventListener("click", () => {
-  const opened = Billing.openCheckout();
+  const opened = modalActiveBilling.openCheckout();
   if (!opened) showToast(t("upgradeNotConfigured"));
 });
 
@@ -360,6 +370,13 @@ modalUpgradeBtn.addEventListener("click", () => {
 function blockIfNotPremium(packKey) {
   if (isPremiumUnlocked()) return false;
   showPremiumModal(t("packTeaser")(UI[state.lang].packs[packKey]));
+  return true;
+}
+
+// 🍶 ひとり飲みモード＋飲み友AI専用のブロック判定（通常プレミアムとは別のSoloBillingを見る）
+function blockIfNotSoloPremium(packKey) {
+  if (isSoloPremiumUnlocked()) return false;
+  showPremiumModal(t("packTeaser")(UI[state.lang].packs[packKey]), SoloBilling);
   return true;
 }
 
@@ -564,10 +581,11 @@ function clearOtherPackButtons(exceptBtn) {
 
 // シンプルな「オン/オフをトグルするだけ」のパック用の共通セットアップ
 // （王様ゲーム・大人向けのように専用フローを持つものは対象外）
-function setupSimplePackToggle(btn, packKey, onKey, offKey, requiresPremium) {
+function setupSimplePackToggle(btn, packKey, onKey, offKey, requiresPremium, blockFn) {
   PACK_TOGGLE_BUTTONS.push(btn);
+  const block = blockFn || blockIfNotPremium;
   btn.addEventListener("click", () => {
-    if (requiresPremium && blockIfNotPremium(packKey)) return;
+    if (requiresPremium && block(packKey)) return;
     const turningOn = state.pack !== packKey;
     clearOtherPackButtons(btn);
     state.pack = turningOn ? packKey : "standard";
@@ -643,9 +661,9 @@ setupSimplePackToggle(btnParty, "party", "partyOn", "partyOff", true);
 const btnNoAlcohol = document.getElementById("pack-noalcohol");
 setupSimplePackToggle(btnNoAlcohol, "noalcohol", "noalcoholOn", "noalcoholOff", false);
 
-/* ---------------- 🍶 ひとり飲みモード（有料機能） ---------------- */
+/* ---------------- 🍶 ひとり飲みモード（月額サブスク・SoloBilling） ---------------- */
 const btnSolo = document.getElementById("pack-solo");
-setupSimplePackToggle(btnSolo, "solo", "soloOn", "soloOff", true);
+setupSimplePackToggle(btnSolo, "solo", "soloOn", "soloOff", true, blockIfNotSoloPremium);
 
 /* ---------------- 👑 王様ゲームモード（無料・QR配布などから即遊べる王様ゲーム特化モード） ---------------- */
 // プレミアム未解放: 王様50% / 王様×自動ランダム指名30% / 通常ネタ20%
@@ -1085,7 +1103,7 @@ function appendRoastBubble(text, who) {
 }
 
 document.getElementById("btn-roast-solo").addEventListener("click", () => {
-  if (blockIfNotPremium("roast")) return;
+  if (blockIfNotSoloPremium("roast")) return;
   renderRoastTexts();
   roastMessage.textContent = "";
   roastLog.innerHTML = "";

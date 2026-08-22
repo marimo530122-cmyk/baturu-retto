@@ -39,3 +39,28 @@ const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/00waEY15ceBKcaQg6q5kk00";
    ========================================================= */
 
 const STRIPE_PARTY_PAYMENT_LINK = "https://buy.stripe.com/YOUR_PARTY_PAYMENT_LINK";
+
+/* =========================================================
+   🍶 ひとり飲みモード＋飲み友AI 専用の月額サブスク（¥500/月「ワンコイン」）
+   ---------------------------------------------------------
+   通常のプレミアム（買い切り）とは別に、🍶ひとり飲みモードと🍶飲み友AIだけを
+   月額で提供するためのサブスクです。Stripeで「毎月」の定期支払い設定にした
+   決済リンクを作成し、ここに貼り付けてください（作り方は通常のプレミアムと
+   同じ手順で、価格設定だけ「Recurring / Monthly」を選ぶ）。
+
+   ⚠️ 忘れずに：Stripe側の決済リンク設定で「支払い後」を
+   「別のウェブサイトに移動させる」にし、移動先URLを
+     https://marimo530122-cmyk.github.io/baturu-retto/?solo_paid=1&solo_session_id={CHECKOUT_SESSION_ID}
+   にしてください（通常プレミアムの paid / session_id とは
+   別のパラメータ名になっているので、間違えないようご注意ください）。
+
+   まだ設定していない間は、🍶ひとり飲み・飲み友AIのボタンを押すと
+   「設定が必要です」という案内が表示されるだけで、それ以外の
+   機能には一切影響しません。開発確認用に ?solopremium=1 も使えます。
+
+   ・QRコードの24時間お試し（お友達紹介特典）は、通常プレミアムと同じく
+   このサブスクにも適用されます（全プレミアムに一律適用。billing.jsの
+   SoloBillingのallowReferralBonusを参照）。
+   ========================================================= */
+
+const STRIPE_SOLO_PAYMENT_LINK = "https://buy.stripe.com/YOUR_SOLO_PAYMENT_LINK";

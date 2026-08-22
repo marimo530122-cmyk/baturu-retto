@@ -135,3 +135,17 @@ const PartyBilling = createBillingModule({
   getPaymentLink: () => STRIPE_PARTY_PAYMENT_LINK,
   allowReferralBonus: false,
 });
+
+// 🍶 ひとり飲みモード＋飲み友AI 専用の月額サブスク（¥500/月「ワンコイン」）
+// QRコードの24時間お試し（お友達紹介特典）は、通常プレミアム(Billing)と
+// 同じくこちらにも適用する（2026-08-22: 当初は月額プランだけに絞る案も
+// あったが、既存の12言語ぶんの「大人向けパックも解放」という文言と矛盾する
+// ため、全プレミアムに一律適用する現状維持の方針に決定）
+const SoloBilling = createBillingModule({
+  storageKey: "batsu-solo-premium",
+  returnParam: "solo_paid",
+  sessionParam: "solo_session_id",
+  devParam: "solopremium",
+  getPaymentLink: () => STRIPE_SOLO_PAYMENT_LINK,
+  allowReferralBonus: true,
+});
