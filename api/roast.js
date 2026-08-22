@@ -169,6 +169,17 @@ module.exports = async (req, res) => {
     return;
   }
 
+  // ⚠️ 一時的な診断コード（2026-08-22: GROQ_API_KEYが反映されない問題の調査用。原因判明後に削除すること）
+  if (req.query && req.query.debug === "1") {
+    res.status(200).json({
+      hasGroqKey: typeof process.env.GROQ_API_KEY === "string" && process.env.GROQ_API_KEY.length > 0,
+      keyLength: (process.env.GROQ_API_KEY || "").length,
+      envKeysContainingGroq: Object.keys(process.env).filter((k) => k.toUpperCase().indexOf("GROQ") !== -1),
+      vercelEnv: process.env.VERCEL_ENV || null,
+    });
+    return;
+  }
+
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     res.status(500).json({ error: "GROQ_API_KEY is not configured on the server" });
