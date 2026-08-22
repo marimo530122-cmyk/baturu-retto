@@ -63,4 +63,4 @@ const STRIPE_PARTY_PAYMENT_LINK = "https://buy.stripe.com/YOUR_PARTY_PAYMENT_LIN
    SoloBillingのallowReferralBonusを参照）。
    ========================================================= */
 
-const STRIPE_SOLO_PAYMENT_LINK = "https://buy.stripe.com/YOUR_SOLO_PAYMENT_LINK";
+const STRIPE_SOLO_PAYMENT_LINK = "https://buy.stripe.com/YOUR_PAYMENT_LINK_SOLO";
