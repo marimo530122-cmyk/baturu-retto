@@ -9,4 +9,4 @@
    案内が出るだけで、それ以外の機能には一切影響しません。
    ========================================================= */
 
-const AI_ROAST_ENDPOINT = "https://YOUR-VERCEL-PROJECT.vercel.app/api/roast";
+const AI_ROAST_ENDPOINT = "https://baturu-retto.vercel.app/api/roast";
