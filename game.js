@@ -1088,6 +1088,14 @@ document.getElementById("btn-roast-solo").addEventListener("click", () => {
   if (blockIfNotPremium("roast")) return;
   renderRoastTexts();
   roastMessage.textContent = "";
+  roastLog.innerHTML = "";
+
+  const character = AiRoast.open();
+  document.getElementById("t-roast-title").textContent = `${character.emoji} ${character.name}`;
+  document.getElementById("t-roast-desc").textContent = character.tagline;
+  appendRoastBubble(character.opener, "ai");
+  speakOdai(character.opener, "ja", resolveVoice());
+
   modalRoast.classList.remove("hidden");
   roastInput.focus();
 });

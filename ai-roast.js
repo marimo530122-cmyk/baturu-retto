@@ -1,13 +1,17 @@
 /* =========================================================
-   😈 タゴサクAI（有料機能・要Vercelデプロイ）
+   🍶 飲み友AI（旧タゴサクAI・有料機能・要Vercelデプロイ）
    ---------------------------------------------------------
    ・ai-roast-config.js に書かれたVercelのAPIアドレスへユーザーの
-     発言を送り、AIの毒舌コメントを受け取る
+     発言を送り、AIのコメントを受け取る
    ・エンドポイントが未設定（プレースホルダーのまま）のときは
      何も通信せず、呼び出し元に「未設定」を返すだけ
-   ・AI(Google Gemini)は無料枠を利用しているが、無料枠にも
+   ・AI(Groq)は無料枠を利用しているが、無料枠にも
      利用回数の上限があるため、1日あたりの発言数に上限を設けて
      使いすぎを防ぐ（端末のlocalStorageで管理する簡易的なもの）
+   ・open() を呼ぶたびに ai-roast-characters.js の9人からランダムで
+     1人選び、以降の会話はそのキャラクターのペルソナで返信される
+     （キャラクターidをサーバー側へ送り、api/roast.js側で
+     ペルソナのSYSTEM_PROMPTを切り替える仕組み）
    ========================================================= */
 
 const AiRoast = (() => {
@@ -15,6 +19,14 @@ const AiRoast = (() => {
   const HISTORY_LIMIT = 12; // 直近12件（ユーザー+AI合計）だけ会話履歴として送る
 
   let history = [];
+  let character = null;
+
+  // チャットを開くたびに呼ぶ。ランダムで1人選び、会話履歴もリセットする
+  function open() {
+    history = [];
+    character = AI_ROAST_CHARACTERS[Math.floor(Math.random() * AI_ROAST_CHARACTERS.length)];
+    return character;
+  }
 
   function todayKey() {
     return "batsu-roast-turns-" + new Date().toISOString().slice(0, 10);
@@ -50,6 +62,10 @@ const AiRoast = (() => {
     history = [];
   }
 
+  function getCharacter() {
+    return character;
+  }
+
   // 戻り値: { ok: true, reply } / { ok: false, reason: "not_configured" | "quota" | "error" }
   async function send(message) {
     if (!isConfigured()) return { ok: false, reason: "not_configured" };
@@ -59,7 +75,7 @@ const AiRoast = (() => {
       const res = await fetch(AI_ROAST_ENDPOINT, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ message, history }),
+        body: JSON.stringify({ message, history, character: character ? character.id : null }),
       });
       if (!res.ok) return { ok: false, reason: "error" };
       const data = await res.json();
@@ -76,5 +92,5 @@ const AiRoast = (() => {
     }
   }
 
-  return { isConfigured, send, reset, quotaReached, maxTurnsPerDay: MAX_TURNS_PER_DAY };
+  return { isConfigured, send, reset, open, getCharacter, quotaReached, maxTurnsPerDay: MAX_TURNS_PER_DAY };
 })();
