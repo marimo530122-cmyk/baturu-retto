@@ -38,7 +38,7 @@ const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/00waEY15ceBKcaQg6q5kk00";
    機能には一切影響しません。開発確認用に ?partypremium=1 も使えます。
    ========================================================= */
 
-const STRIPE_PARTY_PAYMENT_LINK = "https://buy.stripe.com/YOUR_PARTY_PAYMENT_LINK";
+const STRIPE_PARTY_PAYMENT_LINK = "https://buy.stripe.com/YOUR_PAYMENT_LINK_PARTY";
 
 /* =========================================================
    🍶 ひとり飲みモード＋飲み友AI 専用の月額サブスク（¥500/月「ワンコイン」）
