@@ -29,7 +29,7 @@
   <meta name="twitter:description" content="飲み会を爆上げする罰ゲームルーレット。罰ゲーム2,500通り × 👑王様モード × 司会者ボイスで、スマホ1台あればすぐ遊べます。" />
   <meta name="twitter:image" content="https://marimo530122-cmyk.github.io/baturu-retto/og-image.jpg" />
 
-  <link rel="stylesheet" href="style.css?v=62" />
+  <link rel="stylesheet" href="style.css?v=63" />
 </head>
 <body>
 
@@ -421,6 +421,7 @@
     <div class="modal-box modal-box-wide">
       <h3 class="neon-pink" id="t-roast-title">🍶 飲み友AI</h3>
       <p id="t-roast-desc">9人のうち誰かがランダムであなたの話し相手になります。何か話しかけてみましょう。</p>
+      <p id="t-roast-catchphrase" class="roast-catchphrase hidden"></p>
       <div id="roast-log" class="submission-list"></div>
       <p id="roast-message" class="message"></p>
       <div class="input-row">
@@ -463,39 +464,39 @@
   <!-- Firebase（📡オンラインモード用。firebase-config.js が未設定でも他の機能には影響しません） -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-  <script src="firebase-config.js?v=62"></script>
-  <script src="online.js?v=62"></script>
+  <script src="firebase-config.js?v=63"></script>
+  <script src="online.js?v=63"></script>
 
   <!-- 📮 罰ゲーム投稿・共有（同じくFirebaseを使用。moderation.jsが自動審査を担当） -->
-  <script src="moderation.js?v=62"></script>
-  <script src="submissions.js?v=62"></script>
+  <script src="moderation.js?v=63"></script>
+  <script src="submissions.js?v=63"></script>
 
   <!-- 🔗 お友達紹介・アフィリエイト（Firebase設定済みなら招待者側の特典も自動反映） -->
-  <script src="referral.js?v=62"></script>
+  <script src="referral.js?v=63"></script>
 
   <!-- 💎 プレミアム課金（Stripe決済リンク用。billing-config.js が未設定でも他の機能には影響しません） -->
-  <script src="billing-config.js?v=62"></script>
-  <script src="billing.js?v=62"></script>
+  <script src="billing-config.js?v=63"></script>
+  <script src="billing.js?v=63"></script>
 
   <!-- 📢 広告（Google AdSense用。ads-config.js が未設定でも他の機能には影響しません） -->
-  <script src="ads-config.js?v=62"></script>
-  <script src="ads.js?v=62"></script>
+  <script src="ads-config.js?v=63"></script>
+  <script src="ads.js?v=63"></script>
 
   <!-- 🍶 飲み友AI（9キャラクターのチャット。Vercelへのデプロイ・ai-roast-config.jsの設定が必要。未設定でも他の機能には影響しません） -->
-  <script src="ai-roast-config.js?v=62"></script>
-  <script src="ai-roast-characters.js?v=62"></script>
-  <script src="ai-roast.js?v=62"></script>
+  <script src="ai-roast-config.js?v=63"></script>
+  <script src="ai-roast-characters.js?v=63"></script>
+  <script src="ai-roast.js?v=63"></script>
 
-  <script src="bgm.js?v=62"></script>
-  <script src="sfx.js?v=62"></script>
-  <script src="confetti.js?v=62"></script>
-  <script src="achievements.js?v=62"></script>
-  <script src="highlights.js?v=62"></script>
-  <script src="odai-data.js?v=62"></script>
-  <script src="odai-generator.js?v=62"></script>
-  <script src="swarm.js?v=62"></script>
-  <script src="hype-meter.js?v=62"></script>
-  <script src="i18n.js?v=62"></script>
-  <script src="game.js?v=62"></script>
+  <script src="bgm.js?v=63"></script>
+  <script src="sfx.js?v=63"></script>
+  <script src="confetti.js?v=63"></script>
+  <script src="achievements.js?v=63"></script>
+  <script src="highlights.js?v=63"></script>
+  <script src="odai-data.js?v=63"></script>
+  <script src="odai-generator.js?v=63"></script>
+  <script src="swarm.js?v=63"></script>
+  <script src="hype-meter.js?v=63"></script>
+  <script src="i18n.js?v=63"></script>
+  <script src="game.js?v=63"></script>
 </body>
 </html>

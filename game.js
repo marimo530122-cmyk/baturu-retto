@@ -1121,6 +1121,10 @@ function openRoastChat(forceCharacter) {
   const openerText = AiRoast.getOpenerText();
   document.getElementById("t-roast-title").textContent = `${character.emoji} ${character.name}`;
   document.getElementById("t-roast-desc").textContent = character.tagline;
+  // 🗨️ このキャラクターの決め台詞（会話を締めるときの一言）を名前の下に表示しておく
+  const catchphraseEl = document.getElementById("t-roast-catchphrase");
+  catchphraseEl.textContent = character.catchphrase ? `「${character.catchphrase}」` : "";
+  catchphraseEl.classList.toggle("hidden", !character.catchphrase);
   appendRoastBubble(openerText, "ai");
   // 🎙️ 声の質はキャラクターごとに固定（渋いおっさん・ゆっくりゾンビ等）。
   // 全体の音声設定（🎤ボタン）とは独立している
