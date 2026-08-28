@@ -163,12 +163,42 @@ module.exports = async (req, res) => {
   // ⚠️ 一時的な診断コード（2026-08-22: GROQ_API_KEYが反映されない問題の調査用。原因判明後に削除すること）
   // ブラウザで直接開いて確認できるよう、POSTメソッド限定チェックより前に置く（GETでも許可する）
   if (req.query && (req.query.debug === "1" || req.query.debug === "true")) {
-    res.status(200).json({
-      hasGroqKey: typeof process.env.GROQ_API_KEY === "string" && process.env.GROQ_API_KEY.length > 0,
-      keyLength: (process.env.GROQ_API_KEY || "").length,
+    const groqApiKey = process.env.GROQ_API_KEY;
+    const debugInfo = {
+      hasGroqKey: typeof groqApiKey === "string" && groqApiKey.length > 0,
+      keyLength: (groqApiKey || "").length,
       envKeysContainingGroq: Object.keys(process.env).filter((k) => k.toUpperCase().indexOf("GROQ") !== -1),
       vercelEnv: process.env.VERCEL_ENV || null,
-    });
+      model: MODEL,
+    };
+
+    // キーがあれば、実際にGroq APIへ最小のテスト送信をして、本当のエラー内容まで確認する
+    if (debugInfo.hasGroqKey) {
+      try {
+        const testRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${groqApiKey}`,
+          },
+          body: JSON.stringify({
+            model: MODEL,
+            messages: [{ role: "user", content: "こんにちは" }],
+            max_tokens: 10,
+          }),
+        });
+        debugInfo.groqTestStatus = testRes.status;
+        if (testRes.ok) {
+          debugInfo.groqTestOk = true;
+        } else {
+          debugInfo.groqTestError = (await testRes.text()).slice(0, 500);
+        }
+      } catch (e) {
+        debugInfo.groqTestException = String((e && e.message) || e);
+      }
+    }
+
+    res.status(200).json(debugInfo);
     return;
   }
 
