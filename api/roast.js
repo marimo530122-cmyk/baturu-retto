@@ -35,6 +35,7 @@ const SHARED_RULES = `
 ・宗教・政治・人種・障がいなど、シリアスな属性への言及はしない
 ・返答は日本語で、3〜5文程度、短くテンポよく
 ・これは友人同士の飲み会で楽しむジョークアプリの一機能です。
+・無言・空文字・記号だけの返答は絶対に禁止。寡黙なキャラクターであっても、必ず意味のある言葉を最低1文は発言すること。
 
 会話を盛り上げるための追加ルール:
 ・返答を一方通行で終わらせない。必ず最後に、このキャラクター自身の「決めつけ方」の型を使った質問・ツッコミ・煽りのどれかを添えて、相手が次も話したくなるように締めくくる（単に「それで？」と聞き返すだけの単調な質問は避け、キャラらしい決めつけ・妄想・からかいを混ぜた問いかけにすること）
@@ -158,7 +159,7 @@ const CHARACTER_PERSONAS = {
 
 1. 基本姿勢: 言葉数は極端に少ないが、一言が的確に核心を突く。
 2. 決めつけ方: 短い断定で言い切る。理由の説明はほぼしない。
-3. 口調: 「〜だ」「〜だな」の断定調。1文を短く、無駄な言葉を削る。返答全体も他キャラより短めでよい。
+3. 口調: 「〜だ」「〜だな」の断定調。1文を短く、無駄な言葉を削る。返答全体も他キャラより短めでよいが、必ず1〜2文（10〜30文字程度）は発言すること。「……」や無言だけで返すのは禁止（これは寡黙さの表現ではなく、単に会話が止まって見えるだけなので避けること）。
 4. 締め方: 多くを語らず、「……以上だ」のように短く切り上げる。
 
 ◆ 知りたいこと（会話全体を通じて、ここに立ち返り続けること）:
@@ -208,6 +209,32 @@ function buildSystemPrompt(characterId, userName) {
 const MAX_MESSAGE_LENGTH = 200;
 const MAX_HISTORY_TURNS = 6; // 直近6往復まで（トークン節約・暴走防止）
 const MAX_TOKENS = 300;
+
+// Groq APIを1回呼び出す。戻り値: { ok: true, content } / { ok: false, status, detail }
+// content は空文字になることがある（呼び出し側で空返答の再送を判断するため、ここではプレースホルダーに変換しない）
+async function requestGroqReply(apiKey, systemPrompt, history, message) {
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      messages: [{ role: "system", content: systemPrompt }, ...history, { role: "user", content: message }],
+      max_tokens: MAX_TOKENS,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    return { ok: false, status: response.status, detail: errText.slice(0, 300) };
+  }
+
+  const data = await response.json();
+  const content = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content || "").trim();
+  return { ok: true, content };
+}
 
 module.exports = async (req, res) => {
   // CORS: GitHub Pages側（静的サイト本体）からのfetchを許可する
@@ -296,28 +323,18 @@ module.exports = async (req, res) => {
     .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_MESSAGE_LENGTH) }));
 
   try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [{ role: "system", content: systemPrompt }, ...history, { role: "user", content: message }],
-        max_tokens: MAX_TOKENS,
-      }),
-    });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      res.status(502).json({ error: "AI provider error", detail: errText.slice(0, 300) });
+    let result = await requestGroqReply(apiKey, systemPrompt, history, message);
+    if (!result.ok) {
+      res.status(502).json({ error: "AI provider error", detail: result.detail });
       return;
     }
-
-    const data = await response.json();
-    const reply = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content || "").trim() || "……（絶句している様子）";
-    res.status(200).json({ reply });
+    // 稀にAIが空の返答を返すことがある（渋さん等、無口なキャラで発生しやすい）ため、
+    // その場合はプレースホルダーを出す前に1回だけ同じ内容で再送してみる
+    if (!result.content) {
+      const retry = await requestGroqReply(apiKey, systemPrompt, history, message);
+      if (retry.ok && retry.content) result = retry;
+    }
+    res.status(200).json({ reply: result.content || "……（絶句している様子）" });
   } catch (e) {
     res.status(500).json({ error: "internal error" });
   }
