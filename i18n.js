@@ -40,6 +40,7 @@ const UI = {
     roastSoloBtn: "🍶 飲み友と話す",
     roastNotConfigured: "飲み友AIはまだ準備中です（Vercelへのデプロイ設定が必要です）",
     roastQuota: (max) => `今夜はこのくらいにしとこう（1日${max}回まで）。また明日話しかけてね`,
+    roastTopupBtn: "🪙 追加で話す（¥100）",
     roastError: "飲み友AIの様子がおかしいようです……少し待ってからもう一度試してください",
     roastYou: "あなた",
     themes: { neon: "🌃 ネオン", casino: "🎰 カジノ", izakaya: "🏮 居酒屋" },

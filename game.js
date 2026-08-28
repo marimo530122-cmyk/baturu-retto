@@ -1089,12 +1089,14 @@ const modalRoast = document.getElementById("modal-roast");
 const roastLog = document.getElementById("roast-log");
 const roastInput = document.getElementById("roast-input");
 const roastMessage = document.getElementById("roast-message");
+const roastTopupBtn = document.getElementById("roast-topup");
 
 function renderRoastTexts() {
   document.getElementById("t-roast-title").textContent = t("roastTitle");
   document.getElementById("t-roast-desc").textContent = t("roastDesc");
   roastInput.placeholder = t("roastPlaceholder");
   document.getElementById("roast-send").textContent = t("roastSend");
+  roastTopupBtn.textContent = t("roastTopupBtn");
 }
 
 function appendRoastBubble(text, who) {
@@ -1112,6 +1114,7 @@ function openRoastChat(forceCharacter) {
   renderRoastTexts();
   roastMessage.textContent = "";
   roastLog.innerHTML = "";
+  roastTopupBtn.classList.add("hidden");
   stopHandsFreeRoast(); // 前の会話のハンズフリー聞き取りが残っていたら止める
 
   // 🍶ひとり飲みモードで登録されている本人の名前。AiRoastに渡すことで、
@@ -1147,6 +1150,10 @@ document.getElementById("roast-close").addEventListener("click", () => {
   modalRoast.classList.add("hidden");
 });
 
+roastTopupBtn.addEventListener("click", () => {
+  if (!AiRoast.openTopupCheckout()) showToast(t("upgradeNotConfigured"));
+});
+
 // overrideTextを渡すと、入力欄の内容ではなくその文字列を送る（🎤ハンズフリー会話用）
 async function sendRoastMessage(overrideText) {
   const text = (overrideText != null ? overrideText : roastInput.value).trim();
@@ -1170,7 +1177,9 @@ async function sendRoastMessage(overrideText) {
     roastMessage.textContent = t("roastNotConfigured");
     stopHandsFreeRoast();
   } else if (result.reason === "quota") {
-    roastMessage.textContent = t("roastQuota")(AiRoast.maxTurnsPerDay);
+    roastMessage.textContent = t("roastQuota")(AiRoast.getMaxTurns());
+    // 🪙 追加購入用の決済リンクが設定されていれば、その場でボタンを表示する
+    roastTopupBtn.classList.toggle("hidden", !AiRoast.isTopupConfigured());
     stopHandsFreeRoast();
   } else {
     roastMessage.textContent = t("roastError");
