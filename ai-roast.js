@@ -21,10 +21,12 @@ const AiRoast = (() => {
   let history = [];
   let character = null;
 
-  // チャットを開くたびに呼ぶ。ランダムで1人選び、会話履歴もリセットする
-  function open() {
+  // チャットを開くたびに呼ぶ。会話履歴をリセットし、キャラクターを決める。
+  // forceCharacter を渡すとそのキャラクターに固定する（例：ルーレットで既に決まっている場合）。
+  // 省略時は従来通りランダムで1人選ぶ。
+  function open(forceCharacter) {
     history = [];
-    character = AI_ROAST_CHARACTERS[Math.floor(Math.random() * AI_ROAST_CHARACTERS.length)];
+    character = forceCharacter || AI_ROAST_CHARACTERS[Math.floor(Math.random() * AI_ROAST_CHARACTERS.length)];
     return character;
   }
 
