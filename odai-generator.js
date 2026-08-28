@@ -310,9 +310,14 @@ function pickVoice(lang, gender) {
  * @param {string} lang       - "ja" / "en" / "zh" / "ko" / "es"
  * @param {object} persona    - 声のキャラクター設定（省略可）
  *                              例: { pitch: 0.45, rate: 0.9, gender: "male" }
+ * @param {function} onEnd    - 読み上げ完了時に呼ばれるコールバック（省略可。
+ *                              非対応ブラウザ・エラー時も含め必ず1回呼ばれる）
  */
-function speakOdai(speechText, lang = "ja", persona = null) {
-  if (!("speechSynthesis" in window)) return; // 非対応ブラウザでは何もしない
+function speakOdai(speechText, lang = "ja", persona = null, onEnd) {
+  if (!("speechSynthesis" in window)) {
+    if (onEnd) onEnd();
+    return; // 非対応ブラウザでは何もしない
+  }
 
   speechSynthesis.cancel(); // 前の読み上げが残っていたら止める
 
@@ -328,12 +333,11 @@ function speakOdai(speechText, lang = "ja", persona = null) {
     const voice = pickVoice(lang, persona ? persona.gender : null);
     if (voice) utterance.voice = voice;
 
+    const hasBgm = typeof BGM !== "undefined";
     // 読み上げ中はBGMを小さくして、声を聞き取りやすくする
-    if (typeof BGM !== "undefined") {
-      utterance.onstart = () => BGM.duck(true);
-      utterance.onend = () => BGM.duck(false);
-      utterance.onerror = () => BGM.duck(false);
-    }
+    if (hasBgm) utterance.onstart = () => BGM.duck(true);
+    utterance.onend = () => { if (hasBgm) BGM.duck(false); if (onEnd) onEnd(); };
+    utterance.onerror = () => { if (hasBgm) BGM.duck(false); if (onEnd) onEnd(); };
 
     // 稀に「一時停止」状態のまま固まる端末があるための保険
     if (speechSynthesis.paused) speechSynthesis.resume();
