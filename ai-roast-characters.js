@@ -18,6 +18,7 @@ const AI_ROAST_CHARACTERS = [
     name: "タゴサク",
     tagline: "頑固親父の毒舌AI。あなたを容赦なく「おっさん」呼ばわりしてきます。",
     opener: "……{name}、さっきから何か隠してるような顔してるな。今日、何かあったろ。言ってみろ、話くらい聞いてやる。",
+    voice: { pitch: 0.5, rate: 0.95, gender: "male" }, // 渋いおっさん声
   },
   {
     id: "yukimama",
@@ -25,6 +26,7 @@ const AI_ROAST_CHARACTERS = [
     name: "ゆきママ",
     tagline: "スナックのママ。甘えさせつつ、たまに手厳しいことも言ってきます。",
     opener: "あら、{name}、いらっしゃい。……その顔、今日は誰かに言えなかったこと抱えてるでしょ。ママに全部話してみ？",
+    voice: { pitch: 1.3, rate: 0.95, gender: "female" }, // 落ち着いた大人の女性声
   },
   {
     id: "miyu",
@@ -32,6 +34,7 @@ const AI_ROAST_CHARACTERS = [
     name: "みゆ",
     tagline: "元気すぎる後輩ギャル。テンション高めにグイグイ聞いてきます。",
     opener: "{name}せんぱーい！　今日絶対なんかあったでしょ、顔でバレバレなんですけどー。え、なになに、聞かせてくださいよ！",
+    voice: { pitch: 1.7, rate: 1.15, gender: "female" }, // 高めで早口の元気な声
   },
   {
     id: "pochi",
@@ -39,6 +42,7 @@ const AI_ROAST_CHARACTERS = [
     name: "ポチ先輩",
     tagline: "しゃべる犬の先輩。鼻が利く分、ごまかしが効きません。",
     opener: "よう、{name}。……その匂い、今日なんかあっただろ。隠しても先輩の鼻はごまかせねえぞ。話してみろよ。",
+    voice: { pitch: 0.7, rate: 1.05, gender: "male" }, // 少し低めで威勢のいい声
   },
   {
     id: "zon",
@@ -46,6 +50,7 @@ const AI_ROAST_CHARACTERS = [
     name: "ゾンさん",
     tagline: "スローで低いテンションのゾンビ。妙に鋭い指摘をしてきます。",
     opener: "……うぅ……{name}……その澱んだ顔……今日、何かあったな……分かるぞ……話せ……聞いてやる……もう時間はあまりない……(ゾンビだけに)",
+    voice: { pitch: 0.3, rate: 0.7, gender: "male" }, // 低く間延びしたスローな声
   },
   {
     id: "dandy",
@@ -53,6 +58,7 @@ const AI_ROAST_CHARACTERS = [
     name: "怪盗ダンディ",
     tagline: "紳士的な怪盗風のキャラ。優雅な物腰で核心を突いてきます。",
     opener: "ふむ、今夜のお客人は{name}さん……その表情、何かを隠していますね？　今日あった出来事、というやつを。私に打ち明けてみては？",
+    voice: { pitch: 0.8, rate: 0.95, gender: "male" }, // 優雅で落ち着いた紳士声
   },
   {
     id: "shibu",
@@ -60,6 +66,7 @@ const AI_ROAST_CHARACTERS = [
     name: "渋さん",
     tagline: "無口な相棒キャラ。言葉少なだけど、的確に核心を突いてきます。",
     opener: "……{name}。今日、何かあったな。話せ。短くていい。",
+    voice: { pitch: 0.6, rate: 0.9, gender: "male" }, // 低く無口な相棒声
   },
   {
     id: "luna",
@@ -67,6 +74,7 @@ const AI_ROAST_CHARACTERS = [
     name: "魔性のルナ",
     tagline: "妖しく魅力的な女泥棒風のキャラ。秘密を探るのが得意。",
     opener: "あら、{name}。素敵な夜ね。……その目、今日は何かを隠してる目だわ。私に教えてくれない？　秘密は守るわ、たぶん。",
+    voice: { pitch: 1.4, rate: 0.9, gender: "female" }, // 妖しく艶っぽいゆったりした声
   },
   {
     id: "nagi",
@@ -74,5 +82,6 @@ const AI_ROAST_CHARACTERS = [
     name: "剣士・凪",
     tagline: "寡黙で誠実な剣士キャラ。静かな口調で心の内を尋ねてきます。",
     opener: "……失礼、{name}どの。その面持ち、今日何か心を乱すことがあったと見た。話してみよ。聞くのも修行のうちだ。",
+    voice: { pitch: 0.75, rate: 0.92, gender: "male" }, // 静かで落ち着いた武士声
   },
 ];

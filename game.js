@@ -1112,6 +1112,7 @@ function openRoastChat(forceCharacter) {
   renderRoastTexts();
   roastMessage.textContent = "";
   roastLog.innerHTML = "";
+  stopHandsFreeRoast(); // 前の会話のハンズフリー聞き取りが残っていたら止める
 
   // 🍶ひとり飲みモードで登録されている本人の名前。AiRoastに渡すことで、
   // キャラクターが「お前」等の代わりにこの名前で呼びかけてくれる
@@ -1121,7 +1122,9 @@ function openRoastChat(forceCharacter) {
   document.getElementById("t-roast-title").textContent = `${character.emoji} ${character.name}`;
   document.getElementById("t-roast-desc").textContent = character.tagline;
   appendRoastBubble(openerText, "ai");
-  speakOdai(openerText, "ja", resolveVoice());
+  // 🎙️ 声の質はキャラクターごとに固定（渋いおっさん・ゆっくりゾンビ等）。
+  // 全体の音声設定（🎤ボタン）とは独立している
+  speakOdai(openerText, "ja", character.voice);
 
   modalRoast.classList.remove("hidden");
   roastInput.focus();
@@ -1136,8 +1139,9 @@ document.getElementById("roast-close").addEventListener("click", () => {
   modalRoast.classList.add("hidden");
 });
 
-async function sendRoastMessage() {
-  const text = roastInput.value.trim();
+// overrideTextを渡すと、入力欄の内容ではなくその文字列を送る（🎤ハンズフリー会話用）
+async function sendRoastMessage(overrideText) {
+  const text = (overrideText != null ? overrideText : roastInput.value).trim();
   if (!text) return;
   roastInput.value = "";
   roastInput.disabled = true;
@@ -1146,16 +1150,23 @@ async function sendRoastMessage() {
   roastMessage.textContent = "";
 
   const result = await AiRoast.send(text);
+  const character = AiRoast.getCharacter();
 
   if (result.ok) {
     appendRoastBubble(result.reply, "ai");
-    speakOdai(result.reply, "ja", resolveVoice());
+    speakOdai(result.reply, "ja", character && character.voice, () => {
+      // 🎤ハンズフリー会話モード中は、AIが話し終えたら自動でまた聞き取りを再開する
+      if (handsFreeActive) startRoastRecognition();
+    });
   } else if (result.reason === "not_configured") {
     roastMessage.textContent = t("roastNotConfigured");
+    stopHandsFreeRoast();
   } else if (result.reason === "quota") {
     roastMessage.textContent = t("roastQuota")(AiRoast.maxTurnsPerDay);
+    stopHandsFreeRoast();
   } else {
     roastMessage.textContent = t("roastError");
+    stopHandsFreeRoast();
   }
 
   roastInput.disabled = false;
@@ -1168,49 +1179,69 @@ roastInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") sendRoastMessage();
 });
 
-// 🎤 音声入力（対応ブラウザのみ・タイプせずに話しかけられるように）
-// 誤変換対策として、認識結果は自動送信せず入力欄に入れるだけにする（送るかどうかは本人が確認してから）
-(function setupRoastMic() {
-  const micBtn = document.getElementById("roast-mic");
-  const RecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!RecognitionCtor) return; // 非対応ブラウザではボタンを出さない（デフォルトhidden済み）
-  micBtn.classList.remove("hidden");
+// 🎤 音声入力（対応ブラウザのみ）：マイクボタンを1回押すと「ハンズフリー会話モード」になり、
+// 話した内容が確認なしでそのまま自動送信され、AIの返信を話し終えたらまた自動で聞き取りを
+// 再開する（キーボード・送信ボタンを一切使わずに会話を続けられる）。止めるにはもう一度
+// マイクボタンを押すか、モーダルを閉じる。認識エラー（無音タイムアウト等）が起きたときは
+// 無限ループにならないよう、ハンズフリーモード自体を終了する
+const RoastRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
+let roastRecognition = null;
+let roastRecognizing = false;
+let handsFreeActive = false;
 
-  let recognizing = false;
-  let recognition = null;
-
-  micBtn.addEventListener("click", () => {
-    if (recognizing) {
-      recognition.stop();
-      return;
-    }
-    recognition = new RecognitionCtor();
-    recognition.lang = "ja-JP";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-    recognition.onstart = () => {
-      recognizing = true;
-      micBtn.classList.add("active");
-    };
-    recognition.onend = () => {
-      recognizing = false;
-      micBtn.classList.remove("active");
-    };
-    recognition.onerror = () => {
-      recognizing = false;
-      micBtn.classList.remove("active");
-    };
-    recognition.onresult = (e) => {
-      const text = e.results[0][0].transcript;
+function startRoastRecognition() {
+  if (!RoastRecognitionCtor || roastRecognizing) return;
+  roastRecognition = new RoastRecognitionCtor();
+  roastRecognition.lang = "ja-JP";
+  roastRecognition.interimResults = false;
+  roastRecognition.maxAlternatives = 1;
+  roastRecognition.onstart = () => {
+    roastRecognizing = true;
+    document.getElementById("roast-mic").classList.add("active");
+  };
+  roastRecognition.onend = () => {
+    roastRecognizing = false;
+    document.getElementById("roast-mic").classList.remove("active");
+  };
+  roastRecognition.onerror = () => {
+    roastRecognizing = false;
+    document.getElementById("roast-mic").classList.remove("active");
+    handsFreeActive = false;
+  };
+  roastRecognition.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    if (handsFreeActive) {
+      sendRoastMessage(text);
+    } else {
       roastInput.value = (roastInput.value ? roastInput.value + " " : "") + text;
       roastInput.focus();
-    };
-    recognition.start();
+    }
+  };
+  roastRecognition.start();
+}
+
+function stopHandsFreeRoast() {
+  handsFreeActive = false;
+  if (roastRecognizing && roastRecognition) roastRecognition.stop();
+}
+
+(function setupRoastMic() {
+  const micBtn = document.getElementById("roast-mic");
+  if (!RoastRecognitionCtor) return; // 非対応ブラウザではボタンを出さない（デフォルトhidden済み）
+  micBtn.classList.remove("hidden");
+
+  micBtn.addEventListener("click", () => {
+    if (roastRecognizing || handsFreeActive) {
+      stopHandsFreeRoast();
+      return;
+    }
+    handsFreeActive = true;
+    startRoastRecognition();
   });
 
-  // モーダルを閉じたら、録音中でも一緒に止める
+  // モーダルを閉じたら、ハンズフリー会話中でも一緒に止める
   document.getElementById("roast-close").addEventListener("click", () => {
-    if (recognizing) recognition.stop();
+    stopHandsFreeRoast();
   });
 })();
 
