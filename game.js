@@ -1106,13 +1106,14 @@ function appendRoastBubble(text, who) {
   roastLog.scrollTop = roastLog.scrollHeight;
 }
 
-document.getElementById("btn-roast-solo").addEventListener("click", () => {
-  if (blockIfNotSoloPremium("roast")) return;
+// 飲み友AIチャット画面を開く共通処理。forceCharacterを渡すとそのキャラクター固定で開く
+// （🍶ひとり飲みモードのキャラクタールーレットで既に決まっている場合など）。省略時はランダム。
+function openRoastChat(forceCharacter) {
   renderRoastTexts();
   roastMessage.textContent = "";
   roastLog.innerHTML = "";
 
-  const character = AiRoast.open();
+  const character = AiRoast.open(forceCharacter);
   document.getElementById("t-roast-title").textContent = `${character.emoji} ${character.name}`;
   document.getElementById("t-roast-desc").textContent = character.tagline;
   appendRoastBubble(character.opener, "ai");
@@ -1120,6 +1121,11 @@ document.getElementById("btn-roast-solo").addEventListener("click", () => {
 
   modalRoast.classList.remove("hidden");
   roastInput.focus();
+}
+
+document.getElementById("btn-roast-solo").addEventListener("click", () => {
+  if (blockIfNotSoloPremium("roast")) return;
+  openRoastChat();
 });
 
 document.getElementById("roast-close").addEventListener("click", () => {
@@ -1411,17 +1417,6 @@ const FAMILY_MEET_STORY_PROMPTS = {
   ],
 };
 
-// 🍶ひとり飲みモード（日本語UI限定）：文字だけの「お題」の代わりに、
-// 飲み友AIの9キャラクター（ai-roast-characters.js）のうち誰か1人がランダムに登場し、
-// そのキャラの口調の短いセリフ（AI_ROAST_CHARACTERS[].opener）を投げかける
-function pickSoloCharacterOdai() {
-  const character = AI_ROAST_CHARACTERS[Math.floor(Math.random() * AI_ROAST_CHARACTERS.length)];
-  return {
-    displayText: `${character.emoji}【${character.name}】\n${character.opener}`,
-    speechText: character.opener,
-  };
-}
-
 function tryFamilyMeetStoryOdai(fromName, lang) {
   const prompts = FAMILY_MEET_STORY_PROMPTS[lang];
   if (!prompts) return null;
@@ -1707,7 +1702,12 @@ function bumpStat(name, field) {
 
 // 1回戦の始まり
 function startRound() {
-  wheelEntries = participants();
+  // 🍶ひとり飲みモード（日本語UI限定）はホイールの中身を自分の名前ではなく
+  // 飲み友AIの9キャラクターにする（止まったキャラとそのまま会話が始まる）
+  wheelEntries =
+    state.pack === "solo" && state.lang === "ja"
+      ? AI_ROAST_CHARACTERS.map((c) => ({ name: c.name, team: "a" }))
+      : participants();
   wheelRotation = 0;
   drawWheel();
 
@@ -1735,12 +1735,6 @@ function startRound() {
     activePackBadge.textContent = activePackLabel;
     activePackBadge.classList.remove("hidden");
   }
-
-  // 😈タゴサクAIは🍶ひとり飲みモード限定（かつ日本語のジョーク前提のため日本語UIのみ）
-  document.getElementById("btn-roast-solo").classList.toggle(
-    "hidden",
-    !(state.pack === "solo" && state.lang === "ja")
-  );
 }
 
 btnSpin.addEventListener("click", () => {
@@ -1759,6 +1753,13 @@ btnSpin.addEventListener("click", () => {
   // 👑王様ゲームモードは確率配分が丸ごと別物なので、専用ロジックに分岐する
   if (state.pack === "kinggame") {
     runKingGameRound();
+    return;
+  }
+
+  // 🍶ひとり飲みモード（日本語UI限定）は、名前のホイールではなく飲み友AI
+  // キャラクターのホイールを回し、止まったキャラとそのまま会話を始める専用ロジック
+  if (state.pack === "solo" && state.lang === "ja") {
+    runSoloCharacterRound();
     return;
   }
 
@@ -1878,6 +1879,26 @@ function runKingGameRound() {
   });
 }
 
+// 🍶ひとり飲みモード専用のラウンド進行（日本語UI限定）：
+// wheelEntriesは飲み友AIの9キャラクターで構成されている（startRound()側で設定）。
+// 王様・審査員ハプニングは対象外で、止まったキャラクターとそのまま飲み友AIチャットを始める
+function runSoloCharacterRound() {
+  spinWheel((winner, idx) => {
+    state.riggedName = null;
+    btnRig.classList.remove("active");
+    flashWinnerWedge(idx);
+    gameStatus.classList.remove("taunt-pulse");
+    btnSpin.disabled = false;
+
+    state.roundCount++;
+    Achievements.bump("totalRounds");
+
+    const character = AI_ROAST_CHARACTERS[idx];
+    gameStatus.textContent = t("statusPicked")(character.name);
+    setTimeout(() => openRoastChat(character), 900);
+  });
+}
+
 // 結果発表の瞬間の演出（紙吹雪・振動）をまとめて起動する
 function celebrate(colors, vibrationPattern) {
   Confetti.burst(colors);
@@ -1898,7 +1919,6 @@ function showOdai(from, to, judgeName, packOverride) {
   const odaiPack = packOverride || state.pack;
 
   const odai =
-    (odaiPack === "solo" && state.lang === "ja" && pickSoloCharacterOdai()) ||
     (odaiPack === "family" && tryFamilyMeetStoryOdai(from.name, state.lang)) ||
     generateOdai(from.name, to.name, state.lang, odaiPack);
 
@@ -1930,15 +1950,10 @@ function showOdai(from, to, judgeName, packOverride) {
   odaiArea.classList.remove("hidden");
 
   // 🎰 本命の前に、ダミー候補を2つポポポンと高速表示してから確定させる演出
-  // （🍶ひとり飲みモードは通常のお題ではなくキャラクターが登場する演出なので、
-  //   ダミーも同じくランダムなキャラクターの登場にする）
-  const decoys =
-    odaiPack === "solo" && state.lang === "ja"
-      ? [pickSoloCharacterOdai().displayText, pickSoloCharacterOdai().displayText]
-      : [
-          judgePrefix + generateOdai(from.name, to.name, state.lang, odaiPack).displayText,
-          judgePrefix + generateOdai(from.name, to.name, state.lang, odaiPack).displayText,
-        ];
+  const decoys = [
+    judgePrefix + generateOdai(from.name, to.name, state.lang, odaiPack).displayText,
+    judgePrefix + generateOdai(from.name, to.name, state.lang, odaiPack).displayText,
+  ];
   const sequence = [...decoys, finalDisplay];
   let step = 0;
   const popInterval = setInterval(() => {
