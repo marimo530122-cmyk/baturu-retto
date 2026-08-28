@@ -20,14 +20,24 @@ const AiRoast = (() => {
 
   let history = [];
   let character = null;
+  let playerName = "";
 
   // チャットを開くたびに呼ぶ。会話履歴をリセットし、キャラクターを決める。
   // forceCharacter を渡すとそのキャラクターに固定する（例：ルーレットで既に決まっている場合）。
   // 省略時は従来通りランダムで1人選ぶ。
-  function open(forceCharacter) {
+  // name を渡すと、キャラクターが「お前」等の代わりにその名前で呼びかけてくれる
+  // （opener中の{name}の置き換え・サーバー側への送信の両方に使う）
+  function open(forceCharacter, name) {
     history = [];
     character = forceCharacter || AI_ROAST_CHARACTERS[Math.floor(Math.random() * AI_ROAST_CHARACTERS.length)];
+    playerName = (name || "").trim();
     return character;
+  }
+
+  // opener文中の{name}を実際のプレイヤー名に置き換えて返す（名前未設定時はそのまま「あなた」にする）
+  function getOpenerText() {
+    if (!character) return "";
+    return character.opener.replace(/\{name\}/g, playerName || "あなた");
   }
 
   function todayKey() {
@@ -77,7 +87,7 @@ const AiRoast = (() => {
       const res = await fetch(AI_ROAST_ENDPOINT, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ message, history, character: character ? character.id : null }),
+        body: JSON.stringify({ message, history, character: character ? character.id : null, name: playerName }),
       });
       if (!res.ok) return { ok: false, reason: "error" };
       const data = await res.json();
@@ -94,5 +104,5 @@ const AiRoast = (() => {
     }
   }
 
-  return { isConfigured, send, reset, open, getCharacter, quotaReached, maxTurnsPerDay: MAX_TURNS_PER_DAY };
+  return { isConfigured, send, reset, open, getCharacter, getOpenerText, quotaReached, maxTurnsPerDay: MAX_TURNS_PER_DAY };
 })();

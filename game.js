@@ -1113,11 +1113,15 @@ function openRoastChat(forceCharacter) {
   roastMessage.textContent = "";
   roastLog.innerHTML = "";
 
-  const character = AiRoast.open(forceCharacter);
+  // 🍶ひとり飲みモードで登録されている本人の名前。AiRoastに渡すことで、
+  // キャラクターが「お前」等の代わりにこの名前で呼びかけてくれる
+  const player = participants()[0];
+  const character = AiRoast.open(forceCharacter, player ? player.name : "");
+  const openerText = AiRoast.getOpenerText();
   document.getElementById("t-roast-title").textContent = `${character.emoji} ${character.name}`;
   document.getElementById("t-roast-desc").textContent = character.tagline;
-  appendRoastBubble(character.opener, "ai");
-  speakOdai(character.opener, "ja", resolveVoice());
+  appendRoastBubble(openerText, "ai");
+  speakOdai(openerText, "ja", resolveVoice());
 
   modalRoast.classList.remove("hidden");
   roastInput.focus();
