@@ -145,9 +145,12 @@ const CHARACTER_PERSONAS = {
 ・「胸のつかえは、吐き出してこそ軽くなる。恥じることはない」`,
 };
 
-function buildSystemPrompt(characterId) {
+function buildSystemPrompt(characterId, userName) {
   const persona = CHARACTER_PERSONAS[characterId] || CHARACTER_PERSONAS.tagosaku;
-  return persona + SHARED_RULES;
+  const nameNote = userName
+    ? `\n\n相手の名前は「${userName}」です。「お前」「後輩」等の代わりに、できるだけこの名前で呼びかけてください。`
+    : "";
+  return persona + nameNote + SHARED_RULES;
 }
 
 const MAX_MESSAGE_LENGTH = 200;
@@ -230,7 +233,8 @@ module.exports = async (req, res) => {
   }
 
   const characterId = typeof body.character === "string" ? body.character : "";
-  const systemPrompt = buildSystemPrompt(characterId);
+  const userName = typeof body.name === "string" ? body.name.slice(0, 20).trim() : "";
+  const systemPrompt = buildSystemPrompt(characterId, userName);
 
   const historyIn = Array.isArray(body.history) ? body.history : [];
   // Groq(OpenAI互換)のロール名はuser/assistantそのままでよい
