@@ -64,3 +64,24 @@ const STRIPE_PARTY_PAYMENT_LINK = "https://buy.stripe.com/YOUR_PAYMENT_LINK_PART
    ========================================================= */
 
 const STRIPE_SOLO_PAYMENT_LINK = "https://buy.stripe.com/YOUR_PAYMENT_LINK_SOLO";
+
+/* =========================================================
+   🪙 飲み友AI：1日の上限に達した後の追加解放（¥100・買い切り）
+   ---------------------------------------------------------
+   🍶ひとり飲みサブスク内の飲み友AIチャットは1日30回までですが、
+   上限に達した後は、この決済リンクで¥100払うとその日だけ+12回
+   話せるようになります（何度でも買い足せます）。Stripeで「1回払い」の
+   決済リンクを作成し、ここに貼り付けてください（作り方は通常のプレミアムと
+   同じ手順）。
+
+   ⚠️ 忘れずに：Stripe側の決済リンク設定で「支払い後」を
+   「別のウェブサイトに移動させる」にし、移動先URLを
+     https://marimo530122-cmyk.github.io/baturu-retto/?roast_topup=1&roast_topup_session_id={CHECKOUT_SESSION_ID}
+   にしてください（他のプランの paid / session_id とは
+   別のパラメータ名になっているので、間違えないようご注意ください）。
+
+   まだ設定していない間は、上限に達しても追加購入ボタン自体が
+   表示されず、それ以外の機能には一切影響しません。
+   ========================================================= */
+
+const STRIPE_ROAST_TOPUP_LINK = "https://buy.stripe.com/YOUR_PAYMENT_LINK_ROAST_TOPUP";
