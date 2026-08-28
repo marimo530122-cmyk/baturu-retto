@@ -598,6 +598,14 @@ body.premium-active .ad-slot {
   margin: 10px 0;
 }
 
+/* 🍶飲み友AIの決め台詞（キャラごとの締めの一言） */
+.roast-catchphrase {
+  font-style: italic;
+  font-size: 13px;
+  opacity: 0.75;
+  margin: -4px 0 10px;
+}
+
 /* 回転中の煽りテキスト */
 .taunt-pulse {
   animation: tauntPulse 0.5s ease-in-out infinite;
