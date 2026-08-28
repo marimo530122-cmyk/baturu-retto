@@ -244,6 +244,7 @@ function applyLanguage() {
 
   updateLangButton();
   updateBgmGenreButton();
+  updateSetupUiForPack();
 }
 
 /* ---------------- 🌐 言語ボタン（どの画面からでも切り替え可能） ---------------- */
@@ -312,6 +313,7 @@ function showScreen(name) {
   Object.values(screens).forEach((s) => s.classList.add("hidden"));
   screens[name].classList.remove("hidden");
   window.scrollTo(0, 0);
+  if (name === "setup") updateSetupUiForPack();
   // 🔊盛り上がりメーター：ゲーム画面にいる間だけマイクを起動し、離れたら必ず止める（プライバシー配慮）
   if (typeof HypeMeter !== "undefined") {
     if (name === "game" && state.hypeEnabled) {
@@ -664,6 +666,8 @@ setupSimplePackToggle(btnNoAlcohol, "noalcohol", "noalcoholOn", "noalcoholOff", 
 /* ---------------- 🍶 ひとり飲みモード（月額サブスク・SoloBilling） ---------------- */
 const btnSolo = document.getElementById("pack-solo");
 setupSimplePackToggle(btnSolo, "solo", "soloOn", "soloOff", true, blockIfNotSoloPremium);
+// 🍶ひとり飲みモードのON/OFFに合わせて、名前入力欄の見た目（1人向け表記・モード切替の非表示）を更新する
+btnSolo.addEventListener("click", () => updateSetupUiForPack());
 
 /* ---------------- 👑 王様ゲームモード（無料・QR配布などから即遊べる王様ゲーム特化モード） ---------------- */
 // プレミアム未解放: 王様50% / 王様×自動ランダム指名30% / 通常ネタ20%
@@ -1374,6 +1378,18 @@ function updateFamilyRoleRowVisibility() {
   if (show) renderFamilyRoleRow();
 }
 
+// 🍶ひとり飲みモード：登録するのは自分1人だけなので、名前欄の見た目を
+// 「参加メンバー（複数人向け）」から「あなたの名前（1人向け）」に変え、
+// 意味をなさない「男女に分ける」トグルは隠して全員一緒モードに固定する
+function updateSetupUiForPack() {
+  const isSolo = state.pack === "solo";
+  const modeToggle = document.querySelector(".mode-toggle");
+  if (modeToggle) modeToggle.classList.toggle("hidden", isSolo);
+  if (isSolo && state.mode !== "all") setMode("all");
+  document.getElementById("t-team-a").textContent = t(isSolo ? "soloNameLabel" : "teamA");
+  document.getElementById("input-a").placeholder = t(isSolo ? "soloNamePlaceholder" : "placeholder");
+}
+
 // 「馴れ初め」お題：父/母・祖父/祖母・義父/義母のペアが役割タグ経由で両方参加しているときだけ、
 // 一定確率で通常のお題の代わりにこちらを返す（対応言語はja/enのみ。それ以外や条件を満たさない
 // ときはnullを返し、呼び出し側は通常どおりgenerateOdai()にフォールバックする）
@@ -1394,6 +1410,17 @@ const FAMILY_MEET_STORY_PROMPTS = {
     (p) => `Share your favorite memory of a date with ${p}, in detail.`,
   ],
 };
+
+// 🍶ひとり飲みモード（日本語UI限定）：文字だけの「お題」の代わりに、
+// 飲み友AIの9キャラクター（ai-roast-characters.js）のうち誰か1人がランダムに登場し、
+// そのキャラの口調の短いセリフ（AI_ROAST_CHARACTERS[].opener）を投げかける
+function pickSoloCharacterOdai() {
+  const character = AI_ROAST_CHARACTERS[Math.floor(Math.random() * AI_ROAST_CHARACTERS.length)];
+  return {
+    displayText: `${character.emoji}【${character.name}】\n${character.opener}`,
+    speechText: character.opener,
+  };
+}
 
 function tryFamilyMeetStoryOdai(fromName, lang) {
   const prompts = FAMILY_MEET_STORY_PROMPTS[lang];
@@ -1871,6 +1898,7 @@ function showOdai(from, to, judgeName, packOverride) {
   const odaiPack = packOverride || state.pack;
 
   const odai =
+    (odaiPack === "solo" && state.lang === "ja" && pickSoloCharacterOdai()) ||
     (odaiPack === "family" && tryFamilyMeetStoryOdai(from.name, state.lang)) ||
     generateOdai(from.name, to.name, state.lang, odaiPack);
 
@@ -1902,10 +1930,15 @@ function showOdai(from, to, judgeName, packOverride) {
   odaiArea.classList.remove("hidden");
 
   // 🎰 本命の前に、ダミー候補を2つポポポンと高速表示してから確定させる演出
-  const decoys = [
-    judgePrefix + generateOdai(from.name, to.name, state.lang, odaiPack).displayText,
-    judgePrefix + generateOdai(from.name, to.name, state.lang, odaiPack).displayText,
-  ];
+  // （🍶ひとり飲みモードは通常のお題ではなくキャラクターが登場する演出なので、
+  //   ダミーも同じくランダムなキャラクターの登場にする）
+  const decoys =
+    odaiPack === "solo" && state.lang === "ja"
+      ? [pickSoloCharacterOdai().displayText, pickSoloCharacterOdai().displayText]
+      : [
+          judgePrefix + generateOdai(from.name, to.name, state.lang, odaiPack).displayText,
+          judgePrefix + generateOdai(from.name, to.name, state.lang, odaiPack).displayText,
+        ];
   const sequence = [...decoys, finalDisplay];
   let step = 0;
   const popInterval = setInterval(() => {
