@@ -1124,7 +1124,11 @@ function openRoastChat(forceCharacter) {
   appendRoastBubble(openerText, "ai");
   // 🎙️ 声の質はキャラクターごとに固定（渋いおっさん・ゆっくりゾンビ等）。
   // 全体の音声設定（🎤ボタン）とは独立している
-  speakOdai(openerText, "ja", character.voice);
+  // キャラの第一声を話し終えたら、マイク操作なしで自動的にハンズフリー会話モードに入る
+  speakOdai(openerText, "ja", character.voice, () => {
+    handsFreeActive = true;
+    startRoastRecognition();
+  });
 
   modalRoast.classList.remove("hidden");
   roastInput.focus();
