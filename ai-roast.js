@@ -18,6 +18,11 @@ const AiRoast = (() => {
   const MAX_TURNS_PER_DAY = 12;
   const HISTORY_LIMIT = 12; // 直近12件（ユーザー+AI合計）だけ会話履歴として送る
 
+  // 開発確認用のURLパラメータ（?solopremium=1）でアクセスしているときは、
+  // テスト中の会話が1日の利用回数にカウントされないようにする
+  // （billing.jsのSoloBillingと同じdevパラメータ名）
+  const isDevTesting = new URLSearchParams(location.search).get("solopremium") === "1";
+
   let history = [];
   let character = null;
   let playerName = "";
@@ -61,12 +66,14 @@ const AiRoast = (() => {
   }
 
   function bumpTurnsUsed() {
+    if (isDevTesting) return;
     try {
       localStorage.setItem(todayKey(), String(getTurnsUsed() + 1));
     } catch (e) {}
   }
 
   function quotaReached() {
+    if (isDevTesting) return false;
     return getTurnsUsed() >= MAX_TURNS_PER_DAY;
   }
 
