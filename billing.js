@@ -13,15 +13,16 @@
    ・記録はこの端末のlocalStorageに保存（アプリストア課金を
      導入するまでのつなぎとして、サーバーなしで最速で始める方式）
 
-   ⚠️ 注意（正直な限界）：サーバー側でStripeに「本当にこの
-   session_idの決済が成立したか」を問い合わせているわけでは
-   ないため、JavaScriptのコードを読んで session_id の形式を
-   再現できる詳しい人であれば、理論上は無料で解放できてしまい
-   ます。それでも「?paid=1と適当に打つだけ」の突破は防げるので、
-   カジュアルな飲み会アプリとして「まず最速で収益化を始める」
-   ための現実的な強化です。本当の意味で突破不可能にするには、
-   サーバー側でStripeのWebhookを受けて検証する仕組み（や、将来の
-   アプリストア課金）が必要になります。
+   ・2026-08-30、上記の限界に対応するため「楽観的解放＋事後検証」を
+     追加した：session_idの形が正しければ従来通りその場で即解放
+     （体感速度は変えない）しつつ、裏でapi/verify-payment.jsへ
+     一度だけ問い合わせ、Stripe側で本当に支払い済みと確認できな
+     かった場合だけ解放を自動的に取り消す（PAYMENT_VERIFY_ENDPOINTが
+     billing-config.jsで設定済みのときのみ動作。Webhookも
+     データベースも使わない、状態を持たない同期チェック）
+   ・検証エンドポイントが応答しない/未設定のときは「安全側」に
+     倒して解放を維持する（正規購入者を誤って締め出さないため）。
+     その代わり、その間は不正対策としては効かない
 
    ---------------------------------------------------------
    このファイルは createBillingModule() を使って、
@@ -30,7 +31,7 @@
    ========================================================= */
 
 function createBillingModule(config) {
-  const { storageKey, returnParam, sessionParam, devParam, getPaymentLink, allowReferralBonus } = config;
+  const { storageKey, returnParam, sessionParam, devParam, getPaymentLink, allowReferralBonus, plan } = config;
 
   // Stripeのチェックアウトセッションidの形（cs_test_... / cs_live_...）
   const SESSION_ID_PATTERN = /^cs_(test|live)_[A-Za-z0-9]{16,}$/;
@@ -66,17 +67,32 @@ function createBillingModule(config) {
 
   // "?paid=1" が付いているだけでなく、Stripeのsession_idらしき
   // 文字列が一緒に付いているときだけ、本物の決済復帰とみなす
-  function isValidCheckoutReturn() {
-    if (params.get(returnParam) !== "1") return false;
+  function getReturnSessionId() {
+    if (params.get(returnParam) !== "1") return null;
     const sessionId = params.get(sessionParam) || "";
-    return SESSION_ID_PATTERN.test(sessionId);
+    return SESSION_ID_PATTERN.test(sessionId) ? sessionId : null;
+  }
+
+  // 決済から戻った直後に1回だけ、api/verify-payment.jsへ本当に支払い済みか
+  // 問い合わせる。Stripe側で確認が取れなかった場合だけ解放を取り消す
+  // （エンドポイント未設定・ネットワーク不通時は安全側に倒し、何もしない）
+  function verifyInBackground(sessionId) {
+    if (typeof PAYMENT_VERIFY_ENDPOINT !== "string" || !PAYMENT_VERIFY_ENDPOINT || !plan) return;
+    const url = `${PAYMENT_VERIFY_ENDPOINT}?session_id=${encodeURIComponent(sessionId)}&plan=${encodeURIComponent(plan)}`;
+    fetch(url)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data && data.valid === false) writeFlag(false); // 明確に「不正」と判定できたときだけ取り消す
+      })
+      .catch(() => {});
   }
 
   let justUnlocked = false; // このページ読み込みで新規に解放されたか（お祝い演出の判定用）
 
   // Stripeの決済リンクから戻ってきたときに解放を記録し、URLからパラメータを消す
   function handleReturnFromCheckout() {
-    if (!isValidCheckoutReturn()) return;
+    const sessionId = getReturnSessionId();
+    if (!sessionId) return;
     const alreadyUnlocked = readFlag();
     writeFlag(true);
     justUnlocked = !alreadyUnlocked;
@@ -84,6 +100,7 @@ function createBillingModule(config) {
     url.searchParams.delete(returnParam);
     url.searchParams.delete(sessionParam);
     history.replaceState({}, "", url.toString());
+    verifyInBackground(sessionId);
   }
   handleReturnFromCheckout();
 
@@ -124,6 +141,7 @@ const Billing = createBillingModule({
   devParam: "premium",
   getPaymentLink: () => STRIPE_PAYMENT_LINK,
   allowReferralBonus: true,
+  plan: "premium",
 });
 
 // 法人・パーティープラン（結婚式二次会・会社の飲み会向け特別パック）
@@ -134,6 +152,7 @@ const PartyBilling = createBillingModule({
   devParam: "partypremium",
   getPaymentLink: () => STRIPE_PARTY_PAYMENT_LINK,
   allowReferralBonus: false,
+  plan: "party",
 });
 
 // 🍶 ひとり飲みモード＋飲み友AI 専用の月額サブスク（¥500/月「ワンコイン」）
@@ -148,4 +167,5 @@ const SoloBilling = createBillingModule({
   devParam: "solopremium",
   getPaymentLink: () => STRIPE_SOLO_PAYMENT_LINK,
   allowReferralBonus: true,
+  plan: "solo",
 });

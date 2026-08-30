@@ -44,6 +44,25 @@ const AiRoast = (() => {
     }
   }
 
+  // 決済から戻った直後に1回だけ、api/verify-payment.jsへ本当に支払い済みか
+  // 問い合わせる（billing.jsのverifyInBackgroundと同じ仕組み）。Stripe側で
+  // 確認が取れなかった場合だけ、今回加算した分のボーナス回数を取り消す
+  // （エンドポイント未設定・ネットワーク不通時は安全側に倒し、何もしない）
+  function verifyTopupInBackground(sessionId) {
+    if (typeof PAYMENT_VERIFY_ENDPOINT !== "string" || !PAYMENT_VERIFY_ENDPOINT) return;
+    const url = `${PAYMENT_VERIFY_ENDPOINT}?session_id=${encodeURIComponent(sessionId)}&plan=roast_topup`;
+    fetch(url)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data || data.valid !== false) return; // 明確に「不正」と判定できたときだけ取り消す
+        try {
+          const remaining = Math.max(0, getBonusTurns() - TOPUP_BONUS_TURNS);
+          localStorage.setItem(bonusKey(), String(remaining));
+        } catch (e) {}
+      })
+      .catch(() => {});
+  }
+
   function handleTopupReturn() {
     const params = new URLSearchParams(location.search);
     if (params.get("roast_topup") !== "1") return;
@@ -58,6 +77,7 @@ const AiRoast = (() => {
     // ⚠️ このIIFE内には会話履歴用の変数名`history`があり、window.historyを覆い隠すため、
     // 必ずwindow.を付けて参照すること
     window.history.replaceState({}, "", url.toString());
+    verifyTopupInBackground(sessionId);
   }
 
   function isTopupConfigured() {
