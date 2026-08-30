@@ -116,7 +116,7 @@ function createBillingModule(config) {
   return { isPremium, isConfigured, openCheckout, wasJustUnlocked };
 }
 
-// 通常のプレミアム（大人向けパック・1対1モード・ねるとんZoom等）
+// 通常のプレミアム（大人向けパック・1対1モード等）
 const Billing = createBillingModule({
   storageKey: "batsu-premium",
   returnParam: "paid",

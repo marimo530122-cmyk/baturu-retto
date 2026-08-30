@@ -88,7 +88,7 @@ function getRecentOdaiHistory(pack, lang) {
 // 🌐 バイリンガル表示（法人・パーティープラン限定）で、同じ組み合わせを
 // 2つの言語で表示するために、片方の言語で選んだインデックスをもう片方にも使い回す用途。
 function generateOdai(fromName, toName, lang = "ja", pack = "standard", forceIndices) {
-  const PACK_DATA = { romance: ROMANCE_DATA, adult: ADULT_DATA, family: FAMILY_DATA, couple: COUPLE_DATA, nerutoon: NERUTON_DATA, party: PARTY_DATA, noalcohol: NOALCOHOL_DATA, solo: SOLO_DATA };
+  const PACK_DATA = { romance: ROMANCE_DATA, adult: ADULT_DATA, family: FAMILY_DATA, couple: COUPLE_DATA, party: PARTY_DATA, noalcohol: NOALCOHOL_DATA, solo: SOLO_DATA };
   const data =
     PACK_DATA[pack] ? PACK_DATA[pack][lang] || ODAI_DATA[lang] || ODAI_DATA.ja // 未対応言語は通常パックに戻す
       : ODAI_DATA[lang] || ODAI_DATA.ja;

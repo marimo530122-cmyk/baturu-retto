@@ -1,9 +1,9 @@
 /* =========================================================
-   お題データ本体（9パック分の翻訳済みテキスト）
+   お題データ本体（8パック分の翻訳済みテキスト）
    ---------------------------------------------------------
    ・ODAI_DATA(標準)/ROMANCE_DATA/ADULT_DATA/FAMILY_DATA/
-     COUPLE_DATA/NERUTON_DATA/PARTY_DATA/NOALCOHOL_DATA/
-     SOLO_DATA の9つの定数を定義するだけの、ロジックを含まない
+     COUPLE_DATA/PARTY_DATA/NOALCOHOL_DATA/
+     SOLO_DATA の8つの定数を定義するだけの、ロジックを含まない
      純粋なデータファイル
    ・実際の抽選ロジック(generateOdai等)は odai-generator.js 側
    ・index.htmlで、このファイルを odai-generator.js より前に
@@ -3983,109 +3983,6 @@ const COUPLE_DATA = {
       "saling menatap lalu puji warna mata pasangan dengan suara keras",
       "tos lalu langsung berpegangan tangan setelahnya",
       "tempelkan dahi lalu masing-masing sampaikan satu hal yang disyukuri hari ini",
-    ],
-  },
-};
-
-/* ---------------------------------------------------------
-   💘 ねるとんZoomモード（有料機能・初対面マッチングパーティー用）
-   シチュエーション20種 × 行動20種 = 400通り（現在は日本語・英語のみ）
-   ※既存の恋愛パックが「交際中の2人」向けなのに対し、
-     こちらは「初対面同士のマッチングパーティー」向け。
-     褒め合い・第一印象・告白ごっこまでに統一し、
-     キス・身体接触は含めない（世界お題ガイドのルール準拠）
-   --------------------------------------------------------- */
-const NERUTON_DATA = {
-  ja: {
-    situations: [
-      "初対面のドキドキを隠しきれない参加者のように",
-      "運命の出会いを求めてこの会に参加したように",
-      "第一印象で心を撃ち抜かれた瞬間のように",
-      "恋愛番組の告白タイムに出演しているように",
-      "気になる人を前にしてつい饒舌になってしまうように",
-      "合コンのエース級の自己紹介をするように",
-      "運命の人を探す真剣な眼差しで",
-      "初対面なのに妙に馬が合う相手を見つけたように",
-      "この出会いを一生の思い出にしたいと願うように",
-      "恋のライバルに闘志を燃やすように",
-      "好みのタイプ発表会に出演するように",
-      "一目惚れした瞬間の高鳴る鼓動を隠しながら",
-      "マッチングアプリのプロフィールを読み上げるように",
-      "今夜だけの特別な出会いを噛みしめるように",
-      "気になるあの人にだけ聞こえる声で",
-      "恋のキューピッドに背中を押されているように",
-      "運命の相手診断に一喜一憂する参加者のように",
-      "初対面の緊張と期待が入り混じった表情で",
-      "この場にいる全員を虜にする勢いで",
-      "出会いに感謝する乾杯の音頭を取るように",
-    ],
-    actions: [
-      "この場で第一印象が良かった人の名前を、Zoomのチャットでこっそり送る",
-      "自分の「好きなタイプ」を3つ、具体的に発表する",
-      "気になった人の第一印象を、傷つけない範囲で発表する",
-      "自己紹介を、まるで婚活パーティーのプロフィールカード風に読み上げる",
-      "この中で一番話してみたい人を指名し、理由を1つ添える",
-      "自分の恋愛遍歴を、映画の予告編風に3行で紹介する",
-      "今の自分を売り込む「自己PRタイム」を30秒行う",
-      "理想のデートプランを、その場で即興で発表する",
-      "この会に参加した理由を、正直に打ち明ける",
-      "気になる人へのメッセージを、Zoomのチャットで一言だけこっそり送る",
-      "自分の恋愛の決め手ベスト3を発表する",
-      "この場にいる誰かの「良いところ」を3つ、名前を伏せて紹介する",
-      "今の気持ちを、恋愛ソングのタイトルで表現する",
-      "自分にとっての理想の相手像を、絵に描くように言葉で説明する",
-      "この出会いの感想を、一言で表現する",
-      "誰かに送りたい「気になっています」のサインを、身振りだけで表現する",
-      "自分の趣味・特技を、モテアピール全開でプレゼンする",
-      "今夜一番印象に残った会話を、再現してみせる",
-      "この中で「もっと話したい」と思った人の名前を、紙に書いて見せる（本人には秘密で）",
-      "出会いに乾杯する短いスピーチをする",
-    ],
-  },
-  en: {
-    situations: [
-      "Like someone barely hiding the nerves of a first meeting",
-      "Like someone who came here hoping for a fated encounter",
-      "Like the moment your heart skipped a beat at first sight",
-      "Like a contestant on a dating show's confession segment",
-      "Like getting unexpectedly chatty around someone you're curious about",
-      "Like giving an ace-level self-introduction at a mixer",
-      "With the serious look of someone searching for \"the one\"",
-      "Like discovering an oddly perfect connection with a total stranger",
-      "Like wanting to remember this meeting for the rest of your life",
-      "Like burning with rivalry over someone you like",
-      "Like a contestant at a \"my type\" reveal segment",
-      "Hiding the racing heartbeat of love at first sight",
-      "Like reading your own dating-app profile out loud",
-      "Like savoring this one special night of meeting new people",
-      "In a voice meant only for the person you're curious about",
-      "Like being pushed forward by love's own matchmaker",
-      "Like a contestant anxiously awaiting a compatibility result",
-      "With a face mixing first-meeting nerves and hope",
-      "Like trying to charm absolutely everyone in the room",
-      "Like giving a toast of gratitude for this chance encounter",
-    ],
-    actions: [
-      "secretly send the name of whoever made the best first impression, via Zoom chat",
-      "announce three specific things about your \"type\"",
-      "share one kind first impression of someone here, keeping it gentle",
-      "read your own self-introduction like a dating-party profile card",
-      "call out the one person here you'd most like to talk to, with one reason why",
-      "summarize your dating history in three lines, like a movie trailer",
-      "deliver a 30-second \"sell yourself\" pitch",
-      "improvise your dream date plan on the spot",
-      "honestly share why you came to this gathering",
-      "secretly send one message to someone you're curious about, via Zoom chat",
-      "reveal your top three dealbreakers (in a good way) for love",
-      "name three good things about someone here, without saying who",
-      "describe your current mood using the title of a love song",
-      "describe your ideal partner in vivid detail, like painting a picture with words",
-      "sum up your impression of tonight in a single word",
-      "act out (no words) a \"you caught my eye\" signal to someone",
-      "pitch your hobbies and skills with maximum charm",
-      "reenact the most memorable conversation you had tonight",
-      "write down the name of the person you'd like to talk to more (keep it secret from them)",
-      "give a short toast to new encounters",
     ],
   },
 };

@@ -161,7 +161,6 @@ function applyLanguage() {
   document.getElementById("pack-couple").innerHTML = `${u.packs.couple} <span class="lock">🔒</span>`;
   document.getElementById("pack-romance").innerHTML = `${u.packs.romance} <span class="lock">🔒</span>`;
   document.getElementById("pack-online").innerHTML = `${u.packs.online} <span class="lock">🔒</span>`;
-  document.getElementById("pack-nerutoon").innerHTML = `${u.packs.nerutoon} <span class="lock">🔒</span>`;
   document.getElementById("pack-party").innerHTML = `${u.packs.party} <span class="lock">🔒</span>`;
   document.getElementById("pack-noalcohol").textContent = u.packs.noalcohol;
   document.getElementById("pack-solo").innerHTML = `${u.packs.solo} <span class="lock">🔒</span>`;
@@ -353,9 +352,9 @@ function showPremiumModal(text, billingModule) {
 
 document.querySelectorAll(".btn-locked").forEach((btn) => {
   // 個別に専用ハンドラを持つパックは、ここでは何もしない（二重発火防止。以前は
-  // family/couple/party/nerutoon/soloがこの除外リストから漏れており、専用ハンドラが
+  // family/couple/party/soloがこの除外リストから漏れており、専用ハンドラが
   // あるにも関わらずクリックのたびに常に「ご案内モーダル」が出てしまうバグがあった）
-  if (["romance", "online", "adult", "family", "couple", "party", "nerutoon", "solo"].includes(btn.dataset.pack)) return;
+  if (["romance", "online", "adult", "family", "couple", "party", "solo"].includes(btn.dataset.pack)) return;
   btn.addEventListener("click", () => {
     showPremiumModal(t("packTeaser")(UI[state.lang].packs[btn.dataset.pack]));
   });
@@ -642,10 +641,6 @@ document.getElementById("agegate-yes").addEventListener("click", () => {
 document.getElementById("agegate-no").addEventListener("click", () => {
   modalAgeGate.classList.add("hidden");
 });
-
-/* ---------------- 💘 ねるとんZoomモード切り替え（有料機能） ---------------- */
-const btnNerutoon = document.getElementById("pack-nerutoon");
-setupSimplePackToggle(btnNerutoon, "nerutoon", "nerutoonOn", "nerutoonOff", true);
 
 /* ---------------- 👨‍👩‍👧 ファミリー向けパック切り替え（有料機能） ---------------- */
 const btnFamily = document.getElementById("pack-family");
