@@ -69,7 +69,6 @@ game.js                    … ゲーム本体のロジック・画面制御（i
 | `PARTY_DATA` | 🎉法人・パーティー | 12言語（全言語対応済み） |
 | `SOLO_DATA` | 🍶ひとり飲み | 12言語（全言語対応済み） |
 | `NOALCOHOL_DATA` | 🥤ノンアル版 | 12言語（全言語対応済み） |
-| `NERUTON_DATA` | 💘ねるとんZoom | 日英のみ（2言語、他8言語すべて未対応。他の有料パックより遅れている） |
 
 未対応言語を選ぶと自動的に標準パック（`ODAI_DATA`）の同じ言語へフォールバックする仕組みです（`odai-generator.js`の`generateOdai()`内）。標準パック自体が未対応の言語（de/tl）は、最終的に日本語のお題が出ます。
 
@@ -104,3 +103,4 @@ game.js                    … ゲーム本体のロジック・画面制御（i
 - **⚠️ 💘ねるとんZoomパック（`NERUTON_DATA`）が日本語・英語の2言語のみ**。他の有料パックはすべて12言語まで拡張されたのに、これだけ取り残されている（残る唯一の多言語ギャップ）
 - 2026-08-22、🍶ひとり飲みモード＋飲み友AI専用の月額サブスク（¥500/月「ワンコイン」）を追加。`billing.js`に`SoloBilling`（`createBillingModule()`を再利用）、`billing-config.js`に`STRIPE_SOLO_PAYMENT_LINK`（プレースホルダー、Stripeで「Recurring/Monthly」の決済リンクを作成して設定する）を追加。`game.js`に`isSoloPremiumUnlocked()`/`blockIfNotSoloPremium()`を追加し、`pack-solo`ボタンと`btn-roast-solo`（飲み友AI）だけがこちらを見るようにした（他のパックは従来通り`Billing`/`blockIfNotPremium`のまま）。`setupSimplePackToggle()`に5番目の引数`blockFn`を追加して差し替え可能にした。`showPremiumModal(text, billingModule)`も第2引数でどちらの決済リンクを開くか切り替えられるようにした。QRコードの24時間お試し（`Referral`）は、当初SoloBillingだけに絞る案もあったが、既存の12言語ぶんの販促文言（「大人向けパックも解放」等）と矛盾するため、**通常プレミアムと同じく全プレミアムに一律適用**する方針で確定（`SoloBilling`も`allowReferralBonus: true`）。
 - 2026-08-22、😈タゴサクAIを🍶「飲み友AI」に名称変更し、9キャラクター制にした。新規データファイル`ai-roast-characters.js`（id/name/emoji/tagline/opener、ロジックへの依存なしの純データ）を追加し、`ai-roast-config.js`の直後・`ai-roast.js`の直前に読み込む（データがロジックより前、の原則通り）。`AiRoast.open()`を呼ぶたびにランダムで1人選び、選んだキャラのopener文をAPI呼び出しなしでそのまま表示、以降の会話は`character`idをサーバーに送ってペルソナを切り替える。サーバー側`api/roast.js`は`CHARACTER_PERSONAS`に9人分のペルソナ（タゴサク含む）を持ち、`SHARED_RULES`（安全ルール等）を全ペルソナ共通で末尾付与する構成。⑥〜⑨（怪盗ダンディ/渋さん/魔性のルナ/剣士・凪）は実在作品のキャラクターを模倣しない完全オリジナル設定（著作権配慮）。
+- 2026-09-03、💘ねるとんZoomパック（`NERUTON_DATA`）を廃止・削除した。多言語対応が最後まで追いつかなかった（日英2言語のみ）こともあり、ユーザー判断で機能自体を終了。`odai-data.js`のデータ本体、`odai-generator.js`の`PACK_DATA`登録、`index.html`のボタン、`game.js`の初期化・トグル処理、`i18n.js`の全12言語ぶんの文言を削除。オンラインモードの汎用Zoom URL共有機能（`online.js`）はねるとん専用ではなく他パックでも使う汎用機能のため存続。

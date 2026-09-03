@@ -43,7 +43,7 @@ const Online = (() => {
     return String(Math.floor(1000 + Math.random() * 9000)); // 4桁のコード
   }
 
-  // 部屋を作る（幹事側）。zoomUrlは任意（💘ねるとんZoomモード用）。戻り値: 部屋コード（失敗時はnull）
+  // 部屋を作る（幹事側）。zoomUrlは任意（オンライン開催時にZoomリンクを共有したい場合用）。戻り値: 部屋コード（失敗時はnull）
   function createRoom(zoomUrl) {
     if (!ensureApp()) return null;
     roomCode = generateCode();
