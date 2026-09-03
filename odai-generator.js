@@ -312,8 +312,11 @@ function pickVoice(lang, gender) {
  *                              例: { pitch: 0.45, rate: 0.9, gender: "male" }
  * @param {function} onEnd    - 読み上げ完了時に呼ばれるコールバック（省略可。
  *                              非対応ブラウザ・エラー時も含め必ず1回呼ばれる）
+ * @param {object} lipSyncHooks - { onBoundary, onStart, onEnd } を渡すと、
+ *                              発話に合わせてアバターの口パクを駆動できる
+ *                              （省略可。飲み友AIのアバター表示でのみ使用）
  */
-function speakOdai(speechText, lang = "ja", persona = null, onEnd) {
+function speakOdai(speechText, lang = "ja", persona = null, onEnd, lipSyncHooks) {
   if (!("speechSynthesis" in window)) {
     if (onEnd) onEnd();
     return; // 非対応ブラウザでは何もしない
@@ -335,9 +338,21 @@ function speakOdai(speechText, lang = "ja", persona = null, onEnd) {
 
     const hasBgm = typeof BGM !== "undefined";
     // 読み上げ中はBGMを小さくして、声を聞き取りやすくする
-    if (hasBgm) utterance.onstart = () => BGM.duck(true);
-    utterance.onend = () => { if (hasBgm) BGM.duck(false); if (onEnd) onEnd(); };
-    utterance.onerror = () => { if (hasBgm) BGM.duck(false); if (onEnd) onEnd(); };
+    utterance.onstart = () => {
+      if (hasBgm) BGM.duck(true);
+      if (lipSyncHooks && lipSyncHooks.onStart) lipSyncHooks.onStart();
+    };
+    if (lipSyncHooks && lipSyncHooks.onBoundary) utterance.onboundary = lipSyncHooks.onBoundary;
+    utterance.onend = () => {
+      if (hasBgm) BGM.duck(false);
+      if (lipSyncHooks && lipSyncHooks.onEnd) lipSyncHooks.onEnd();
+      if (onEnd) onEnd();
+    };
+    utterance.onerror = () => {
+      if (hasBgm) BGM.duck(false);
+      if (lipSyncHooks && lipSyncHooks.onEnd) lipSyncHooks.onEnd();
+      if (onEnd) onEnd();
+    };
 
     // 稀に「一時停止」状態のまま固まる端末があるための保険
     if (speechSynthesis.paused) speechSynthesis.resume();

@@ -1085,6 +1085,10 @@ const roastLog = document.getElementById("roast-log");
 const roastInput = document.getElementById("roast-input");
 const roastMessage = document.getElementById("roast-message");
 const roastTopupBtn = document.getElementById("roast-topup");
+const roastAvatarEl = document.getElementById("roast-avatar");
+const roastAffectionEl = document.getElementById("roast-affection");
+const roastQuotaCounterEl = document.getElementById("roast-quota-counter");
+const roastTopicChipsEl = document.getElementById("roast-topic-chips");
 
 function renderRoastTexts() {
   document.getElementById("t-roast-title").textContent = t("roastTitle");
@@ -1103,6 +1107,82 @@ function appendRoastBubble(text, who) {
   roastLog.scrollTop = roastLog.scrollHeight;
 }
 
+/* ---------------------------------------------------------
+   💗 親密度（affection）: このキャラクターと通算何回話したかを
+   端末のlocalStorageに記録し、回数に応じて関係が進んでいく演出。
+   サーバー側（api/roast.js）にもレベルを送り、口調の温度感を
+   少しだけ変化させる（詳しくはbuildSystemPrompt側のnoteを参照）。
+   --------------------------------------------------------- */
+const AFFECTION_LEVELS = [
+  { min: 0, label: "はじめまして", hearts: 1 },
+  { min: 5, label: "顔なじみ", hearts: 2 },
+  { min: 15, label: "常連さん", hearts: 3 },
+  { min: 30, label: "腐れ縁", hearts: 4 },
+];
+
+function affectionKey(characterId) {
+  return "batsu-roast-affection-" + characterId;
+}
+
+function getAffectionCount(characterId) {
+  try {
+    return parseInt(localStorage.getItem(affectionKey(characterId)) || "0", 10);
+  } catch (e) {
+    return 0;
+  }
+}
+
+function bumpAffectionCount(characterId) {
+  try {
+    localStorage.setItem(affectionKey(characterId), String(getAffectionCount(characterId) + 1));
+  } catch (e) {}
+}
+
+function getAffectionInfo(count) {
+  let cur = AFFECTION_LEVELS[0];
+  for (const lv of AFFECTION_LEVELS) if (count >= lv.min) cur = lv;
+  return cur;
+}
+
+function renderAffection(characterId) {
+  const count = getAffectionCount(characterId);
+  const info = getAffectionInfo(count);
+  const hearts = "💗".repeat(info.hearts) + "🤍".repeat(4 - info.hearts);
+  roastAffectionEl.textContent = `${hearts} ${info.label}（通算${count}回）`;
+  roastAffectionEl.classList.remove("hidden");
+}
+
+function renderQuotaCounter() {
+  const used = AiRoast.getTurnsUsedForDisplay ? AiRoast.getTurnsUsedForDisplay() : null;
+  const max = AiRoast.getMaxTurns();
+  if (used == null) {
+    roastQuotaCounterEl.textContent = "";
+    return;
+  }
+  roastQuotaCounterEl.textContent = `残り ${Math.max(0, max - used)} / ${max} 回（本日）`;
+}
+
+const ROAST_TOPIC_CHIPS = [
+  "今日あったこと聞いて",
+  "愚痴きいてほしい",
+  "惚気話がある",
+  "仕事の話をしたい",
+  "ただ雑談したい",
+  "励ましてほしい",
+];
+
+function renderTopicChips() {
+  roastTopicChipsEl.innerHTML = "";
+  ROAST_TOPIC_CHIPS.forEach((label) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "roast-topic-chip";
+    btn.textContent = label;
+    btn.addEventListener("click", () => sendRoastMessage(label));
+    roastTopicChipsEl.appendChild(btn);
+  });
+}
+
 // 飲み友AIチャット画面を開く共通処理。forceCharacterを渡すとそのキャラクター固定で開く
 // （🍶ひとり飲みモードのキャラクタールーレットで既に決まっている場合など）。省略時はランダム。
 function openRoastChat(forceCharacter) {
@@ -1116,21 +1196,37 @@ function openRoastChat(forceCharacter) {
   // キャラクターが「お前」等の代わりにこの名前で呼びかけてくれる
   const player = participants()[0];
   const character = AiRoast.open(forceCharacter, player ? player.name : "");
-  const openerText = AiRoast.getOpenerText();
+  const affectionCount = getAffectionCount(character.id);
+  const affectionInfo = getAffectionInfo(affectionCount);
+  // 💗常連さん以上（通算15回〜）になると、キャラごとの「深まった一言」を第一声にする
+  const openerText =
+    affectionInfo.hearts >= 3 && character.deepOpener
+      ? character.deepOpener.replace(/\{name\}/g, (player && player.name) || "あなた")
+      : AiRoast.getOpenerText();
   document.getElementById("t-roast-title").textContent = `${character.emoji} ${character.name}`;
   document.getElementById("t-roast-desc").textContent = character.tagline;
   // 🗨️ このキャラクターの決め台詞（会話を締めるときの一言）を名前の下に表示しておく
   const catchphraseEl = document.getElementById("t-roast-catchphrase");
   catchphraseEl.textContent = character.catchphrase ? `「${character.catchphrase}」` : "";
   catchphraseEl.classList.toggle("hidden", !character.catchphrase);
+  renderAffection(character.id);
+  renderQuotaCounter();
+  renderTopicChips();
+  CharacterAvatar.mount(roastAvatarEl, character.id);
   appendRoastBubble(openerText, "ai");
   // 🎙️ 声の質はキャラクターごとに固定（渋いおっさん・ゆっくりゾンビ等）。
   // 全体の音声設定（🎤ボタン）とは独立している
   // キャラの第一声を話し終えたら、マイク操作なしで自動的にハンズフリー会話モードに入る
-  speakOdai(openerText, "ja", character.voice, () => {
-    handsFreeActive = true;
-    startRoastRecognition();
-  });
+  speakOdai(
+    openerText,
+    "ja",
+    character.voice,
+    () => {
+      handsFreeActive = true;
+      startRoastRecognition();
+    },
+    LipSync.hooks()
+  );
 
   modalRoast.classList.remove("hidden");
   roastInput.focus();
@@ -1143,13 +1239,14 @@ document.getElementById("btn-roast-solo").addEventListener("click", () => {
 
 document.getElementById("roast-close").addEventListener("click", () => {
   modalRoast.classList.add("hidden");
+  CharacterAvatar.unmount();
 });
 
 roastTopupBtn.addEventListener("click", () => {
   if (!AiRoast.openTopupCheckout()) showToast(t("upgradeNotConfigured"));
 });
 
-// overrideTextを渡すと、入力欄の内容ではなくその文字列を送る（🎤ハンズフリー会話用）
+// overrideTextを渡すと、入力欄の内容ではなくその文字列を送る（🎤ハンズフリー会話・話題チップ用）
 async function sendRoastMessage(overrideText) {
   const text = (overrideText != null ? overrideText : roastInput.value).trim();
   if (!text) return;
@@ -1159,15 +1256,25 @@ async function sendRoastMessage(overrideText) {
   appendRoastBubble(`【${t("roastYou")}】${text}`, "user");
   roastMessage.textContent = "";
 
-  const result = await AiRoast.send(text);
   const character = AiRoast.getCharacter();
+  const affectionCount = character ? getAffectionCount(character.id) : 0;
+  const result = await AiRoast.send(text, getAffectionInfo(affectionCount));
 
   if (result.ok) {
     appendRoastBubble(result.reply, "ai");
-    speakOdai(result.reply, "ja", character && character.voice, () => {
-      // 🎤ハンズフリー会話モード中は、AIが話し終えたら自動でまた聞き取りを再開する
-      if (handsFreeActive) startRoastRecognition();
-    });
+    if (character) bumpAffectionCount(character.id);
+    renderAffection(character ? character.id : "");
+    renderQuotaCounter();
+    speakOdai(
+      result.reply,
+      "ja",
+      character && character.voice,
+      () => {
+        // 🎤ハンズフリー会話モード中は、AIが話し終えたら自動でまた聞き取りを再開する
+        if (handsFreeActive) startRoastRecognition();
+      },
+      LipSync.hooks()
+    );
   } else if (result.reason === "not_configured") {
     roastMessage.textContent = t("roastNotConfigured");
     stopHandsFreeRoast();
@@ -1750,7 +1857,7 @@ function bumpStat(name, field) {
 // 1回戦の始まり
 function startRound() {
   // 🍶ひとり飲みモード（日本語UI限定）はホイールの中身を自分の名前ではなく
-  // 飲み友AIの9キャラクターにする（止まったキャラとそのまま会話が始まる）
+  // 飲み友AIの11キャラクターにする（止まったキャラとそのまま会話が始まる）
   wheelEntries =
     state.pack === "solo" && state.lang === "ja"
       ? AI_ROAST_CHARACTERS.map((c) => ({ name: c.name, team: "a" }))
@@ -1927,7 +2034,7 @@ function runKingGameRound() {
 }
 
 // 🍶ひとり飲みモード専用のラウンド進行（日本語UI限定）：
-// wheelEntriesは飲み友AIの9キャラクターで構成されている（startRound()側で設定）。
+// wheelEntriesは飲み友AIの11キャラクターで構成されている（startRound()側で設定）。
 // 王様・審査員ハプニングは対象外で、止まったキャラクターとそのまま飲み友AIチャットを始める
 function runSoloCharacterRound() {
   spinWheel((winner, idx) => {

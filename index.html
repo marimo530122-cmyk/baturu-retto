@@ -415,14 +415,18 @@
     </div>
   </div>
 
-  <!-- ============ 🍶 飲み友AI（9キャラクターのチャット・プレミアム機能・要Vercelデプロイ） ============ -->
+  <!-- ============ 🍶 飲み友AI（11キャラクターのチャット・プレミアム機能・要Vercelデプロイ） ============ -->
   <div id="modal-roast" class="modal hidden">
     <div class="modal-box modal-box-wide">
+      <div id="roast-avatar" class="roast-avatar"></div>
       <h3 class="neon-pink" id="t-roast-title">🍶 飲み友AI</h3>
-      <p id="t-roast-desc">9人のうち誰かがランダムであなたの話し相手になります。何か話しかけてみましょう。</p>
+      <p id="t-roast-desc">11人のうち誰かがランダムであなたの話し相手になります。何か話しかけてみましょう。</p>
       <p id="t-roast-catchphrase" class="roast-catchphrase hidden"></p>
+      <p id="roast-affection" class="roast-affection hidden"></p>
       <div id="roast-log" class="submission-list"></div>
       <p id="roast-message" class="message"></p>
+      <p id="roast-quota-counter" class="roast-quota-counter"></p>
+      <div id="roast-topic-chips" class="roast-topic-chips"></div>
       <button id="roast-topup" class="btn btn-sub hidden">🪙 追加で話す（¥100）</button>
       <div class="input-row">
         <button id="roast-mic" class="btn btn-mic hidden" title="音声入力">🎤</button>
@@ -482,9 +486,10 @@
   <script src="ads-config.js?v=65"></script>
   <script src="ads.js?v=65"></script>
 
-  <!-- 🍶 飲み友AI（9キャラクターのチャット。Vercelへのデプロイ・ai-roast-config.jsの設定が必要。未設定でも他の機能には影響しません） -->
+  <!-- 🍶 飲み友AI（キャラクターのチャット。Vercelへのデプロイ・ai-roast-config.jsの設定が必要。未設定でも他の機能には影響しません） -->
   <script src="ai-roast-config.js?v=65"></script>
   <script src="ai-roast-characters.js?v=65"></script>
+  <script src="character-avatar.js?v=65"></script>
   <script src="ai-roast.js?v=65"></script>
 
   <script src="bgm.js?v=65"></script>

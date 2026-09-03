@@ -8,7 +8,7 @@
    ・AI(Groq)は無料枠を利用しているが、無料枠にも
      利用回数の上限があるため、1日あたりの発言数に上限を設けて
      使いすぎを防ぐ（端末のlocalStorageで管理する簡易的なもの）
-   ・open() を呼ぶたびに ai-roast-characters.js の9人からランダムで
+   ・open() を呼ぶたびに ai-roast-characters.js の11人からランダムで
      1人選び、以降の会話はそのキャラクターのペルソナで返信される
      （キャラクターidをサーバー側へ送り、api/roast.js側で
      ペルソナのSYSTEM_PROMPTを切り替える仕組み）
@@ -144,7 +144,9 @@ const AiRoast = (() => {
   }
 
   // 戻り値: { ok: true, reply } / { ok: false, reason: "not_configured" | "quota" | "error" }
-  async function send(message) {
+  // affectionInfo（省略可）: { label, hearts } を渡すと、サーバー側の口調が
+  // 関係の深さに応じてわずかに温度感を変える（game.jsのgetAffectionInfo()参照）
+  async function send(message, affectionInfo) {
     if (!isConfigured()) return { ok: false, reason: "not_configured" };
     if (quotaReached()) return { ok: false, reason: "quota" };
 
@@ -152,7 +154,14 @@ const AiRoast = (() => {
       const res = await fetch(AI_ROAST_ENDPOINT, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ message, history, character: character ? character.id : null, name: playerName }),
+        body: JSON.stringify({
+          message,
+          history,
+          character: character ? character.id : null,
+          name: playerName,
+          affectionLabel: affectionInfo ? affectionInfo.label : null,
+          affectionHearts: affectionInfo ? affectionInfo.hearts : null,
+        }),
       });
       if (!res.ok) return { ok: false, reason: "error" };
       const data = await res.json();
@@ -179,6 +188,7 @@ const AiRoast = (() => {
     quotaReached,
     maxTurnsPerDay: MAX_TURNS_PER_DAY,
     getMaxTurns,
+    getTurnsUsedForDisplay: getTurnsUsed,
     isTopupConfigured,
     openTopupCheckout,
   };

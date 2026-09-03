@@ -33,7 +33,7 @@ const UI = {
       roast: "🍶 飲み友AI（日本語のみ）",
     },
     roastTitle: "🍶 飲み友AI",
-    roastDesc: "9人のうち誰かがランダムであなたの話し相手になります。何か話しかけてみましょう。",
+    roastDesc: "11人のうち誰かがランダムであなたの話し相手になります。何か話しかけてみましょう。",
     roastPlaceholder: "何か言い返してみる…",
     roastSend: "送信",
     roastSoloBtn: "🍶 飲み友と話す",

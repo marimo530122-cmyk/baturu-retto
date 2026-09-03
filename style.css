@@ -606,6 +606,68 @@ body.premium-active .ad-slot {
   margin: -4px 0 10px;
 }
 
+/* 🎭 飲み友AIのアバター（SVG・口パク） */
+.roast-avatar {
+  width: 132px;
+  height: 145px;
+  margin: 0 auto 6px;
+}
+.roast-avatar-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 14px var(--c-accent-a, #ff2d95));
+}
+@keyframes raBlink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.08); }
+}
+.ra-eye {
+  animation: raBlink 5.2s ease-in-out infinite;
+}
+@keyframes raAntennaGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.ra-antenna-glow {
+  animation: raAntennaGlow 1.6s ease-in-out infinite;
+}
+
+/* 💗 親密度メーター */
+.roast-affection {
+  font-size: 12px;
+  color: #ff9ac2;
+  margin: -6px 0 8px;
+  letter-spacing: 0.05em;
+}
+
+/* 🔢 残り会話回数の常時表示 */
+.roast-quota-counter {
+  font-size: 11px;
+  color: #9a8fb0;
+  margin: -4px 0 10px;
+}
+
+/* 💬 話題の取っかかりチップ */
+.roast-topic-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+.roast-topic-chip {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--c-panel-border);
+  background: var(--c-panel);
+  color: #e8e0f0;
+  cursor: pointer;
+}
+.roast-topic-chip:hover {
+  border-color: var(--c-accent-a);
+  color: var(--c-accent-a);
+}
+
 /* 回転中の煽りテキスト */
 .taunt-pulse {
   animation: tauntPulse 0.5s ease-in-out infinite;

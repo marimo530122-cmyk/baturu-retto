@@ -81,7 +81,7 @@ game.js                    … ゲーム本体のロジック・画面制御（i
 | 💎 プレミアム課金（Stripe） | `billing-config.js` | 要件定義書.md セクション11 |
 | 📡 オンラインモード / 📮 投稿共有 | `firebase-config.js` | 要件定義書.md セクション10 |
 | 📢 広告（AdSense） | `ads-config.js` | 要件定義書.md セクション12 |
-| 🍶 飲み友AIチャット（9キャラ） | `ai-roast-config.js` + Vercel側の`api/roast.js` | 要件定義書.md セクション13 |
+| 🍶 飲み友AIチャット（11キャラ） | `ai-roast-config.js` + Vercel側の`api/roast.js` | 要件定義書.md セクション13 |
 
 ## 7. その他のディレクトリ
 
@@ -104,3 +104,4 @@ game.js                    … ゲーム本体のロジック・画面制御（i
 - 2026-08-22、🍶ひとり飲みモード＋飲み友AI専用の月額サブスク（¥500/月「ワンコイン」）を追加。`billing.js`に`SoloBilling`（`createBillingModule()`を再利用）、`billing-config.js`に`STRIPE_SOLO_PAYMENT_LINK`（プレースホルダー、Stripeで「Recurring/Monthly」の決済リンクを作成して設定する）を追加。`game.js`に`isSoloPremiumUnlocked()`/`blockIfNotSoloPremium()`を追加し、`pack-solo`ボタンと`btn-roast-solo`（飲み友AI）だけがこちらを見るようにした（他のパックは従来通り`Billing`/`blockIfNotPremium`のまま）。`setupSimplePackToggle()`に5番目の引数`blockFn`を追加して差し替え可能にした。`showPremiumModal(text, billingModule)`も第2引数でどちらの決済リンクを開くか切り替えられるようにした。QRコードの24時間お試し（`Referral`）は、当初SoloBillingだけに絞る案もあったが、既存の12言語ぶんの販促文言（「大人向けパックも解放」等）と矛盾するため、**通常プレミアムと同じく全プレミアムに一律適用**する方針で確定（`SoloBilling`も`allowReferralBonus: true`）。
 - 2026-08-22、😈タゴサクAIを🍶「飲み友AI」に名称変更し、9キャラクター制にした。新規データファイル`ai-roast-characters.js`（id/name/emoji/tagline/opener、ロジックへの依存なしの純データ）を追加し、`ai-roast-config.js`の直後・`ai-roast.js`の直前に読み込む（データがロジックより前、の原則通り）。`AiRoast.open()`を呼ぶたびにランダムで1人選び、選んだキャラのopener文をAPI呼び出しなしでそのまま表示、以降の会話は`character`idをサーバーに送ってペルソナを切り替える。サーバー側`api/roast.js`は`CHARACTER_PERSONAS`に9人分のペルソナ（タゴサク含む）を持ち、`SHARED_RULES`（安全ルール等）を全ペルソナ共通で末尾付与する構成。⑥〜⑨（怪盗ダンディ/渋さん/魔性のルナ/剣士・凪）は実在作品のキャラクターを模倣しない完全オリジナル設定（著作権配慮）。
 - 2026-09-03、💘ねるとんZoomパック（`NERUTON_DATA`）を廃止・削除した。多言語対応が最後まで追いつかなかった（日英2言語のみ）こともあり、ユーザー判断で機能自体を終了。`odai-data.js`のデータ本体、`odai-generator.js`の`PACK_DATA`登録、`index.html`のボタン、`game.js`の初期化・トグル処理、`i18n.js`の全12言語ぶんの文言を削除。オンラインモードの汎用Zoom URL共有機能（`online.js`）はねるとん専用ではなく他パックでも使う汎用機能のため存続。
+- 2026-09-03、🍶飲み友AIを大幅強化。新規ファイル`character-avatar.js`に、各キャラクターの見た目（SVG手続き描画）と`LipSync`（発話の`boundary`イベントに基づく疑似リップシンク。実写動画ではない。理由はutubyou AI（Sanctuary）プロジェクトの正直な見立てと同じ）を実装し、`CharacterAvatar.mount()`でモーダル内に表示・毎フレーム口/視線/眉を更新する。`odai-generator.js`の`speakOdai()`に5番目の引数`lipSyncHooks`を追加（後方互換、他の呼び出し箇所は無変更）。💗親密度システム（`game.js`の`AFFECTION_LEVELS`、通算会話回数をlocalStorageに記録し4段階で進行、通算15回以降は`deepOpener`という特別な第一声に切り替わる）を追加し、`api/roast.js`の`buildSystemPrompt()`にも`affectionHearts`を渡して口調の温度感をわずかに変化させるようにした。残り回数の常時表示（`roast-quota-counter`）・話題の取っかかりチップ6種（`roast-topic-chips`）も追加。キャラクターを2人追加し11人制に（🔮占い師マダム・レイ／🤖新人AI・ゼロ）。`AI_ROAST_CHARACTERS`から自動生成される`wheelEntries`のため、ルーレット側は変更不要で新キャラも自動的に反映される。
