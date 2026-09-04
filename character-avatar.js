@@ -16,6 +16,14 @@
 const LipSync = (() => {
   let openness = 0;
   let target = 0;
+  // 口の開き(openness)に加えて、広がり方(width: 0=お/う寄りの丸い口、
+  // 1=い/え寄りの横に広い口)も持つことで、単なる楕円の拡大縮小ではなく
+  // 簡易ビゼーム(母音の口形)morphを行う（sanctuaryプロジェクトの
+  // lib/voice-engine.tsで先に実装したものと同じ考え方の移植）。
+  // このゲームの音声はWeb Speech APIのみ（実音声解析は使わない）ため、
+  // widthは発話中だけゆっくり往復させる疑似演出にとどめている。
+  let width = 0.5;
+  let targetWidth = 0.5;
   let rafId = null;
   let fallbackTimer = null;
   let lastBoundaryAt = 0;
@@ -37,6 +45,7 @@ const LipSync = (() => {
   function onEnd() {
     speaking = false;
     target = 0;
+    targetWidth = 0.5;
     if (fallbackTimer) clearInterval(fallbackTimer);
     fallbackTimer = null;
   }
@@ -58,6 +67,14 @@ const LipSync = (() => {
       const rate = openness < target ? 0.55 : 0.12;
       openness += (target - openness) * rate;
       target *= 0.85;
+
+      if (speaking) {
+        targetWidth = 0.35 + (Math.sin(performance.now() / 170) + 1) * 0.15;
+      } else {
+        targetWidth = 0.5;
+      }
+      width += (targetWidth - width) * 0.15;
+
       if (openness < 0.02 && !speaking) {
         openness = 0;
         rafId = null;
@@ -77,8 +94,26 @@ const LipSync = (() => {
     return openness;
   }
 
-  return { hooks, getOpenness };
+  // 0=お・う寄りの丸い口、1=い・え寄りの横に広い口
+  function getWidth() {
+    return width;
+  }
+
+  return { hooks, getOpenness, getWidth };
 })();
+
+// 簡易ビゼーム(母音の口形)morph: openness(口の開き)とwidth(丸い⇔横に広い)
+// から、単なる楕円の拡大縮小ではなく母音ごとに異なる口の輪郭を生成する
+function mouthPath(cx, cy, openness, width) {
+  const rx = 8 + width * 9; // 8(丸い)〜17(横に広い)
+  const ry = 2 + openness * 15;
+  const curl = (0.5 - width) * 3;
+  const left = cx - rx;
+  const right = cx + rx;
+  const top = cy - ry - curl;
+  const bottom = cy + ry - curl;
+  return `M ${left} ${cy - curl} C ${left} ${top}, ${right} ${top}, ${right} ${cy - curl} C ${right} ${bottom}, ${left} ${bottom}, ${left} ${cy - curl} Z`;
+}
 
 /* ---------------------------------------------------------
    キャラクターごとの見た目設定（肌色・アクセントカラー・髪型/装飾）
@@ -195,7 +230,7 @@ function buildCharacterAvatarSvg(characterId) {
       <circle class="ra-pupil ra-pupil-r" cx="118" cy="108" r="4" fill="${isRobot ? "#7fd8ff" : "#2a2820"}"/>
     </g>
     <ellipse cx="100" cy="128" rx="3" ry="4" fill="${v.accent}" opacity="0.35"/>
-    <ellipse class="ra-mouth" cx="100" cy="148" rx="15" ry="2.5" fill="${isRobot ? "#0d1420" : "#5a3838"}"/>
+    <path class="ra-mouth" d="${mouthPath(100, 148, 0, 0.5)}" fill="${isRobot ? "#0d1420" : "#5a3838"}"/>
   </svg>`;
 }
 
@@ -222,8 +257,9 @@ const CharacterAvatar = (() => {
   function tick() {
     if (!container) return;
     const openness = LipSync.getOpenness();
+    const width = LipSync.getWidth();
     const mouth = container.querySelector(".ra-mouth");
-    if (mouth) mouth.setAttribute("ry", String(2.5 + openness * 15));
+    if (mouth) mouth.setAttribute("d", mouthPath(100, 148, openness, width));
 
     const sec = performance.now() / 1000;
     const gazeX = Math.sin(sec * 0.4) * 1.6 + Math.sin(sec * 0.13) * 0.8;
