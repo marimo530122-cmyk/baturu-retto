@@ -119,7 +119,6 @@ function mouthPath(cx, cy, openness, width) {
    キャラクターごとの見た目設定（肌色・アクセントカラー・髪型/装飾）
    --------------------------------------------------------- */
 const CHARACTER_VISUALS = {
-  tagosaku: { skin: "#c9a877", accent: "#4a3a2a", cheek: "#d88a6a", topper: "oyaji" },
   yukimama: { skin: "#e8c9a8", accent: "#6a1a35", cheek: "#e8a0a8", topper: "mama" },
   miyu: { skin: "#f0d0b8", accent: "#ff6bb5", cheek: "#ff9ac2", topper: "gal" },
   pochi: { skin: "#c9a877", accent: "#a9865c", cheek: "#e8a0a0", topper: "dog" },
@@ -134,11 +133,6 @@ const CHARACTER_VISUALS = {
 
 function toppperSvg(kind, accent) {
   switch (kind) {
-    case "oyaji":
-      // 後退した生え際・もみあげ・口ひげ
-      return `
-        <path d="M 40 70 Q 100 20 160 70 L 160 85 Q 100 55 40 85 Z" fill="${accent}" opacity="0.85"/>
-        <path d="M 82 128 Q 100 138 118 128 Q 100 133 82 128 Z" fill="${accent}"/>`;
     case "mama":
       // 上品なまとめ髪＋簪
       return `
@@ -201,10 +195,43 @@ function toppperSvg(kind, accent) {
 }
 
 /* ---------------------------------------------------------
+   写実アバター（Geminiで生成した本人了承済みの写真を使うキャラのみ）
+   ---------------------------------------------------------
+   ・写真は口の形を複数枚生成すると生成のたびに顔が微妙にズレて
+     不自然になりやすいため採用せず、代わりに話している間だけ
+     縁がキャラのアクセントカラーでやわらかく発光する演出にする
+     （sanctuaryプロジェクトと違い、飲み友AIはキャラごとに色が
+     決まっているため、その色をそのままグローに使う）。
+   ・写真を用意していないキャラ（ポチ先輩=犬・ゾンさん=ゾンビ・
+     ゼロ=ロボット）は、引き続き上のSVG手続き描画のまま。
+   --------------------------------------------------------- */
+const CHARACTER_PHOTOS = {
+  dandy: "avatars/dandy.jpg",
+  shibu: "avatars/shibu.jpg",
+  luna: "avatars/luna.jpg",
+  yukimama: "avatars/yukimama.jpg",
+  miyu: "avatars/miyu.jpg",
+  nagi: "avatars/nagi.jpg",
+  reika: "avatars/reika.jpg",
+};
+
+function buildCharacterAvatarPhoto(characterId) {
+  const v = CHARACTER_VISUALS[characterId] || CHARACTER_VISUALS.dandy;
+  const src = CHARACTER_PHOTOS[characterId];
+  return `
+  <div class="roast-avatar-photo" style="--ra-glow-color: ${v.accent}">
+    <div class="roast-avatar-photo-motion">
+      <img class="roast-avatar-photo-img" src="${src}" alt="" />
+    </div>
+    <div class="roast-avatar-photo-ring"></div>
+  </div>`;
+}
+
+/* ---------------------------------------------------------
    1体分のアバターSVGを生成する
    --------------------------------------------------------- */
 function buildCharacterAvatarSvg(characterId) {
-  const v = CHARACTER_VISUALS[characterId] || CHARACTER_VISUALS.tagosaku;
+  const v = CHARACTER_VISUALS[characterId] || CHARACTER_VISUALS.dandy;
   const isRobot = v.topper === "robot";
   return `
   <svg viewBox="0 0 200 220" class="roast-avatar-svg" aria-hidden="true">
@@ -244,7 +271,9 @@ const CharacterAvatar = (() => {
   function mount(el, characterId) {
     unmount();
     container = el;
-    container.innerHTML = buildCharacterAvatarSvg(characterId);
+    container.innerHTML = CHARACTER_PHOTOS[characterId]
+      ? buildCharacterAvatarPhoto(characterId)
+      : buildCharacterAvatarSvg(characterId);
     tick();
   }
 
@@ -260,6 +289,10 @@ const CharacterAvatar = (() => {
     const width = LipSync.getWidth();
     const mouth = container.querySelector(".ra-mouth");
     if (mouth) mouth.setAttribute("d", mouthPath(100, 148, openness, width));
+
+    // 写実アバター: 口の形の代わりに、話している間だけ縁を発光させる
+    const photoFrame = container.querySelector(".roast-avatar-photo");
+    if (photoFrame) photoFrame.classList.toggle("speaking", openness > 0.05);
 
     const sec = performance.now() / 1000;
     const gazeX = Math.sin(sec * 0.4) * 1.6 + Math.sin(sec * 0.13) * 0.8;
