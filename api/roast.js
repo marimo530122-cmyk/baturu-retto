@@ -353,7 +353,10 @@ module.exports = async (req, res) => {
       const retry = await requestGroqReply(apiKey, systemPrompt, history, message);
       if (retry.ok && retry.content) result = retry;
     }
-    res.status(200).json({ reply: result.content || "……（絶句している様子）" });
+    // 2回試しても空だった場合の保険。「絶句している様子」等、無言に見える文言は
+    // ルール違反（このAIはどんなキャラでも必ず一言は発言する設計）になるため、
+    // 誰が読んでも自然な相槌をここで直接返す
+    res.status(200).json({ reply: result.content || "ごめん、ちょっと聞き取れなかった。もう一回言ってくれる？" });
   } catch (e) {
     res.status(500).json({ error: "internal error" });
   }
