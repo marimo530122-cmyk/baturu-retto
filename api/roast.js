@@ -226,7 +226,7 @@ function buildSystemPrompt(characterId, userName, affectionHearts) {
 
 const MAX_MESSAGE_LENGTH = 200;
 const MAX_HISTORY_TURNS = 6; // 直近6往復まで（トークン節約・暴走防止）
-const MAX_TOKENS = 300;
+const MAX_TOKENS = 500;
 
 // Groq APIを1回呼び出す。戻り値: { ok: true, content } / { ok: false, status, detail }
 // content は空文字になることがある（呼び出し側で空返答の再送を判断するため、ここではプレースホルダーに変換しない）
@@ -241,6 +241,10 @@ async function requestGroqReply(apiKey, systemPrompt, history, message) {
       model: MODEL,
       messages: [{ role: "system", content: systemPrompt }, ...history, { role: "user", content: message }],
       max_tokens: MAX_TOKENS,
+      // MODELはgpt-oss系(推論モデル)のため、返答の前に内部で「考える」工程(reasoning)にトークンを
+      // 消費する。effortが高いと、雑談程度の短い返答でも考える工程だけでmax_tokensを使い切ってしまい、
+      // 肝心の返答本文(content)が空になることがあったため、雑談用途には過剰な思考を抑える
+      reasoning_effort: "low",
     }),
   });
 
