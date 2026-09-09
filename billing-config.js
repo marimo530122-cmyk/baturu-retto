@@ -63,7 +63,7 @@ const STRIPE_PARTY_PAYMENT_LINK = "https://buy.stripe.com/YOUR_PAYMENT_LINK_PART
    SoloBillingのallowReferralBonusを参照）。
    ========================================================= */
 
-const STRIPE_SOLO_PAYMENT_LINK = "https://buy.stripe.com/YOUR_PAYMENT_LINK_SOLO";
+const STRIPE_SOLO_PAYMENT_LINK = "https://buy.stripe.com/9B6fZi3dkalu4Io2fA5kk01";
 
 /* =========================================================
    🪙 飲み友AI：1日の上限に達した後の追加解放（¥100・買い切り）
