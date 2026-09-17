@@ -85,6 +85,38 @@ REGION_CONFIGS = {
         line_cta_text="QRを読み取って友だち追加!",
         profile_hint_text="詳細はプロフィールへ!",
     ),
+    "KR": RegionConfig(
+        lang="ko",
+        intro_text="세상에서 가장 살벌한 벌칙 게임 앱?!",
+        cta_text="지금 플레이! 프로필 링크 확인!",
+        font_file="NotoSansKR-Bold.ttf",
+        line_cta_text="QR코드를 스캔해서 친구 추가!",
+        profile_hint_text="프로필에도 같은 QR코드가 있어요!",
+    ),
+    "CN": RegionConfig(
+        lang="zh",
+        intro_text="全世界最狠的惩罚游戏App?!",
+        cta_text="马上玩!链接在主页简介!",
+        font_file="NotoSansSC-Bold.ttf",
+        line_cta_text="扫码添加LINE好友!",
+        profile_hint_text="主页简介也有同一个二维码!",
+    ),
+    "FR": RegionConfig(
+        lang="fr",
+        intro_text="L'appli de gages la plus folle ?!",
+        cta_text="Jouez maintenant ! Lien en bio !",
+        font_file="NotoSans-Bold.ttf",
+        line_cta_text="Scannez pour nous ajouter sur LINE !",
+        profile_hint_text="Le même QR code est aussi en bio !",
+    ),
+    "PT": RegionConfig(
+        lang="pt",
+        intro_text="O app de prendas mais insano?!",
+        cta_text="Jogue agora! Link na bio!",
+        font_file="NotoSans-Bold.ttf",
+        line_cta_text="Escaneie para nos adicionar no LINE!",
+        profile_hint_text="O mesmo QR code também está na bio!",
+    ),
 }
 
 
