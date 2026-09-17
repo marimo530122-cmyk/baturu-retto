@@ -17,6 +17,7 @@ const UI = {
     free: "＼ 今すぐ無料で遊べる！ ／",
     start: "🎰 はじめる",
     premiumHeading: "✨ 有料版（じゅんび中）",
+    premiumHeadingUnlocked: "✨ 有料版（解放中）",
     packs: {
       adult: "🔞 大人向け",
       family: "👨‍👩‍👧 ファミリー",
@@ -245,6 +246,7 @@ const UI = {
     free: "＼ Play FREE right now! ／",
     start: "🎰 PLAY NOW",
     premiumHeading: "✨ Premium (coming soon)",
+    premiumHeadingUnlocked: "✨ Premium (unlocked)",
     packs: {
       adult: "🔞 Adults Only",
       family: "👨‍👩‍👧 Family",
@@ -451,6 +453,7 @@ const UI = {
     free: "＼ 現在就能免費開玩！／",
     start: "🎰 開始遊戲",
     premiumHeading: "✨ 付費版（準備中）",
+    premiumHeadingUnlocked: "✨ 付費版（已解鎖）",
     packs: {
       adult: "🔞 成人限定",
       family: "👨‍👩‍👧 家庭版",
@@ -655,6 +658,7 @@ const UI = {
     free: "＼ 지금 바로 무료로 즐기기！ ／",
     start: "🎰 시작하기",
     premiumHeading: "✨ 프리미엄（준비중）",
+    premiumHeadingUnlocked: "✨ 프리미엄（해제됨）",
     packs: {
       adult: "🔞 성인 전용",
       family: "👨‍👩‍👧 가족 모드",
@@ -859,6 +863,7 @@ const UI = {
     free: "＼ ¡Juega GRATIS ahora mismo! ／",
     start: "🎰 JUGAR",
     premiumHeading: "✨ Versión Premium (próximamente)",
+    premiumHeadingUnlocked: "✨ Versión Premium (desbloqueada)",
     packs: {
       adult: "🔞 Solo Adultos",
       family: "👨‍👩‍👧 Familiar",
@@ -1063,6 +1068,7 @@ const UI = {
     free: "＼ Jogue GRÁTIS agora mesmo! ／",
     start: "🎰 JOGAR",
     premiumHeading: "✨ Versão Premium (em breve)",
+    premiumHeadingUnlocked: "✨ Versão Premium (desbloqueada)",
     packs: {
       adult: "🔞 Somente Adultos",
       family: "👨‍👩‍👧 Família",
@@ -1267,6 +1273,7 @@ const UI = {
     free: "＼ Chơi MIỄN PHÍ ngay bây giờ! ／",
     start: "🎰 CHƠI NGAY",
     premiumHeading: "✨ Phiên bản Premium (sắp ra mắt)",
+    premiumHeadingUnlocked: "✨ Phiên bản Premium (đã mở khóa)",
     packs: {
       adult: "🔞 Chỉ dành cho người lớn",
       family: "👨‍👩‍👧 Gia đình",
@@ -1471,6 +1478,7 @@ const UI = {
     free: "＼ Jetzt KOSTENLOS spielen! ／",
     start: "🎰 JETZT SPIELEN",
     premiumHeading: "✨ Premium (bald verfügbar)",
+    premiumHeadingUnlocked: "✨ Premium (freigeschaltet)",
     packs: {
       adult: "🔞 Nur für Erwachsene",
       family: "👨‍👩‍👧 Familie",
@@ -1675,6 +1683,7 @@ const UI = {
     free: "＼ Maglaro ng LIBRE ngayon! ／",
     start: "🎰 SIMULAN NA",
     premiumHeading: "✨ Premium (malapit na)",
+    premiumHeadingUnlocked: "✨ Premium (na-unlock na)",
     packs: {
       adult: "🔞 Adults Only",
       family: "👨‍👩‍👧 Pamilya",
@@ -1879,6 +1888,7 @@ const UI = {
     free: "＼ Jouez GRATUITEMENT maintenant ! ／",
     start: "🎰 JOUER",
     premiumHeading: "✨ Version Premium (bientôt)",
+    premiumHeadingUnlocked: "✨ Version Premium (débloquée)",
     packs: {
       adult: "🔞 Réservé aux adultes",
       family: "👨‍👩‍👧 Famille",
@@ -2083,6 +2093,7 @@ const UI = {
     free: "＼ เล่นฟรีได้เลยตอนนี้! ／",
     start: "🎰 เริ่มเลย",
     premiumHeading: "✨ เวอร์ชันพรีเมียม (เร็วๆ นี้)",
+    premiumHeadingUnlocked: "✨ เวอร์ชันพรีเมียม (ปลดล็อกแล้ว)",
     packs: {
       adult: "🔞 สำหรับผู้ใหญ่",
       family: "👨‍👩‍👧 ครอบครัว",
@@ -2287,6 +2298,7 @@ const UI = {
     free: "＼ Main GRATIS sekarang! ／",
     start: "🎰 MAIN SEKARANG",
     premiumHeading: "✨ Premium (segera hadir)",
+    premiumHeadingUnlocked: "✨ Premium (sudah terbuka)",
     packs: {
       adult: "🔞 Khusus Dewasa",
       family: "👨‍👩‍👧 Keluarga",

@@ -155,15 +155,23 @@ function applyLanguage() {
   document.getElementById("t-tag").textContent = u.tag;
   document.getElementById("t-free").textContent = u.free;
   document.getElementById("btn-start").textContent = u.start;
-  document.getElementById("t-premium-heading").textContent = u.premiumHeading;
-  document.getElementById("pack-adult").innerHTML = `${u.packs.adult} <span class="lock">🔒</span>`;
-  document.getElementById("pack-family").innerHTML = `${u.packs.family} <span class="lock">🔒</span>`;
-  document.getElementById("pack-couple").innerHTML = `${u.packs.couple} <span class="lock">🔒</span>`;
-  document.getElementById("pack-romance").innerHTML = `${u.packs.romance} <span class="lock">🔒</span>`;
-  document.getElementById("pack-online").innerHTML = `${u.packs.online} <span class="lock">🔒</span>`;
-  document.getElementById("pack-party").innerHTML = `${u.packs.party} <span class="lock">🔒</span>`;
+  // 💎 有料版が解放済み（?premium=1 でのテスト含む）のときは、鍵アイコンと
+  // 「じゅんび中」の見出しを外し、見た目でも解放状態が分かるようにする。
+  // （以前はここで常に🔒と「準備中」を上書きしていたため、実際は解放されていても
+  // 画面上は無料版と見分けがつかないバグがあった）
+  const premiumNow = isPremiumUnlocked();
+  const soloPremiumNow = isSoloPremiumUnlocked();
+  const lockIcon = (unlocked) => (unlocked ? "" : ` <span class="lock">🔒</span>`);
+  document.getElementById("t-premium-heading").textContent =
+    premiumNow ? (u.premiumHeadingUnlocked || u.premiumHeading) : u.premiumHeading;
+  document.getElementById("pack-adult").innerHTML = `${u.packs.adult}${lockIcon(premiumNow)}`;
+  document.getElementById("pack-family").innerHTML = `${u.packs.family}${lockIcon(premiumNow)}`;
+  document.getElementById("pack-couple").innerHTML = `${u.packs.couple}${lockIcon(premiumNow)}`;
+  document.getElementById("pack-romance").innerHTML = `${u.packs.romance}${lockIcon(premiumNow)}`;
+  document.getElementById("pack-online").innerHTML = `${u.packs.online}${lockIcon(premiumNow)}`;
+  document.getElementById("pack-party").innerHTML = `${u.packs.party}${lockIcon(premiumNow)}`;
   document.getElementById("pack-noalcohol").textContent = u.packs.noalcohol;
-  document.getElementById("pack-solo").innerHTML = `${u.packs.solo} <span class="lock">🔒</span>`;
+  document.getElementById("pack-solo").innerHTML = `${u.packs.solo}${lockIcon(soloPremiumNow)}`;
   // 😈タゴサクAIは🍶ひとり飲みモードの中だけで使える機能として統合済み（旧・独立パックボタンは廃止）。
   // ボタン自体は startRound() 側で state.pack==="solo" && state.lang==="ja" のときだけ表示する
   document.getElementById("btn-roast-solo").textContent = t("roastSoloBtn");
