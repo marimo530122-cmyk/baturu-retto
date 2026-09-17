@@ -87,6 +87,7 @@ const UI = {
     spiceLocked: "レベル3以上は有料版で解放されます。",
     modalTitle: "✨ 有料版のご案内 ✨",
     modalPrice: "買い切り 480円（現在準備中です。お楽しみに！）",
+    modalPriceSolo: "🍶ひとり飲み+飲み友AIだけの月額サブスクです（月額500円・ワンコイン）",
     modalClose: "とじる",
     voices: {
       random: "🎲 声はおまかせ（毎回変わる）",
@@ -292,6 +293,7 @@ const UI = {
     spiceLocked: "Level 3 and up are unlocked in the premium version.",
     modalTitle: "✨ Premium Version ✨",
     modalPrice: "One-time purchase $3.99 (coming soon!)",
+    modalPriceSolo: "Separate monthly subscription just for 🍶Solo Drinking + Drinking Buddy AI — ¥500/month (JPY)",
     modalClose: "Close",
     voices: {
       random: "🎲 Surprise voice (changes every time)",
@@ -497,6 +499,7 @@ const UI = {
     spiceLocked: "等級3以上須付費版才能解鎖。",
     modalTitle: "✨ 付費版介紹 ✨",
     modalPrice: "買斷制 NT$90（目前準備中，敬請期待！）",
+    modalPriceSolo: "🍶獨自小酌+飲友AI專用的月費訂閱（月費日圓500円）",
     modalClose: "關閉",
     voices: {
       random: "🎲 隨機語音（每次不同）",
@@ -702,6 +705,7 @@ const UI = {
     spiceLocked: "레벨 3부터는 프리미엄 버전에서 해제됩니다.",
     modalTitle: "✨ 프리미엄 안내 ✨",
     modalPrice: "일회성 결제 ₩3,900（현재 준비중입니다. 기대해주세요！）",
+    modalPriceSolo: "🍶혼술+술친구AI 전용 월정액 구독입니다（월 500엔・JPY）",
     modalClose: "닫기",
     voices: {
       random: "🎲 무작위 목소리（매번 바뀜）",
@@ -907,6 +911,7 @@ const UI = {
     spiceLocked: "El nivel 3 en adelante se desbloquea en la versión premium.",
     modalTitle: "✨ Versión Premium ✨",
     modalPrice: "Pago único €3.49 / MX$29 (¡próximamente!)",
+    modalPriceSolo: "Suscripción mensual aparte, solo para 🍶Beber Solo + IA de compañía — ¥500/mes (JPY)",
     modalClose: "Cerrar",
     voices: {
       random: "🎲 Voz sorpresa (cambia cada vez)",
@@ -1112,6 +1117,7 @@ const UI = {
     spiceLocked: "O nível 3 em diante é desbloqueado na versão premium.",
     modalTitle: "✨ Versão Premium ✨",
     modalPrice: "Pagamento único R$9,90 (em breve!)",
+    modalPriceSolo: "Assinatura mensal separada, só para 🍶Beber Sozinho + IA amiga de bebida — ¥500/mês (JPY)",
     modalClose: "Fechar",
     voices: {
       random: "🎲 Voz surpresa (muda toda vez)",
@@ -1317,6 +1323,7 @@ const UI = {
     spiceLocked: "Mức 3 trở lên được mở khóa trong phiên bản premium.",
     modalTitle: "✨ Phiên bản Premium ✨",
     modalPrice: "Thanh toán một lần ₫39.000 (sắp ra mắt!)",
+    modalPriceSolo: "Gói đăng ký hàng tháng riêng, chỉ dành cho 🍶Uống Một Mình + AI bạn nhậu — ¥500/tháng (JPY)",
     modalClose: "Đóng",
     voices: {
       random: "🎲 Giọng ngẫu nhiên (đổi mỗi lần)",
@@ -1522,6 +1529,7 @@ const UI = {
     spiceLocked: "Level 3 und höher sind in der Premium-Version freigeschaltet.",
     modalTitle: "✨ Premium-Version ✨",
     modalPrice: "Einmaliger Kauf 3,99 € (demnächst verfügbar!)",
+    modalPriceSolo: "Separates Monatsabo nur für 🍶Alleine trinken + Trink-Buddy-KI — ¥500/Monat (JPY)",
     modalClose: "Schließen",
     voices: {
       random: "🎲 Überraschungsstimme (wechselt jedes Mal)",
@@ -1727,6 +1735,7 @@ const UI = {
     spiceLocked: "Level 3 pataas ay bukas na sa premium version.",
     modalTitle: "✨ Premium Version ✨",
     modalPrice: "Isang beses na bayad ₱199 (malapit na!)",
+    modalPriceSolo: "Hiwalay na buwanang subscription para lang sa 🍶Solo Drinking + Drinking Buddy AI — ¥500/buwan (JPY)",
     modalClose: "Isara",
     voices: {
       random: "🎲 Random na boses (nagbabago tuwing round)",
@@ -1932,6 +1941,7 @@ const UI = {
     spiceLocked: "Les niveaux 3 et plus sont débloqués dans la version premium.",
     modalTitle: "✨ Version Premium ✨",
     modalPrice: "Achat unique 3,49 € (bientôt disponible !)",
+    modalPriceSolo: "Abonnement mensuel séparé, réservé à 🍶Boire Seul + IA compagnon de boisson — ¥500/mois (JPY)",
     modalClose: "Fermer",
     voices: {
       random: "🎲 Voix surprise (change à chaque fois)",
@@ -2137,6 +2147,7 @@ const UI = {
     spiceLocked: "ระดับ 3 ขึ้นไปปลดล็อกได้ในเวอร์ชันพรีเมียม",
     modalTitle: "✨ เวอร์ชันพรีเมียม ✨",
     modalPrice: "จ่ายครั้งเดียว ฿49 (กำลังเตรียมการ เร็วๆ นี้!)",
+    modalPriceSolo: "สมัครสมาชิกรายเดือนแยกต่างหาก สำหรับ 🍶ดื่มคนเดียว + AI เพื่อนดื่มเท่านั้น — ¥500/เดือน (JPY)",
     modalClose: "ปิด",
     voices: {
       random: "🎲 สุ่มเสียง (เปลี่ยนทุกครั้ง)",
@@ -2342,6 +2353,7 @@ const UI = {
     spiceLocked: "Level 3 ke atas terbuka di versi premium.",
     modalTitle: "✨ Versi Premium ✨",
     modalPrice: "Pembelian sekali Rp59.000 (segera hadir!)",
+    modalPriceSolo: "Langganan bulanan terpisah, khusus untuk 🍶Minum Sendiri + AI teman minum — ¥500/bulan (JPY)",
     modalClose: "Tutup",
     voices: {
       random: "🎲 Suara acak (berubah setiap kali)",

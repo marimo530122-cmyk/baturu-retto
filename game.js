@@ -350,8 +350,11 @@ const modalUpgradeBtn = document.getElementById("modal-upgrade");
 let modalActiveBilling = Billing;
 
 // 有料版ご案内モーダルを、アップグレードボタン付きで表示する
-function showPremiumModal(text, billingModule) {
+// priceText省略時は通常プレミアム（買い切り）の価格文言のまま。
+// 🍶ひとり飲みだけは月額サブスクで価格・課金形態が別物なので、専用の文言を渡す。
+function showPremiumModal(text, billingModule, priceText) {
   document.getElementById("modal-text").textContent = text;
+  document.getElementById("t-modal-price").textContent = priceText || t("modalPrice");
   modalUpgradeBtn.textContent = t("upgradeBtn");
   modalUpgradeBtn.classList.remove("hidden");
   modal.classList.remove("hidden");
@@ -385,7 +388,7 @@ function blockIfNotPremium(packKey) {
 // 🍶 ひとり飲みモード＋飲み友AI専用のブロック判定（通常プレミアムとは別のSoloBillingを見る）
 function blockIfNotSoloPremium(packKey) {
   if (isSoloPremiumUnlocked()) return false;
-  showPremiumModal(t("packTeaser")(UI[state.lang].packs[packKey]), SoloBilling);
+  showPremiumModal(t("packTeaser")(UI[state.lang].packs[packKey]), SoloBilling, t("modalPriceSolo"));
   return true;
 }
 
