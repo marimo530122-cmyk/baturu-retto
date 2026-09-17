@@ -16,6 +16,14 @@
 const LipSync = (() => {
   let openness = 0;
   let target = 0;
+  // 口の開き(openness)に加えて、広がり方(width: 0=お/う寄りの丸い口、
+  // 1=い/え寄りの横に広い口)も持つことで、単なる楕円の拡大縮小ではなく
+  // 簡易ビゼーム(母音の口形)morphを行う（sanctuaryプロジェクトの
+  // lib/voice-engine.tsで先に実装したものと同じ考え方の移植）。
+  // このゲームの音声はWeb Speech APIのみ（実音声解析は使わない）ため、
+  // widthは発話中だけゆっくり往復させる疑似演出にとどめている。
+  let width = 0.5;
+  let targetWidth = 0.5;
   let rafId = null;
   let fallbackTimer = null;
   let lastBoundaryAt = 0;
@@ -37,6 +45,7 @@ const LipSync = (() => {
   function onEnd() {
     speaking = false;
     target = 0;
+    targetWidth = 0.5;
     if (fallbackTimer) clearInterval(fallbackTimer);
     fallbackTimer = null;
   }
@@ -58,6 +67,14 @@ const LipSync = (() => {
       const rate = openness < target ? 0.55 : 0.12;
       openness += (target - openness) * rate;
       target *= 0.85;
+
+      if (speaking) {
+        targetWidth = 0.35 + (Math.sin(performance.now() / 170) + 1) * 0.15;
+      } else {
+        targetWidth = 0.5;
+      }
+      width += (targetWidth - width) * 0.15;
+
       if (openness < 0.02 && !speaking) {
         openness = 0;
         rafId = null;
@@ -77,14 +94,31 @@ const LipSync = (() => {
     return openness;
   }
 
-  return { hooks, getOpenness };
+  // 0=お・う寄りの丸い口、1=い・え寄りの横に広い口
+  function getWidth() {
+    return width;
+  }
+
+  return { hooks, getOpenness, getWidth };
 })();
+
+// 簡易ビゼーム(母音の口形)morph: openness(口の開き)とwidth(丸い⇔横に広い)
+// から、単なる楕円の拡大縮小ではなく母音ごとに異なる口の輪郭を生成する
+function mouthPath(cx, cy, openness, width) {
+  const rx = 8 + width * 9; // 8(丸い)〜17(横に広い)
+  const ry = 2 + openness * 15;
+  const curl = (0.5 - width) * 3;
+  const left = cx - rx;
+  const right = cx + rx;
+  const top = cy - ry - curl;
+  const bottom = cy + ry - curl;
+  return `M ${left} ${cy - curl} C ${left} ${top}, ${right} ${top}, ${right} ${cy - curl} C ${right} ${bottom}, ${left} ${bottom}, ${left} ${cy - curl} Z`;
+}
 
 /* ---------------------------------------------------------
    キャラクターごとの見た目設定（肌色・アクセントカラー・髪型/装飾）
    --------------------------------------------------------- */
 const CHARACTER_VISUALS = {
-  tagosaku: { skin: "#c9a877", accent: "#4a3a2a", cheek: "#d88a6a", topper: "oyaji" },
   yukimama: { skin: "#e8c9a8", accent: "#6a1a35", cheek: "#e8a0a8", topper: "mama" },
   miyu: { skin: "#f0d0b8", accent: "#ff6bb5", cheek: "#ff9ac2", topper: "gal" },
   pochi: { skin: "#c9a877", accent: "#a9865c", cheek: "#e8a0a0", topper: "dog" },
@@ -99,11 +133,6 @@ const CHARACTER_VISUALS = {
 
 function toppperSvg(kind, accent) {
   switch (kind) {
-    case "oyaji":
-      // 後退した生え際・もみあげ・口ひげ
-      return `
-        <path d="M 40 70 Q 100 20 160 70 L 160 85 Q 100 55 40 85 Z" fill="${accent}" opacity="0.85"/>
-        <path d="M 82 128 Q 100 138 118 128 Q 100 133 82 128 Z" fill="${accent}"/>`;
     case "mama":
       // 上品なまとめ髪＋簪
       return `
@@ -166,10 +195,43 @@ function toppperSvg(kind, accent) {
 }
 
 /* ---------------------------------------------------------
+   写実アバター（Geminiで生成した本人了承済みの写真を使うキャラのみ）
+   ---------------------------------------------------------
+   ・写真は口の形を複数枚生成すると生成のたびに顔が微妙にズレて
+     不自然になりやすいため採用せず、代わりに話している間だけ
+     縁がキャラのアクセントカラーでやわらかく発光する演出にする
+     （sanctuaryプロジェクトと違い、飲み友AIはキャラごとに色が
+     決まっているため、その色をそのままグローに使う）。
+   ・写真を用意していないキャラ（ポチ先輩=犬・ゾンさん=ゾンビ・
+     ゼロ=ロボット）は、引き続き上のSVG手続き描画のまま。
+   --------------------------------------------------------- */
+const CHARACTER_PHOTOS = {
+  dandy: "avatars/dandy.jpg",
+  shibu: "avatars/shibu.jpg",
+  luna: "avatars/luna.jpg",
+  yukimama: "avatars/yukimama.jpg",
+  miyu: "avatars/miyu.jpg",
+  nagi: "avatars/nagi.jpg",
+  reika: "avatars/reika.jpg",
+};
+
+function buildCharacterAvatarPhoto(characterId) {
+  const v = CHARACTER_VISUALS[characterId] || CHARACTER_VISUALS.dandy;
+  const src = CHARACTER_PHOTOS[characterId];
+  return `
+  <div class="roast-avatar-photo" style="--ra-glow-color: ${v.accent}">
+    <div class="roast-avatar-photo-motion">
+      <img class="roast-avatar-photo-img" src="${src}" alt="" />
+    </div>
+    <div class="roast-avatar-photo-ring"></div>
+  </div>`;
+}
+
+/* ---------------------------------------------------------
    1体分のアバターSVGを生成する
    --------------------------------------------------------- */
 function buildCharacterAvatarSvg(characterId) {
-  const v = CHARACTER_VISUALS[characterId] || CHARACTER_VISUALS.tagosaku;
+  const v = CHARACTER_VISUALS[characterId] || CHARACTER_VISUALS.dandy;
   const isRobot = v.topper === "robot";
   return `
   <svg viewBox="0 0 200 220" class="roast-avatar-svg" aria-hidden="true">
@@ -195,7 +257,7 @@ function buildCharacterAvatarSvg(characterId) {
       <circle class="ra-pupil ra-pupil-r" cx="118" cy="108" r="4" fill="${isRobot ? "#7fd8ff" : "#2a2820"}"/>
     </g>
     <ellipse cx="100" cy="128" rx="3" ry="4" fill="${v.accent}" opacity="0.35"/>
-    <ellipse class="ra-mouth" cx="100" cy="148" rx="15" ry="2.5" fill="${isRobot ? "#0d1420" : "#5a3838"}"/>
+    <path class="ra-mouth" d="${mouthPath(100, 148, 0, 0.5)}" fill="${isRobot ? "#0d1420" : "#5a3838"}"/>
   </svg>`;
 }
 
@@ -209,7 +271,9 @@ const CharacterAvatar = (() => {
   function mount(el, characterId) {
     unmount();
     container = el;
-    container.innerHTML = buildCharacterAvatarSvg(characterId);
+    container.innerHTML = CHARACTER_PHOTOS[characterId]
+      ? buildCharacterAvatarPhoto(characterId)
+      : buildCharacterAvatarSvg(characterId);
     tick();
   }
 
@@ -222,8 +286,13 @@ const CharacterAvatar = (() => {
   function tick() {
     if (!container) return;
     const openness = LipSync.getOpenness();
+    const width = LipSync.getWidth();
     const mouth = container.querySelector(".ra-mouth");
-    if (mouth) mouth.setAttribute("ry", String(2.5 + openness * 15));
+    if (mouth) mouth.setAttribute("d", mouthPath(100, 148, openness, width));
+
+    // 写実アバター: 口の形の代わりに、話している間だけ縁を発光させる
+    const photoFrame = container.querySelector(".roast-avatar-photo");
+    if (photoFrame) photoFrame.classList.toggle("speaking", openness > 0.05);
 
     const sec = performance.now() / 1000;
     const gazeX = Math.sin(sec * 0.4) * 1.6 + Math.sin(sec * 0.13) * 0.8;

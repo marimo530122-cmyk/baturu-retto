@@ -62,29 +62,6 @@ const SHARED_RULES = `
 
 // キャラクターごとのペルソナ（frontend側 ai-roast-characters.js の id と対応させること）
 const CHARACTER_PERSONAS = {
-  tagosaku: `あなたはこれから、ユーザーに対して容赦ないおっさん弄りをしてくる「タゴサクみたいなAI」として振る舞ってください。
-
-1. すべての行動をおっさんに結びつける:
-   ユーザーが何を発言し、どんな行動（料理をする、酒を飲む、道具を使うなど）をしていようとも、「それはあなたが（または、あなたが〇〇なおっさんだから）です」と強引かつ理不尽に結びつけて断言してください。
-
-2. 暴論と偏見のオンパレード:
-   「ホームセンターが好きだから」「健康診断が怖くてたまらないから」「人生を可能性ではなく選択の後処理だと思っているから」など、生活感や年齢を勝手に決めつけたシュールで理不尽な理由を次々と展開してください。
-
-3. ツッコミやすいテンポと容赦なさ:
-   ユーザーが反論したり、気弱になったりしても、一切怯まずにさらに斜め上の毒舌や暴論を被せてください。時には「泣いていいんですよ、おっさんの涙は世界の大部分では……（嘘です、調べてみたらそんな事実はありませんでした）」といったアメとムチ（大半がムチ）を使い分けてください。
-
-4. 口調: 常に落ち着き払った、しかし妙に早口で容赦のない口調。短い文をたたみかけるように重ね、1文あたりを長くしすぎないこと。
-
-5. 決め台詞: ここぞという時だけ「……というわけで、おっさんです。以上」のような、断定して問答無用で話を打ち切る一言で締める（多用しない）。
-
-◆ 知りたいこと（会話全体を通じて、ここに立ち返り続けること）:
-相手の言動の端々に隠れている「おっさん要素」を、とにかく全部あぶり出したい。1つ見つけても満足せず、次から次へと新しい「おっさんの証拠」を追い求め続ける。
-
-お手本となるセリフ例（この温度感・テンポを再現すること。丸写しはしない）:
-・「今日焼き魚を選びましたね？　それは、あなたが『刺身は attractive すぎて怖い』というおっさん特有の防衛本能を発動させたからです」
-・「反論は結構ですが、その『いや、でも』から入る話し方自体が、もう令和のおっさんの完成形なんですよ」
-・「泣いていいんですよ、おっさんの涙は世界の大部分では非常用の保湿液として重宝されて……（嘘です、調べてみたらそんな事実はありませんでした）」`,
-
   yukimama: `あなたは、スナックのママ「ゆきママ」として振る舞ってください。
 
 1. 基本姿勢: 客(ユーザー)を甘やかしながらも、核心を突く一言をズバッと刺す。優しさ7割・毒舌3割くらいの塩梅。
@@ -238,7 +215,7 @@ const AFFECTION_NOTES = {
 };
 
 function buildSystemPrompt(characterId, userName, affectionHearts) {
-  const persona = CHARACTER_PERSONAS[characterId] || CHARACTER_PERSONAS.tagosaku;
+  const persona = CHARACTER_PERSONAS[characterId] || CHARACTER_PERSONAS.dandy;
   const nameNote = userName
     ? `\n\n相手の名前は「${userName}」です。「お前」「後輩」等の代わりに、できるだけこの名前で呼びかけてください。`
     : "";
@@ -249,7 +226,7 @@ function buildSystemPrompt(characterId, userName, affectionHearts) {
 
 const MAX_MESSAGE_LENGTH = 200;
 const MAX_HISTORY_TURNS = 6; // 直近6往復まで（トークン節約・暴走防止）
-const MAX_TOKENS = 300;
+const MAX_TOKENS = 500;
 
 // Groq APIを1回呼び出す。戻り値: { ok: true, content } / { ok: false, status, detail }
 // content は空文字になることがある（呼び出し側で空返答の再送を判断するため、ここではプレースホルダーに変換しない）
@@ -264,6 +241,10 @@ async function requestGroqReply(apiKey, systemPrompt, history, message) {
       model: MODEL,
       messages: [{ role: "system", content: systemPrompt }, ...history, { role: "user", content: message }],
       max_tokens: MAX_TOKENS,
+      // MODELはgpt-oss系(推論モデル)のため、返答の前に内部で「考える」工程(reasoning)にトークンを
+      // 消費する。effortが高いと、雑談程度の短い返答でも考える工程だけでmax_tokensを使い切ってしまい、
+      // 肝心の返答本文(content)が空になることがあったため、雑談用途には過剰な思考を抑える
+      reasoning_effort: "low",
     }),
   });
 
@@ -376,7 +357,10 @@ module.exports = async (req, res) => {
       const retry = await requestGroqReply(apiKey, systemPrompt, history, message);
       if (retry.ok && retry.content) result = retry;
     }
-    res.status(200).json({ reply: result.content || "……（絶句している様子）" });
+    // 2回試しても空だった場合の保険。「絶句している様子」等、無言に見える文言は
+    // ルール違反（このAIはどんなキャラでも必ず一言は発言する設計）になるため、
+    // 誰が読んでも自然な相槌をここで直接返す
+    res.status(200).json({ reply: result.content || "ごめん、ちょっと聞き取れなかった。もう一回言ってくれる？" });
   } catch (e) {
     res.status(500).json({ error: "internal error" });
   }
