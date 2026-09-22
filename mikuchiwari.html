@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZKSQ0CVV41"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZKSQ0CVV41');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>三口割り - 飲んだ量で割り勘</title>
+  <meta name="description" content="「がっつり・ふつう・ちょっと」の3段階で、飲み会の割り勘を一発計算。ノンアルや途中参加の人も不公平なし。" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://marimo530122-cmyk.github.io/baturu-retto/mikuchiwari.html" />
+  <meta property="og:title" content="三口割り - 飲んだ量で割り勘" />
+  <meta property="og:description" content="「がっつり・ふつう・ちょっと」の3段階で、飲み会の割り勘を一発計算。" />
+  <meta name="twitter:card" content="summary" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --c-bg-1: #2a1550;
+      --c-bg-3: #0b0716;
+      --c-accent-a: #ff2d95;
+      --c-accent-b: #8f4bff;
+      --c-panel: #1c1430;
+      --c-panel-border: #4a3a75;
+      --c-text: #f3eefe;
+      --c-muted: #b3a6d4;
+    }
+    body {
+      min-height: 100vh;
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      color: var(--c-text);
+      background: radial-gradient(circle at 50% 0%, var(--c-bg-1), var(--c-bg-3) 70%) no-repeat;
+      padding: 24px 16px 48px;
+    }
+    main { max-width: 440px; margin: 0 auto; }
+    html { background: var(--c-bg-3); }
+    h1 { text-align: center; font-size: 28px; }
+    h1 span {
+      background: linear-gradient(90deg, var(--c-accent-a), var(--c-accent-b));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .lead { text-align: center; color: var(--c-muted); font-size: 13px; margin: 6px 0 20px; }
+    .panel {
+      background: var(--c-panel);
+      border: 1px solid var(--c-panel-border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    label { display: block; font-size: 13px; color: var(--c-muted); margin-bottom: 6px; }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 18px;
+      color: var(--c-text);
+      background: #120c22;
+      border: 1px solid var(--c-panel-border);
+      border-radius: 8px;
+    }
+    .tier {
+      display: grid;
+      grid-template-columns: 1fr 76px 76px;
+      gap: 8px;
+      align-items: end;
+      margin-top: 12px;
+    }
+    .tier-name { font-weight: bold; font-size: 15px; padding-bottom: 10px; }
+    .tier-name small { display: block; font-weight: normal; font-size: 11px; color: var(--c-muted); }
+    .tier label { font-size: 11px; margin-bottom: 4px; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      font-size: 17px;
+      font-weight: bold;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+    .btn-primary { background: linear-gradient(90deg, var(--c-accent-a), var(--c-accent-b)); }
+    .btn-x { background: #000; border: 1px solid #555; margin-top: 10px; }
+    .btn-line { background: #06c755; margin-top: 10px; }
+    .error { color: #ff7b9c; font-size: 13px; margin-top: 10px; min-height: 1em; }
+    .result-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--c-panel-border);
+      font-size: 16px;
+    }
+    .result-line strong { font-size: 20px; }
+    .result-note { font-size: 13px; color: var(--c-muted); margin-top: 10px; }
+    .hidden { display: none !important; }
+    .cross-sell a { color: var(--c-accent-a); font-weight: bold; }
+    .pr-label {
+      display: inline-block;
+      font-size: 11px;
+      padding: 1px 6px;
+      border: 1px solid var(--c-muted);
+      border-radius: 4px;
+      color: var(--c-muted);
+      margin-bottom: 8px;
+    }
+    .affiliate a {
+      display: block;
+      padding: 10px 0;
+      color: #ffd36b;
+      font-weight: bold;
+      border-bottom: 1px dashed var(--c-panel-border);
+    }
+    .affiliate-notice { font-size: 11px; color: var(--c-muted); margin-top: 8px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>🍻 <span>三口割り</span></h1>
+  <p class="lead">飲んだ量に合わせて3段階で割り勘。ノンアルの人も途中参加の人も不公平なし。</p>
+
+  <section class="panel">
+    <label for="total">お会計の合計（円）</label>
+    <input id="total" type="number" inputmode="numeric" min="1" placeholder="例: 24000" />
+
+    <div class="tier">
+      <div class="tier-name">🍺 がっつり<small>たくさん飲んだ人</small></div>
+      <div><label for="count-0">人数</label><input id="count-0" type="number" inputmode="numeric" min="0" value="0" /></div>
+      <div><label for="weight-0">比率</label><input id="weight-0" type="number" inputmode="decimal" min="0.1" step="0.1" value="1.2" /></div>
+    </div>
+    <div class="tier">
+      <div class="tier-name">🍻 ふつう<small>いつも通り</small></div>
+      <div><label for="count-1">人数</label><input id="count-1" type="number" inputmode="numeric" min="0" value="0" /></div>
+      <div><label for="weight-1">比率</label><input id="weight-1" type="number" inputmode="decimal" min="0.1" step="0.1" value="1.0" /></div>
+    </div>
+    <div class="tier">
+      <div class="tier-name">🥤 ちょっと<small>ノンアル・途中参加</small></div>
+      <div><label for="count-2">人数</label><input id="count-2" type="number" inputmode="numeric" min="0" value="0" /></div>
+      <div><label for="weight-2">比率</label><input id="weight-2" type="number" inputmode="decimal" min="0.1" step="0.1" value="0.6" /></div>
+    </div>
+
+    <div class="row-2">
+      <div>
+        <label for="unit">端数の単位</label>
+        <select id="unit">
+          <option value="1">1円</option>
+          <option value="10">10円</option>
+          <option value="100" selected>100円</option>
+          <option value="500">500円</option>
+          <option value="1000">1000円</option>
+        </select>
+      </div>
+      <div>
+        <label for="rounding">端数の扱い</label>
+        <select id="rounding">
+          <option value="up" selected>切り上げ</option>
+          <option value="down">切り捨て</option>
+        </select>
+      </div>
+    </div>
+
+    <button id="calc" class="btn btn-primary" style="margin-top:16px">計算する</button>
+    <p id="error" class="error"></p>
+  </section>
+
+  <section id="result" class="panel hidden">
+    <div id="result-lines"></div>
+    <p id="result-note" class="result-note"></p>
+    <button id="share-x" class="btn btn-x">𝕏 結果をポストする</button>
+    <button id="share-line" class="btn btn-line">LINEで送る</button>
+  </section>
+
+  <section class="panel cross-sell">
+    🎯 誰が奢るか決まらない？<br />
+    会計の前に <a href="./" id="to-roulette">バツルーレット</a> で運命の1人を決めよう
+  </section>
+
+  <section id="affiliate" class="panel affiliate hidden">
+    <span class="pr-label">PR</span>
+    <p style="font-size:14px">幹事の負担をもっと減らすお助けグッズ</p>
+    <div id="affiliate-links"></div>
+    <p id="affiliate-notice" class="affiliate-notice hidden">
+      Amazonのアソシエイトとして、当サイトは適格販売により収入を得ています。
+    </p>
+  </section>
+</main>
+
+<script src="mikuchiwari-config.js"></script>
+<script>
+  const TIERS = ["🍺 がっつり", "🍻 ふつう", "🥤 ちょっと"];
+  const PAGE_URL = "https://marimo530122-cmyk.github.io/baturu-retto/mikuchiwari.html";
+  let shareText = "";
+
+  function track(name, params) {
+    if (typeof gtag === "function") gtag("event", name, params || {});
+  }
+
+  function roundTo(value, unit, mode) {
+    return (mode === "down" ? Math.floor(value / unit) : Math.ceil(value / unit)) * unit;
+  }
+
+  function yen(n) {
+    return n.toLocaleString("ja-JP") + "円";
+  }
+
+  // 各段階の「比率×人数」を口数として合計し、1口あたりの金額から各人の支払額を出す
+  function calculate() {
+    const errorEl = document.getElementById("error");
+    errorEl.textContent = "";
+
+    const total = Math.floor(Number(document.getElementById("total").value));
+    const unit = Number(document.getElementById("unit").value);
+    const mode = document.getElementById("rounding").value;
+    const tiers = TIERS.map((name, i) => ({
+      name,
+      count: Math.floor(Number(document.getElementById("count-" + i).value) || 0),
+      weight: Number(document.getElementById("weight-" + i).value) || 0,
+    })).filter((t) => t.count > 0);
+
+    if (!(total > 0)) return (errorEl.textContent = "お会計の合計を入力してください");
+    if (tiers.length === 0) return (errorEl.textContent = "人数を1人以上入力してください");
+    if (tiers.some((t) => t.count < 0 || t.weight <= 0)) {
+      return (errorEl.textContent = "人数は0以上、比率は0より大きい数にしてください");
+    }
+
+    const shares = tiers.reduce((sum, t) => sum + t.count * t.weight, 0);
+    const people = tiers.reduce((sum, t) => sum + t.count, 0);
+    tiers.forEach((t) => (t.pay = roundTo((total * t.weight) / shares, unit, mode)));
+    const collected = tiers.reduce((sum, t) => sum + t.count * t.pay, 0);
+    const diff = collected - total;
+
+    const lines = document.getElementById("result-lines");
+    lines.innerHTML = "";
+    tiers.forEach((t) => {
+      const row = document.createElement("div");
+      row.className = "result-line";
+      const left = document.createElement("span");
+      left.textContent = `${t.name} × ${t.count}人`;
+      const right = document.createElement("strong");
+      right.textContent = yen(t.pay);
+      row.append(left, right);
+      lines.appendChild(row);
+    });
+
+    let note = `集金額 ${yen(collected)}（合計 ${yen(total)} / ${people}人）`;
+    if (diff > 0) note += `\n幹事の手元に ${yen(diff)} 残ります（次回の足しに）`;
+    if (diff < 0) note += `\n${yen(-diff)} 足りないので幹事が負担します`;
+    const noteEl = document.getElementById("result-note");
+    noteEl.textContent = note;
+    noteEl.style.whiteSpace = "pre-line";
+
+    shareText =
+      `🍻三口割りで割り勘したよ！\n合計${yen(total)} / ${people}人\n` +
+      tiers.map((t) => `${t.name} ${yen(t.pay)}×${t.count}`).join("\n") +
+      "\n#三口割り #割り勘";
+
+    document.getElementById("result").classList.remove("hidden");
+    track("mikuchiwari_calculate", { people });
+  }
+
+  document.getElementById("calc").addEventListener("click", calculate);
+
+  document.getElementById("share-x").addEventListener("click", () => {
+    const url =
+      "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareText) +
+      "&url=" + encodeURIComponent(PAGE_URL);
+    window.open(url, "_blank", "noopener");
+    track("mikuchiwari_share", { method: "x" });
+  });
+
+  document.getElementById("share-line").addEventListener("click", () => {
+    const url = "https://line.me/R/msg/text/?" + encodeURIComponent(shareText + "\n" + PAGE_URL);
+    window.open(url, "_blank", "noopener");
+    track("mikuchiwari_share", { method: "line" });
+  });
+
+  document.getElementById("to-roulette").addEventListener("click", () => {
+    track("mikuchiwari_to_roulette");
+  });
+
+  // mikuchiwari-config.js にアフィリエイトリンクが設定されているときだけ紹介枠を出す
+  (function renderAffiliate() {
+    if (typeof MIKUCHIWARI_AFFILIATE_ITEMS === "undefined") return;
+    const items = MIKUCHIWARI_AFFILIATE_ITEMS.filter(
+      (item) => typeof item.url === "string" && /^https:\/\//.test(item.url)
+    );
+    if (items.length === 0) return;
+
+    const box = document.getElementById("affiliate-links");
+    items.forEach((item) => {
+      const a = document.createElement("a");
+      a.href = item.url;
+      a.target = "_blank";
+      a.rel = "sponsored noopener";
+      a.textContent = item.label + " ›";
+      a.addEventListener("click", () => track("mikuchiwari_affiliate_click", { label: item.label }));
+      box.appendChild(a);
+    });
+    if (typeof AMAZON_ASSOCIATE_NOTICE !== "undefined" && AMAZON_ASSOCIATE_NOTICE) {
+      document.getElementById("affiliate-notice").classList.remove("hidden");
+    }
+    document.getElementById("affiliate").classList.remove("hidden");
+  })();
+</script>
+</body>
+</html>
