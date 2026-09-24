@@ -1,0 +1,53 @@
+# ドクゼツAI 設定ファイル（すべてローカルエンドポイント）
+
+llm:
+  provider: ollama
+  base_url: http://localhost:11434
+  model: llama3.1:8b
+  temperature: 0.7
+  stream: true
+
+asr:
+  engine: faster-whisper
+  model_size: small
+  device: cpu
+  compute_type: int8
+  language: ja
+  vad_filter: true          # VAD(無音区間検出)で発話部分だけを認識し高速化
+  silence_trim_ms: 300
+
+tts:
+  engine: voicevox
+  base_url: http://localhost:50021
+  default_speaker_id: 3
+  silence_trim:
+    enabled: true
+    threshold_db: -40       # これより静かな部分は「無音」とみなす
+    min_silence_ms: 150     # 無音区間はこの長さまで切り詰める
+
+session:
+  duration_seconds: 180     # 1セッション = 3分
+  warn_before_end_seconds: 20
+
+avatars:
+  - id: mokumoku
+    name: "もくもく先生"
+    speaker_id: 3
+    tone: "穏やかで静かな包容力"
+  - id: hare
+    name: "ハレ"
+    speaker_id: 8
+    tone: "明るく軽やかな相棒"
+  - id: shizuku
+    name: "しずく"
+    speaker_id: 14
+    tone: "落ち着いた低めの声で寄り添う"
+
+privacy:
+  local_only: true          # 外部クラウドには一切送信しない
+  save_transcripts: false
+  transcript_dir: "./local_records"
+
+vision:
+  enabled: false            # 既定OFF。オプトインの補助機能（vision_watch.py）
+  camera_index: 0
